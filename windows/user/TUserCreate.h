@@ -1,0 +1,10 @@
+#ifndef THEATRE_ADMIN_TUSERCREATE_H
+#define THEATRE_ADMIN_TUSERCREATE_H
+
+
+class TUserCreate {
+
+};
+
+
+#endif //THEATRE_ADMIN_TUSERCREATE_H

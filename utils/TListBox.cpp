@@ -4,7 +4,7 @@
 #include "TDB.h"
 
 TListBox::TListBox(QString t) {
-	QJsonArray a = TDB().request("lists/" + t)["response"].toArray();
+	QJsonArray a = TDB().request("lists/" + t).toArray();
 
 	for (auto v : a) {
 		map.insert(v.toObject()["name"].toString(), v.toObject()["id"].toInt());

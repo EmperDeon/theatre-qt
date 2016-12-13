@@ -1,14 +1,10 @@
-
 #include <dialogs/TDLogin.h>
 #include <QApplication>
 #include <windows/TMainWindow.h>
 #include <QtCore/QFile>
 #include <utils/TDB.h>
-#include <QtCore>
-#include "windows/actors.h"
 
 class QApplication;
-
 class TMainWindow;
 
 QString readStyleSheet() {
@@ -24,7 +20,6 @@ int main(int argc, char **argv) {
 
 	TMainWindow *w = new TMainWindow;
 	w->show();
-
 
 	return a.exec();
 }

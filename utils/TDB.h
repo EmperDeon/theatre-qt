@@ -14,7 +14,7 @@ class TDB {
 
 	QStringList roles;
 
-	QJsonObject GET(QString path, QMap<QString, QString> params);
+	QJsonValue GET(QString path, QMap<QString, QString> params);
 
 	void getToken();
 
@@ -22,12 +22,12 @@ class TDB {
 
 	void checkAndRefreshToken();
 
-	bool hasErrors(QJsonObject o);
+	bool hasErrors();
 
 public:
 	TDB();
 
-	QJsonObject request(QString path, QMap<QString, QString> params = QMap<QString, QString>());
+	QJsonValue request(QString path, QMap<QString, QString> params = QMap<QString, QString>());
 
 	QJsonObject lastError();
 

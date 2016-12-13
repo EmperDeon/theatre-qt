@@ -4,7 +4,7 @@
 
 
 TComboBox::TComboBox(QString table) {
-	QJsonArray obj = TDB().request("lists/" + table)["response"].toArray();
+	QJsonArray obj = TDB().request("lists/" + table).toArray();
 
 	for (auto v : obj) {
 		l_ids << v.toObject()["id"].toInt();

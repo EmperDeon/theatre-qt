@@ -1,12 +1,11 @@
 #include <QtWidgets/QHBoxLayout>
+#include <windows/user/TUsers.h>
 #include "windows/create_theatre.h"
 #include "windows/edit_theatre.h"
 #include "windows/theatres.h"
 #include "windows/create_actor.h"
 #include "windows/actors.h"
 #include "TMainWindow.h"
-#include "TUser.h"
-#include <QDebug>
 
 TMainWindow::TMainWindow() {
 	QWidget *nw = new QWidget;

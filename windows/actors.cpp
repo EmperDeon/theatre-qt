@@ -5,7 +5,7 @@
 actors::actors() {
 	add = new QPushButton("Добавить новый");
 	TDB db;
-	QJsonArray ar = db.request("actors")["response"].toArray();
+	QJsonArray ar = db.request("actors").toArray();
 
 
 	l = new QVBoxLayout;

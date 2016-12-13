@@ -12,17 +12,20 @@ TDB::TDB() {
 	token = conf.getS("token");
 }
 
-QJsonObject TDB::request(QString path, QMap<QString, QString> params) {
+QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
+	qDebug() << "Request:" << path << ", params:" << params;
+
 	checkAndRefreshToken();
-
-	qDebug() << "Reqest:" << path << ", params:" << params;
-
 	params.insert("token", token);
-	return GET(path, params);
+
+	QJsonValue r = GET(path, params);
+	hasErrors();
+
+	return r;
 }
 
-QJsonObject TDB::GET(QString path, QMap<QString, QString> params) {
-	QUrl c("https://laravel-theatre.herokuapp.com/api/" + path);
+QJsonValue TDB::GET(QString path, QMap<QString, QString> params) {
+	QUrl c("http://laravel.dev/api/" + path);
 	QUrlQuery q;
 	for (QString k : params.keys())
 		q.addQueryItem(k, params[k]);
@@ -37,9 +40,7 @@ QJsonObject TDB::GET(QString path, QMap<QString, QString> params) {
 	lastReply = QJsonDocument::fromJson(reply->readAll()).object();
 	reply->deleteLater();
 
-	hasErrors(lastReply);
-
-	return lastReply;
+	return lastReply["response"];
 }
 
 QJsonObject TDB::lastError() {
@@ -55,16 +56,16 @@ void TDB::getToken() {
 	} else {
 		conf.set("login", cred["login"]);
 
-		QJsonObject o = GET("auth/new", QMap<QString, QString>{
+		QString o = GET("auth/new", QMap<QString, QString>{
 				{"login",    cred["login"].toString()},
 				{"password", cred["password"].toString()}
-		});
+		}).toString();
 
-		if (hasErrors(o)) {
+		if (hasErrors()) {
 			getToken();
 
 		} else {
-			token = o["token"].toString();
+			token = o;
 			conf.set("token", token);
 
 		}
@@ -72,17 +73,18 @@ void TDB::getToken() {
 }
 
 void TDB::checkAndRefreshToken() {
-	QJsonObject o = GET("auth/check", {{"token", token}});
+	GET("auth/check", {{"token", token}}).toString();
 
-	if (hasErrors(o)) {
+	if (hasErrors()) {
 		checkAndRefreshToken();
 
 	}
 }
 
-bool TDB::hasErrors(QJsonObject o) {
-	if (o.contains("error")) {
-		QString err = o["error"].toString(), mess;
+bool TDB::hasErrors() {
+	if (lastReply.contains("error")) {
+		QString err = lastReply["error"].toString(), mess;
+		qDebug() << "Error:" << err;
 
 		if (err == "token_expired") {
 			refreshToken();
@@ -105,11 +107,11 @@ bool TDB::hasErrors(QJsonObject o) {
 		} else if (err == "could_not_create_token") {
 			mess = QObject::tr("Внутренняя ошибка сервера") + '\n' +
 			       QObject::tr("Обратитесь к администратору с фотографией ошибки") + '\n' +
-			       o["message"].toString();
+			       lastReply["message"].toString();
 
 		}
 
-		QMessageBox::critical(0, QObject::tr(""), mess);
+		QMessageBox::critical(0, err, mess);
 		return true;
 	}
 
@@ -117,10 +119,11 @@ bool TDB::hasErrors(QJsonObject o) {
 }
 
 void TDB::refreshToken() {
-	QJsonObject o = GET("auth/ref", {{"token", token}});
+	QString o = GET("auth/ref", {{"token", token}}).toString();
 
-	if (!hasErrors(o)) {
-		token = o["token"].toString();
+
+	if (!hasErrors()) {
+		token = o;
 		conf.set("token", token);
 	}
 }
@@ -128,8 +131,8 @@ void TDB::refreshToken() {
 QStringList TDB::getRoles() {
 	QStringList r;
 
-	QJsonObject o = request("auth/roles");
-	for (QJsonValue v : o["roles"].toArray())
+	QJsonArray o = request("auth/roles").toArray();
+	for (QJsonValue v : o)
 		r << v.toString();
 
 	return r;

@@ -23,16 +23,13 @@ set(P_S
         utils/TDB.cpp
         utils/TListBox.cpp
 
-        windows/TBooking.cpp
-        windows/TComments.cpp
-        windows/TLogin.cpp
         windows/TMainMenu.cpp
         windows/TMainWindow.cpp
-        windows/TModel.cpp
-        windows/TReviews.cpp
-        windows/TStatistics.cpp
 
-        windows/TUser.cpp
+        windows/user/TUser.cpp
+        windows/user/TUsers.cpp
+        windows/user/TUserCreate.cpp
+        windows/user/TUserEdit.cpp
 
         windows/edit_theatre.cpp
         windows/create_theatre.cpp
@@ -53,16 +50,13 @@ set(P_H
         utils/TDB.h
         utils/TListBox.h
 
-        windows/TBooking.h
-        windows/TComments.h
-        windows/TLogin.h
         windows/TMainMenu.h
         windows/TMainWindow.h
-        windows/TModel.h
-        windows/TReviews.h
-        windows/TStatistics.h
 
-        windows/TUser.h
+        windows/user/TUser.h
+        windows/user/TUsers.h
+        windows/user/TUserCreate.h
+        windows/user/TUserEdit.h
 
         windows/edit_theatre.h
         windows/create_theatre.h

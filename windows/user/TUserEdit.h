@@ -1,0 +1,10 @@
+#ifndef THEATRE_ADMIN_TUSEREDIT_H
+#define THEATRE_ADMIN_TUSEREDIT_H
+
+
+class TUserEdit {
+
+};
+
+
+#endif //THEATRE_ADMIN_TUSEREDIT_H
