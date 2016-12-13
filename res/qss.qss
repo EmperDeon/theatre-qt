@@ -1,0 +1,17 @@
+* {
+    font: 10pt "Segoe UI";
+    /*border: 1px solid black;*/
+}
+
+QLabel[menuLink=true] { /* Sub link */
+    padding-left: 3px;
+    color: black;
+
+}
+
+QLabel[menuLink=false] {
+}
+
+a.tst {
+
+}
