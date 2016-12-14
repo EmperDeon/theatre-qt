@@ -1,7 +1,7 @@
 TODO: [Curse]
 TODO:  Loading screen for menu (after TUser)
 TODO:  Rename Roles to Perms !!Important!!
-
+TODO:  Move ScrollArea from user to global class (templates / TModel)
 
 TODO: [Later]
 TODO:  Models - Booking, Comments, Reviews, Statistics

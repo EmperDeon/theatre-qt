@@ -16,6 +16,8 @@ set(P_S
         dialogs/TDCheck.cpp
         dialogs/TDLogin.cpp
 
+        templates/TTModel.cpp
+
         res/res.rc
 
         utils/TComboBox.cpp
@@ -44,6 +46,8 @@ set(P_S
 set(P_H
         dialogs/TDCheck.h
         dialogs/TDLogin.h
+
+        templates/TTModel.h
 
         utils/TComboBox.h
         utils/TConfig.h

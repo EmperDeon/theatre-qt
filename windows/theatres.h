@@ -8,9 +8,9 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QTextEdit>
 #include <Windows/theatre.h>
+#include <templates/TTModel.h>
 
-
-class theatres : public QWidget {
+class theatres : public TTModel {
 Q_OBJECT
 public:
 	QPushButton *add;

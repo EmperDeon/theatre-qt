@@ -1,9 +1,11 @@
 #ifndef THEATRE_ADMIN_TUSERS_H
 #define THEATRE_ADMIN_TUSERS_H
-
 #include <QtWidgets>
+#include <templates/TTModel.h>
 
-class TUsers : public QWidget { // Отображение всех юзеров
+class TTModel;
+
+class TUsers : public TTModel { // Отображение всех юзеров
 
 public:
 	TUsers();

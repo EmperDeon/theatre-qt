@@ -8,10 +8,12 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QTextEdit>
+#include <templates/TTModel.h>
 #include "windows/actor.h"
 
+class TTModel;
 
-class actors : public QWidget {
+class actors : public TTModel {
 Q_OBJECT
 public:
 	QPushButton *add;

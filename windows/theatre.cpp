@@ -1,3 +1,4 @@
+#include <QtWidgets/QFormLayout>
 #include "theatre.h"
 
 theatre::theatre(QJsonObject o) {
@@ -16,10 +17,10 @@ theatre::theatre(QJsonObject o) {
 	l_tel_num = new QLabel("Телефонный номер");
 	l_desc = new QLabel("Описание:");
 
-	l_name->setBuddy(name);
-	l_address->setBuddy(address);
-	l_tel_num->setBuddy(tel_num);
-	l_desc->setBuddy(desc);
+//	l_name->setBuddy(name);
+//	l_address->setBuddy(address);
+//	l_tel_num->setBuddy(tel_num);
+//	l_desc->setBuddy(desc);
 
 	edit = new QPushButton("Изменить");
 	del = new QPushButton("Удалить");
@@ -33,17 +34,15 @@ theatre::theatre(QJsonObject o) {
 	l1->setAlignment(Qt::AlignTop);
 
 	connect(edit, &QPushButton::clicked, this, &theatre::CEdit);
-	l2->addWidget(l_name);
-	l2->addWidget(name);
-	l2->addWidget(l_address);
-	l2->addWidget(address);
-	l2->addWidget(l_tel_num);
-	l2->addWidget(tel_num);
-	l2->addWidget(l_desc);
-	l2->addWidget(desc);
-	l->addLayout(l2);
-	l->addLayout(l1);
 
+	QFormLayout *fl = new QFormLayout;
+
+	fl->addRow(l_name, name);
+	fl->addRow(l_address, address);
+	fl->addRow(l_tel_num, tel_num);
+	fl->addRow(l_desc, desc);
+	l->addLayout(fl);
+	l->addLayout(l1);
 
 	setLayout(l);
 

@@ -7,13 +7,10 @@ theatres::theatres() {
 	TDB db;
 	QJsonArray ar = db.request("theatres").toArray();
 
-	l = new QVBoxLayout;
-	l->addWidget(add);
+	layout->addWidget(add);
 
 	for (auto v : ar) {
 		QWidget *n = new theatre(v.toObject());
-		l->addWidget(n);
+		layout->addWidget(n);
 	}
-
-	setLayout(l);
 }
