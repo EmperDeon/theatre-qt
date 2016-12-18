@@ -46,7 +46,6 @@ TUser::TUser(QJsonObject o) {
 
 	setLayout(l);
 	setFrameStyle(QFrame::StyledPanel);
-
 }
 
 void TUser::edt() {

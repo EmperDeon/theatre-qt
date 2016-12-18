@@ -6,13 +6,17 @@
 class TListBox;
 
 class TListBox : public QListWidget {
-	QMap<QString, int> map;
-	QList<int> selected;
+	QMap<QString, QString> map;
+	QStringList selected;
 
 public:
 	TListBox(QString t);
 
-	QList<int> getIds() { return selected; }
+	void clearList() { selected.clear(); }
+
+	void setIds(QStringList l);
+
+	QStringList getIds() { return selected; }
 
 protected:
 	virtual void mouseDoubleClickEvent(QMouseEvent *event) override;

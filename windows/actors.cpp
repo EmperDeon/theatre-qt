@@ -7,7 +7,7 @@ actors::actors() {
 	TDB db;
 	QJsonArray ar = db.request("actors").toArray();
 
-	for (auto v : ar) {
+	for (QJsonValue v : ar) {
 		QWidget *n = new actor(v.toObject());
 		layout->addWidget(n);
 	}

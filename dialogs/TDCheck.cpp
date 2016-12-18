@@ -3,7 +3,7 @@
 #include <QDebug>
 #include "TDCheck.h"
 
-TDCheck::TDCheck(QMap<QString, int> m, QList<int> s) : map(m) {
+TDCheck::TDCheck(QMap<QString, QString> m, QStringList s) : map(m) {
 	QVBoxLayout *l = new QVBoxLayout;
 
 	QHBoxLayout *hl1 = new QHBoxLayout;
@@ -47,21 +47,21 @@ TDCheck::TDCheck(QMap<QString, int> m, QList<int> s) : map(m) {
 	setLayout(l);
 }
 
-QList<int> TDCheck::getSelection(QMap<QString, int> m, QList<int> s) {
+QStringList TDCheck::getSelection(QMap<QString, QString> m, QStringList s) {
 	TDCheck t(m, s);
 
 	if (t.exec()) {
 		return t.getSelected();
 
 	} else {
-		return {-1};
+		return {""};
 	}
 }
 
-QList<int> TDCheck::getSelected() {
-	QList<int> r;
+QStringList TDCheck::getSelected() {
+	QStringList r;
 
-	for (auto v : lst)
+	for (QCheckBox *v : lst)
 		if (v->isChecked())
 			r << map[v->text()];
 

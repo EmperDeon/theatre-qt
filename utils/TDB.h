@@ -31,7 +31,7 @@ public:
 
 	QJsonObject lastError();
 
-	QStringList getRoles();
+	QStringList getPerms();
 };
 
 

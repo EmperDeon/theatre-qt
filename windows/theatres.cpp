@@ -9,7 +9,7 @@ theatres::theatres() {
 
 	layout->addWidget(add);
 
-	for (auto v : ar) {
+	for (QJsonValue v : ar) {
 		QWidget *n = new theatre(v.toObject());
 		layout->addWidget(n);
 	}

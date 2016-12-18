@@ -6,18 +6,17 @@
 TComboBox::TComboBox(QString table) {
 	QJsonArray obj = TDB().request("lists/" + table).toArray();
 
-	for (auto v : obj) {
-		l_ids << v.toObject()["id"].toInt();
-		l_str << v.toObject()["name"].toString();
+	for (QJsonValue v : obj) {
+		map.insert(v.toObject()["id"].toInt(), v.toObject()["name"].toString());
 	}
 
 	setLists();
 }
 
 void TComboBox::setLists() {
-	this->addItems(l_str);
+	this->addItems(map.values());
 }
 
-int TComboBox::getIndex() const {
-	return l_ids.value(this->currentIndex());
+QString TComboBox::getIndex() const {
+	return QString::number(map.keys().value(this->currentIndex()));
 }

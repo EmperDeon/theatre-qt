@@ -89,19 +89,19 @@ void TMainMenu::hideMenu() {
 }
 
 // Add new begin (Insert entry)
-#define Ie(a) if(roles.contains(a)){ \
+#define Ie(a) if(perms.contains(a)){ \
                 QJsonArray s
 
 // Add sub entry (Insert entry Sub if)
-#define IeSI(a, b) if(roles.contains( a )) \
+#define IeSI(a, b) if(perms.contains( a )) \
                     s << QJsonObject{ \
-                        {"action", QString("show ") + a}, \
+                        {"action", a}, \
                         {"name", b} \
                     }
 
 // Add new end
 #define IeC(a, b)   menuStructure << QJsonObject{ \
-                    {"action", QString("show ") + a}, \
+                    {"action", a}, \
                     {"name", b}, \
                     {"sub", s} \
                     }; \
@@ -109,7 +109,7 @@ void TMainMenu::hideMenu() {
 
 
 void TMainMenu::createStructure() {
-	QStringList roles = {"theatres",
+	QStringList perms = {"theatres",
 	                     "performances",
 	                     "articles",
 	                     "actors",
@@ -128,7 +128,7 @@ void TMainMenu::createStructure() {
 	                     "create_actors",
 	                     "create_user"
 
-	}; //TDB().getRoles();
+	}; //TDB().getPerms();
 
 	Ie("theatres");
 		IeSI("create_theatre", "Создать новый театр");

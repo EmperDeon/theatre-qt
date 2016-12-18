@@ -8,14 +8,14 @@
 
 class TDCheck : QDialog {
 	QList<QCheckBox *> lst;
-	QMap<QString, int> map;
+	QMap<QString, QString> map;
 
 public:
-	TDCheck(QMap<QString, int> m, QList<int> s);
+	TDCheck(QMap<QString, QString> m, QStringList s);
 
-	QList<int> getSelected();
+	QStringList getSelected();
 
-	static QList<int> getSelection(QMap<QString, int> m, QList<int> s);
+	static QStringList getSelection(QMap<QString, QString> m, QStringList s);
 };
 
 

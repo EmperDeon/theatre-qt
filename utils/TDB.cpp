@@ -25,12 +25,13 @@ QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
 }
 
 QJsonValue TDB::GET(QString path, QMap<QString, QString> params) {
-	QUrl c("http://laravel.dev/api/" + path);
+	QUrl c("https://laravel-theatre.herokuapp.com/api/" + path);
 	QUrlQuery q;
 	for (QString k : params.keys())
 		q.addQueryItem(k, params[k]);
 
 	c.setQuery(q);
+//qDebug() << c;
 
 	QNetworkReply *reply = manager.get(QNetworkRequest(c));
 	QEventLoop wait;
@@ -128,10 +129,10 @@ void TDB::refreshToken() {
 	}
 }
 
-QStringList TDB::getRoles() {
+QStringList TDB::getPerms() {
 	QStringList r;
 
-	QJsonArray o = request("auth/roles").toArray();
+	QJsonArray o = request("auth/perms").toArray();
 	for (QJsonValue v : o)
 		r << v.toString();
 

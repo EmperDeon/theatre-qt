@@ -6,23 +6,25 @@
 TListBox::TListBox(QString t) {
 	QJsonArray a = TDB().request("lists/" + t).toArray();
 
-	for (auto v : a) {
-		map.insert(v.toObject()["name"].toString(), v.toObject()["id"].toInt());
+	for (QJsonValue v : a) {
+		map.insert(v.toObject()["name"].toString(), QString::number(v.toObject()["id"].toInt()));
 	}
-
-
 }
 
 void TListBox::mouseDoubleClickEvent(QMouseEvent *event) {
-	QList<int> t = TDCheck::getSelection(map, selected);
+	QStringList t = TDCheck::getSelection(map, selected);
 
-	if (t.count() == 1 && t[0] == -1) return;
+	if (t.count() == 1 && t[0] == "") return;
 
-	selected = t;
+	setIds(t);
+}
+
+void TListBox::setIds(QStringList l) {
+	selected = l;
 
 	this->clear();
-	for (auto v : map.keys()) {
-		if (t.contains(map[v]))
+	for (QString v : map.keys()) {
+		if (l.contains(map[v]))
 			this->addItem(v);
 	}
 
