@@ -4,6 +4,11 @@
 
 
 TComboBox::TComboBox(QString table) {
+	if (table != "")
+		load(table);
+}
+
+void TComboBox::load(QString table) {
 	QJsonArray obj = TDB().request("lists/" + table).toArray();
 
 	for (QJsonValue v : obj) {
@@ -19,4 +24,8 @@ void TComboBox::setLists() {
 
 QString TComboBox::getIndex() const {
 	return QString::number(map.keys().value(this->currentIndex()));
+}
+
+void TComboBox::setCurrentItem(int id) {
+	setCurrentIndex(map.keys().indexOf(id));
 }

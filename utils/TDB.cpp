@@ -26,6 +26,8 @@ QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
 
 QJsonValue TDB::GET(QString path, QMap<QString, QString> params) {
 	QUrl c("https://laravel-theatre.herokuapp.com/api/" + path);
+//    QUrl c("http://laravel.dev/api/" + path);
+
 	QUrlQuery q;
 	for (QString k : params.keys())
 		q.addQueryItem(k, params[k]);
@@ -71,6 +73,8 @@ void TDB::getToken() {
 
 		}
 	}
+
+	conf.save();
 }
 
 void TDB::checkAndRefreshToken() {
@@ -97,13 +101,25 @@ bool TDB::hasErrors() {
 			return true;
 		}
 
-		// TODO: move this to windows
-//		if (err == "no_access") {
-//			mess = QObject::tr("Недостаточно прав для этого действия");
-//
-//		} else
+		if (err == "no_access") {
+			err = "Ошибка";
+			mess = QObject::tr("Недостаточно прав для этого действия");
+
+		} else
 		if (err == "invalid_credentials") {
 			mess = QObject::tr("Неправильный логин/пароль");
+
+		} else if (err == "no_id") {
+			err = "Ошибка";
+			mess = "Строки с таким id не существует";
+
+		} else if (err == "entry_exists") {
+			err = "Ошибка";
+			mess = "Такая запись уже существует";
+
+		} else if (err == "no_def_value") {
+			err = "Ошибка";
+			mess = "Введены не все данные";
 
 		} else if (err == "could_not_create_token") {
 			mess = QObject::tr("Внутренняя ошибка сервера") + '\n' +
@@ -127,6 +143,8 @@ void TDB::refreshToken() {
 		token = o;
 		conf.set("token", token);
 	}
+
+	conf.save();
 }
 
 QStringList TDB::getPerms() {

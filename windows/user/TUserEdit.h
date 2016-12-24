@@ -1,30 +1,21 @@
 #ifndef THEATRE_ADMIN_TUSEREDIT_H
 #define THEATRE_ADMIN_TUSEREDIT_H
-
 #include <QtWidgets/QtWidgets>
-#include <utils/TListBox.h>
-#include <utils/TComboBox.h>
+#include <utils/TCheckBox.h>
+#include <templates/TEdit.h>
 
-class TUserEdit : public QWidget {
-Q_OBJECT
-	int id;
-	QJsonObject obj;
-	TComboBox *c_box;
-	QPushButton *b_create, *b_reset;
-
+class TUserEdit : public TEdit {
 	QLineEdit *l_fio, *l_pos, *l_login, *l_passw, *l_phone;
-	TListBox *l_perms;
+	TCheckBox *l_perms;
 
 public:
 	TUserEdit();
 
-	void submit();
+	virtual void submit();
 
-	void reset();
+	virtual void reset();
 
-public slots:
-
-	void changeIndex(int i);
+	virtual void load();
 };
 
 

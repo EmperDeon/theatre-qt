@@ -1,7 +1,7 @@
 #ifndef THEATRE_ADMIN_TUSER_H
 #define THEATRE_ADMIN_TUSER_H
 
-#include <utils/TListBox.h>
+#include <utils/TCheckBox.h>
 #include <QtCore/QJsonObject>
 #include <QtWidgets/QtWidgets>
 

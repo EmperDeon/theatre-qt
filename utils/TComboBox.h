@@ -6,10 +6,12 @@ class TComboBox : public QComboBox {
 	QMap<int, QString> map;
 
 public:
-	TComboBox(QString table);
+	TComboBox(QString table = "");
 
+	void load(QString table);
 	void setLists();
 
+	void setCurrentItem(int id);
 	QString getIndex() const;
 };
 

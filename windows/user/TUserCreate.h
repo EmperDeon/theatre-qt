@@ -1,21 +1,19 @@
 #ifndef THEATRE_ADMIN_TUSERCREATE_H
 #define THEATRE_ADMIN_TUSERCREATE_H
-
 #include <QtWidgets/QtWidgets>
-#include <utils/TListBox.h>
+#include <utils/TCheckBox.h>
+#include <templates/TCreate.h>
 
-class TUserCreate : public QWidget {
-	QPushButton *b_create, *b_reset;
-
+class TUserCreate : public TCreate {
 	QLineEdit *l_fio, *l_pos, *l_login, *l_passw, *l_phone;
-	TListBox *l_perms;
+	TCheckBox *l_perms;
 
 public:
 	TUserCreate();
 
-	void create();
+	virtual void create();
 
-	void reset();
+	virtual void reset();
 
 };
 

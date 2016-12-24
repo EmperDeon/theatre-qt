@@ -1,8 +1,7 @@
-#include <dialogs/TDLogin.h>
-#include <QApplication>
 #include <windows/TMainWindow.h>
+#include <QApplication>
 #include <QtCore/QFile>
-#include <utils/TDB.h>
+
 
 class QApplication;
 class TMainWindow;

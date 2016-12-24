@@ -1,7 +1,7 @@
 #ifndef THEATRE_ADMIN_TUSERS_H
 #define THEATRE_ADMIN_TUSERS_H
 #include <QtWidgets>
-#include <templates/TTModel.h>
+#include <templates/TTModels.h>
 
 class TTModel;
 

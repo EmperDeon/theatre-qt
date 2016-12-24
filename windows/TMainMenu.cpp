@@ -12,7 +12,6 @@ TMainMenu::TMainMenu(TMainWindow *w) : wnd(w) {
 
 	b_hide = new QPushButton(tr("Свернуть меню <"));
 
-	createStructure();
 	reformMenu();
 
 	connect(b_hide, &QPushButton::clicked, this, &TMainMenu::hideMenu);
@@ -109,57 +108,87 @@ void TMainMenu::hideMenu() {
 
 
 void TMainMenu::createStructure() {
-	QStringList perms = {"theatres",
-	                     "performances",
-	                     "articles",
-	                     "actors",
-	                     "users",
-	                     "edit_theatre",
-	                     "edit_theatre",
-	                     "edit_poster",
-	                     "edit_perf",
-	                     "edit_article",
-	                     "edit_actors",
-	                     "edit_user",
-	                     "create_theatre",
-	                     "create_poster",
-	                     "create_perf",
-	                     "create_article",
-	                     "create_actors",
-	                     "create_user"
+	menuStructure = QJsonArray();
 
-	}; //TDB().getPerms();
+	QStringList perms = TDB().getPerms();
+//		 	"theatres",
+//            "theatre_choose",
+//			"theatre_create",
+//			"theatre_edit",
+//			"theatre_delete",
+//
+//			"users",
+//			"user_create",
+//			"user_edit",
+//			"user_delete",
+//
+//			"actors",
+//			"actor_create",
+//			"actor_edit",
+//			"actor_delete",
+//
+//			"perfs",
+//			"perf_create",
+//			"perf_edit",
+//			"perf_delete",
+//
+//			"posters",
+//			"poster_create",
+//			"poster_edit",
+//			"poster_delete",
+//
+//			"articles",
+//			"article_create",
+//			"article_edit",
+//			"article_delete"
+//	}; //TDB().getPerms();
+
 
 	Ie("theatres");
-		IeSI("create_theatre", "Создать новый театр");
-		IeSI("edit_theatre", "Редактировать театр");
+		IeSI("theatre_choose", "Сменить текущий театр");
+		IeSI("theatre_create", "Создать новый театр");
 	IeC("theatres", "Театры");
 
-	Ie("performances");
-		IeSI("create_poster", "Добавление афиши");
-		IeSI("edit_poster", "Редактирование афиши");
-		IeSI("create_perf", "Добавление постановки");
-		IeSI("edit_perf", "Редактирование постановки");
-	IeC("performances", "Репертуар");
+
+	Ie("theatre_edit");
+	IeC("theatre_edit", "Редактировать текущий театр");
+
+	Ie("t_perfs");
+		IeSI("t_perf_create", "Добавление спектакля");
+		IeSI("t_perf_edit", "Редактирование спектактля");
+	IeC("t_perfs", "Репертуар");
+
+	Ie("posters");
+		IeSI("poster_create", "Добавление афиши");
+		IeSI("poster_edit", "Редактирование афиши");
+	IeC("posters", "Афиша");
 
 	Ie("articles");
-		IeSI("create_article", "Добавление статьи");
-		IeSI("edit_article", "Редактирование статьи");
+		IeSI("article_create", "Добавление статьи");
+		IeSI("article_edit", "Редактирование статьи");
 	IeC("articles", "Новости");
 
-	Ie("actors");
-		IeSI("create_actors", "Добавление актеров");
-		IeSI("edit_actors", "Редактирование данных об актере");
-	IeC("actors", "Актеры");
+	//Ie("actors");
+	//	IeSI("actor_create", "Добавление актеров");
+	//	IeSI("actor_edit", "Редактирование данных об актере");
+	//IeC("actors", "Актеры");
 
 	Ie("users");
-		IeSI("create_user", "Добавление сотрудника");
-		IeSI("edit_user", "Редактирование данных о сотруднике");
+		IeSI("user_create", "Добавление сотрудника");
+		IeSI("user_edit", "Редактирование данных о сотруднике");
 	IeC("users", "Сотрудники");
 
+	menuStructure << QJsonObject{{"action", ""},
+	                             {"name",   ""},
+	                             {"sub",    QJsonArray{}}};
+	menuStructure << QJsonObject{{"action", "logout"},
+	                             {"name",   "Сменить пользователя"},
+	                             {"sub",    QJsonArray{}}};
 }
 
 void TMainMenu::reformMenu() {
+	createStructure();
+
 	QLayoutItem *item;
 	while ((item = l_menu->takeAt(0)) != nullptr)
 		item->widget()->deleteLater();

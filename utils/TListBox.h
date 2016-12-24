@@ -1,25 +1,28 @@
 #ifndef THEATRE_ADMIN_TLISTBOX_H
 #define THEATRE_ADMIN_TLISTBOX_H
 
-#include <QtWidgets/QListWidget>
+#include <QtWidgets/QtWidgets>
 
-class TListBox;
 
-class TListBox : public QListWidget {
+class TListBox : public QGroupBox {
 	QMap<QString, QString> map;
-	QStringList selected;
+
+	QListWidget *list;
+
+	QStringList added, removed;
+
+	void add();
+
+	void rem();
 
 public:
-	TListBox(QString t);
+	TListBox(QString t = "");
 
-	void clearList() { selected.clear(); }
+	void load(QString t);
 
-	void setIds(QStringList l);
+	QStringList getAdded();
 
-	QStringList getIds() { return selected; }
-
-protected:
-	virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
+	QStringList getItems();
 };
 
 

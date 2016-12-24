@@ -2,65 +2,41 @@
 #include "TUserEdit.h"
 
 TUserEdit::TUserEdit() {
-	QVBoxLayout *l = new QVBoxLayout;
-	QFormLayout *l_box = new QFormLayout;
-
-	c_box = new TComboBox("users");
-
-	// Sub layout
 	l_fio = new QLineEdit();
 	l_pos = new QLineEdit();
 	l_login = new QLineEdit();
 	l_passw = new QLineEdit();
 	l_phone = new QLineEdit();
-	l_perms = new TListBox("u__perms");
+	l_perms = new TCheckBox("u__perms");
 
 	l_passw->setEchoMode(QLineEdit::PasswordEchoOnEdit);
-	l_box->setMargin(0);
 
-	l_box->addRow("ФИО:", l_fio);
-	l_box->addRow("Должность:", l_pos);
-	l_box->addRow("Логин:", l_login);
-	l_box->addRow("Пароль:", l_passw);
-	l_box->addRow("Телефон:", l_phone);
-	l_box->addRow("Права доступа", l_perms);
-	// Sub layout
 
-	b_create = new QPushButton("Сохранить");
-	b_reset = new QPushButton("Сбросить");
+	layout->setMargin(0);
 
-	connect(c_box, SIGNAL(currentIndexChanged(int)), this, SLOT(changeIndex(int)));
-	connect(b_create, &QPushButton::clicked, this, &TUserEdit::submit);
-	connect(b_reset, &QPushButton::clicked, this, &TUserEdit::reset);
+	layout->addRow("ФИО:", l_fio);
+	layout->addRow("Должность:", l_pos);
+	layout->addRow("Логин:", l_login);
+	layout->addRow("Пароль:", l_passw);
+	layout->addRow("Телефон:", l_phone);
+	layout->addRow("Права доступа", l_perms);
 
-	QHBoxLayout *vl = new QHBoxLayout;
-	vl->addWidget(b_create);
-	vl->addWidget(b_reset);
-	vl->setAlignment(Qt::AlignBottom);
-
-	l->addWidget(c_box, 0, Qt::AlignTop);
-	l->addLayout(l_box);
-	l->addLayout(vl);
-	l->addSpacing(10);
-
-	setLayout(l);
-
-	changeIndex(0);
+	c_box->load("users");
+	load();
 }
 
 void TUserEdit::submit() {
 	if (QMessageBox::question(this, "Сохранение в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
 	    QMessageBox::Yes) {
-		QString o = TDB().request("users/edit",
-		                          {
-				                          {"id",       QString::number(id)},
-				                          {"fio",      l_fio->text()},
-				                          {"position", l_pos->text()},
-				                          {"login",    l_login->text()},
-				                          {"password", l_passw->text()},
-				                          {"phone",    l_phone->text()},
-				                          {"perms",    l_perms->getIds().join(',')}
-		                          }).toString();
+		QString o = TDB().request("users/edit", {
+				{"id",       QString::number(id)},
+				{"fio",      l_fio->text()},
+				{"position", l_pos->text()},
+				{"login",    l_login->text()},
+				{"password", l_passw->text()},
+				{"phone",    l_phone->text()},
+				{"perms",    l_perms->getIds().join(',')}
+		}).toString();
 
 		if (o == "successful")
 			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
@@ -79,9 +55,7 @@ void TUserEdit::reset() {
 	l_perms->setIds(obj["perms"].toString().split(','));
 }
 
-void TUserEdit::changeIndex(int i) {
-	Q_UNUSED(i);
-
+void TUserEdit::load() {
 	obj = TDB().request("users/" + c_box->getIndex()).toObject();
 	reset();
 }
