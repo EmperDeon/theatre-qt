@@ -6,7 +6,7 @@ TTheatreEdit::TTheatreEdit() {
 	phone = new QLineEdit();
 	address = new QLineEdit();
 	desc = new QTextEdit();
-	list = new TListBox("t__halls");
+	list = new TListBox("t_halls");
 
 	layout->setMargin(0);
 
@@ -45,7 +45,6 @@ void TTheatreEdit::submit() {
 		}).toString();
 
 		if (o == "successful") {
-			reset();
 			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
 		}
 	}

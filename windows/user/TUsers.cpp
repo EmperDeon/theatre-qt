@@ -5,7 +5,7 @@
 // TUsers
 TUsers::TUsers() : TTModel() {
 	// Fill scroll with widgets
-	QJsonArray users = TDB().request("users").toArray();
+	QJsonArray users = TDB().request("u_apis").toArray();
 
 	for (QJsonValue v : users)
 		layout->addWidget(new TUser(v.toObject()));

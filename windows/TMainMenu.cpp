@@ -145,38 +145,38 @@ void TMainMenu::createStructure() {
 
 
 	Ie("theatres");
-		IeSI("theatre_choose", "Сменить текущий театр");
-		IeSI("theatre_create", "Создать новый театр");
+		IeSI("theatres_choose", "Сменить текущий театр");
+		IeSI("theatres_create", "Создать новый театр");
 	IeC("theatres", "Театры");
 
 
-	Ie("theatre_edit");
-	IeC("theatre_edit", "Редактировать текущий театр");
+	Ie("theatres_update");
+	IeC("theatres_update", "Редактировать текущий театр");
 
 	Ie("t_perfs");
-		IeSI("t_perf_create", "Добавление спектакля");
-		IeSI("t_perf_edit", "Редактирование спектактля");
+		IeSI("t_perfs_create", "Добавление спектакля");
+		IeSI("t_perfs_update", "Редактирование спектактля");
 	IeC("t_perfs", "Репертуар");
 
 	Ie("posters");
-		IeSI("poster_create", "Добавление афиши");
-		IeSI("poster_edit", "Редактирование афиши");
+		IeSI("posters_create", "Добавление афиши");
+		IeSI("posters_update", "Редактирование афиши");
 	IeC("posters", "Афиша");
 
 	Ie("articles");
-		IeSI("article_create", "Добавление статьи");
-		IeSI("article_edit", "Редактирование статьи");
+		IeSI("articles_create", "Добавление статьи");
+		IeSI("articles_update", "Редактирование статьи");
 	IeC("articles", "Новости");
 
-	//Ie("actors");
-	//	IeSI("actor_create", "Добавление актеров");
-	//	IeSI("actor_edit", "Редактирование данных об актере");
-	//IeC("actors", "Актеры");
+	Ie("actors");
+		IeSI("actors_create", "Добавление актеров");
+		IeSI("actors_update", "Редактирование данных об актере");
+	IeC("actors", "Актеры");
 
-	Ie("users");
-		IeSI("user_create", "Добавление сотрудника");
-		IeSI("user_edit", "Редактирование данных о сотруднике");
-	IeC("users", "Сотрудники");
+	Ie("u_apis");
+		IeSI("u_apis_create", "Добавление сотрудника");
+		IeSI("u_apis_update", "Редактирование данных о сотруднике");
+	IeC("u_apis", "Сотрудники");
 
 	menuStructure << QJsonObject{{"action", ""},
 	                             {"name",   ""},

@@ -15,9 +15,9 @@
 #include <windows/poster/TPosterCreate.h>
 #include <windows/poster/TPosterEdit.h>
 
-#include "windows/theatre/TTheatreCreate.h"
-#include "windows/theatre/TTheatreEdit.h"
-#include "windows/theatre/TTheatres.h"
+#include <windows/theatre/TTheatreCreate.h>
+#include <windows/theatre/TTheatreEdit.h>
+#include <windows/theatre/TTheatres.h>
 
 #include <windows/user/TUsers.h>
 #include <windows/user/TUserCreate.h>
@@ -37,12 +37,28 @@ TMainWindow::TMainWindow() {
 	this->setCentralWidget(nw);
 
 	changeCurrent("main");
-	resize(1000, 500);
+	resize(800, 500);
+
+	this->statusBar()->showMessage("213", 10000);
 }
 
 void TMainWindow::changeCurrent(QString s) {
+	if (loadingWidget) { // Exit if already loading
+		return;
+	}
+
 	if (w_curr != nullptr)
-		w_curr->deleteLater(), w_curr = nullptr;
+		w_curr->setVisible(false), w_curr->deleteLater(), w_curr = nullptr;
+
+	loadingWidget = true;
+	auto loadW = getNewLoadWidget();
+	l->addWidget(loadW);
+
+//
+//	QEventLoop wait;
+//	QTimer::singleShot(3000, &wait, SLOT(quit()));
+//	wait.exec();
+
 
 	if (s == "logout") {
 		TConfig conf;
@@ -57,62 +73,64 @@ void TMainWindow::changeCurrent(QString s) {
 	} else if (s == "main") {
 		w_curr = getNewMainWidget();
 
-	} else if (s == "theatre_create") {
+	} else if (s == "theatres_create") {
 		w_curr = new TTheatreCreate;
 
-	} else if (s == "theatre_edit") {
+	} else if (s == "theatres_update") {
 		w_curr = new TTheatreEdit;
 
 	} else if (s == "theatres") {
 		w_curr = new TTheatres;
 
-	} else if (s == "users") {
+	} else if (s == "u_apis") {
 		w_curr = new TUsers;
 
-	} else if (s == "user_create") {
+	} else if (s == "u_apis_create") {
 		w_curr = new TUserCreate;
 
-	} else if (s == "user_edit") {
+	} else if (s == "u_apis_update") {
 		w_curr = new TUserEdit;
 
 	} else if (s == "articles") {
 		w_curr = new TArticles;
 
-	} else if (s == "article_edit") {
+	} else if (s == "articles_update") {
 		w_curr = new TArticleEdit;
 
-	} else if (s == "article_create") {
+	} else if (s == "articles_create") {
 		w_curr = new TArticleCreate;
 
-	} else if (s == "theatre_choose") {
+	} else if (s == "theatres_choose") {
 		w_curr = new TChoose;
 
 	} else if (s == "t_perfs") {
 		w_curr = new TPerfs;
 
-	} else if (s == "t_perf_create") {
+	} else if (s == "t_perfs_create") {
 		w_curr = new TPerfCreate;
 
-	} else if (s == "t_perf_edit") {
+	} else if (s == "t_perfs_update") {
 		w_curr = new TPerfEdit;
 
 	} else if (s == "posters") {
 		w_curr = new TPosters;
 
-	} else if (s == "poster_create") {
+	} else if (s == "posters_create") {
 		w_curr = new TPosterCreate;
 
-	} else if (s == "poster_edit") {
+	} else if (s == "posters_update") {
 		w_curr = new TPosterEdit;
 
 	}
 
-
-	s_curr = s;
-	if (w_curr != nullptr)
+	if (w_curr != nullptr) {
 		l->addWidget(w_curr);
-	else
+	} else {
 		w_curr = new QLabel("No Widget"), l->addWidget(w_curr, Qt::AlignCenter);
+	}
+
+	loadW->deleteLater();
+	loadingWidget = false;
 }
 
 QWidget *TMainWindow::getNewMainWidget() {
@@ -139,3 +157,24 @@ QWidget *TMainWindow::getNewMainWidget() {
 	return r;
 }
 
+QWidget *TMainWindow::getNewLoadWidget() {
+	QWidget *w = new QWidget;
+	QVBoxLayout *l = new QVBoxLayout;
+
+	QLabel *l1 = new QLabel("Страница загружается, пожалуйста подождите");
+	QLabel *l2 = new QLabel;
+
+	l1->setStyleSheet("font: 16pt Segoe UI");
+
+	QMovie *m = new QMovie(":/loading.gif");
+	m->start();
+	l2->setMovie(m);
+
+	l->addWidget(l1);
+	l->addWidget(l2, 0, Qt::AlignCenter);
+	l->setAlignment(Qt::AlignCenter);
+	l->setSpacing(40);
+
+	w->setLayout(l);
+	return w;
+}

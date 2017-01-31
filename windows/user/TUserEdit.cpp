@@ -7,7 +7,7 @@ TUserEdit::TUserEdit() {
 	l_login = new QLineEdit();
 	l_passw = new QLineEdit();
 	l_phone = new QLineEdit();
-	l_perms = new TCheckBox("u__perms");
+	l_perms = new TCheckBox("u_perms");
 
 	l_passw->setEchoMode(QLineEdit::PasswordEchoOnEdit);
 
@@ -21,14 +21,14 @@ TUserEdit::TUserEdit() {
 	layout->addRow("Телефон:", l_phone);
 	layout->addRow("Права доступа", l_perms);
 
-	c_box->load("users");
+	c_box->load("u_apis");
 	load();
 }
 
 void TUserEdit::submit() {
 	if (QMessageBox::question(this, "Сохранение в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
 	    QMessageBox::Yes) {
-		QString o = TDB().request("users/edit", {
+		QString o = TDB().request("u_apis/edit", {
 				{"id",       QString::number(id)},
 				{"fio",      l_fio->text()},
 				{"position", l_pos->text()},
@@ -56,6 +56,6 @@ void TUserEdit::reset() {
 }
 
 void TUserEdit::load() {
-	obj = TDB().request("users/" + c_box->getIndex()).toObject();
+	obj = TDB().request("u_apis/" + c_box->getIndex()).toObject();
 	reset();
 }

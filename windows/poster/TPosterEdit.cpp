@@ -2,8 +2,8 @@
 #include "TPosterEdit.h"
 
 TPosterEdit::TPosterEdit() {
-	name = new TComboBox("t__performances");
-	hall = new TComboBox("t__halls");
+	name = new TComboBox("t_performances");
+	hall = new TComboBox("t_halls");
 	date = new QDateTimeEdit();
 
 	date->setDisplayFormat("dd.MM.yyyy hh:mm");
@@ -23,6 +23,7 @@ void TPosterEdit::submit() {
 	if (QMessageBox::question(this, "Сохранение в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
 	    QMessageBox::Yes) {
 		QString o = TDB().request("posters/edit", {
+				{"id",        QString::number(id)},
 				{"t_perf_id", name->getIndex()},
 				{"hall_id",   hall->getIndex()},
 				{"date",      date->dateTime().toString("dd.MM.yyyy hh:mm")}
@@ -37,8 +38,8 @@ void TPosterEdit::submit() {
 void TPosterEdit::reset() {
 	id = obj["id"].toInt();
 
-	name->setCurrentItem(obj["t_perf_id"].toInt());
-	hall->setCurrentItem(obj["hall_id"].toInt());
+	name->setCurrentItem(obj["perf"].toObject()["id"].toInt());
+	hall->setCurrentItem(obj["hall"].toObject()["id"].toInt());
 	date->setDateTime(QDateTime::fromString(obj["date"].toString(), "dd.MM.yyyy hh:mm"));
 }
 

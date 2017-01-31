@@ -32,7 +32,7 @@ TListBox::TListBox(QString t) : QGroupBox("Редактирование спис
 }
 
 void TListBox::load(QString t) {
-	QJsonArray a = TDB().request("lists/" + t).toArray();
+	QJsonArray a = TDB().request("utils/lists", {{"name", t}}).toArray();
 
 	for (QJsonValue v : a) {
 		map.insert(v.toObject()["name"].toString(), QString::number(v.toObject()["id"].toInt()));

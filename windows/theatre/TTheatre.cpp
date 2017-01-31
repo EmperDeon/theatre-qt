@@ -19,6 +19,8 @@ TTheatre::TTheatre(QJsonObject o) {
 	address->setEnabled(false);
 	desc->setEnabled(false);
 
+	phone->setValidator(new QRegExpValidator(QRegExp("[\\d,\\(,\\),\\-]+")));
+
 	b_edt->setMaximumWidth(100);
 	b_del->setMaximumWidth(100);
 

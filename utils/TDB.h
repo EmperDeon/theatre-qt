@@ -9,16 +9,17 @@
 class TDB {
 	QNetworkAccessManager manager;
 	QJsonObject lastReply;
+	int lastTime;
+	QNetworkReply::NetworkError lastError;
+
 	QString token;
 	TConfig conf;
 
 	QStringList roles;
 
-	QJsonValue GET(QString path, QMap<QString, QString> params);
+	QJsonValue GET(QString path, QMap<QString, QString> params, QString r_type);
 
 	void getToken();
-
-	void refreshToken();
 
 	void checkAndRefreshToken();
 
@@ -29,9 +30,14 @@ public:
 
 	QJsonValue request(QString path, QMap<QString, QString> params = QMap<QString, QString>());
 
-	QJsonObject lastError();
+//	QJsonObject lastError();
 
 	QStringList getPerms();
+
+
+	void writeToLog(QString path, QMap<QString, QString> params, QString r_type);
+
+	QString getResponseCode() const;
 };
 
 

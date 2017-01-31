@@ -3,8 +3,8 @@
 
 
 TPosterCreate::TPosterCreate() {
-	name = new TComboBox("t__performances");
-	hall = new TComboBox("t__halls");
+	name = new TComboBox("t_performances");
+	hall = new TComboBox("t_halls");
 	date = new QDateTimeEdit();
 
 	date->setDisplayFormat("dd.MM.yyyy hh:mm");

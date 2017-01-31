@@ -9,10 +9,10 @@ TComboBox::TComboBox(QString table) {
 }
 
 void TComboBox::load(QString table) {
-	QJsonArray obj = TDB().request("lists/" + table).toArray();
+	QJsonObject obj = TDB().request("utils/lists", {{"name", table}}).toObject();
 
-	for (QJsonValue v : obj) {
-		map.insert(v.toObject()["id"].toInt(), v.toObject()["name"].toString());
+	for (QString v : obj.keys()) {
+		map.insert(v.toInt(), obj[v].toString());
 	}
 
 	setLists();

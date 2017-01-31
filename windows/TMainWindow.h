@@ -10,9 +10,11 @@ class TMainWindow : public QMainWindow {
 	TMainMenu *w_menu;
 	QHBoxLayout *l;
 	QWidget *w_curr = nullptr;
-	QString s_curr;
+	bool loadingWidget = false;
 
 	QWidget *getNewMainWidget();
+
+	QWidget *getNewLoadWidget();
 
 public:
 	TMainWindow();

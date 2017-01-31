@@ -15,7 +15,7 @@ TPerfEdit::TPerfEdit() {
 
 	p_name = new QLineEdit;
 	p_auth = new QLineEdit;
-	p_type = new TComboBox("p__types");
+	p_type = new TComboBox("p_types");
 
 	connect(p_add, &QPushButton::clicked, this, &TPerfEdit::add);
 
@@ -52,7 +52,7 @@ TPerfEdit::TPerfEdit() {
 	layout->addWidget(new QLabel("Полное описание:"));
 	layout->addWidget(e_desc);
 
-	c_box->load("t__performances");
+	c_box->load("t_performances");
 }
 
 void TPerfEdit::add() {
@@ -87,7 +87,6 @@ void TPerfEdit::submit() {
 		if (o == "successful") {
 			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
 			p_box->load("performances");
-			reset();
 		}
 	}
 }

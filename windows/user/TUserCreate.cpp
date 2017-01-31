@@ -9,7 +9,7 @@ TUserCreate::TUserCreate() {
 	l_passw = new QLineEdit();
 	l_phone = new QLineEdit();
 
-	l_perms = new TCheckBox("u__perms");
+	l_perms = new TCheckBox("u_perms");
 	l_passw->setEchoMode(QLineEdit::PasswordEchoOnEdit);
 
 	layout->addRow("ФИО:", l_fio);
@@ -23,7 +23,7 @@ TUserCreate::TUserCreate() {
 void TUserCreate::create() {
 	if (QMessageBox::question(this, "Создание записи в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
 	    QMessageBox::Yes) {
-		QString o = TDB().request("users/create", {
+		QString o = TDB().request("u_apis/create", {
 				                          {"fio",      l_fio->text()},
 				                          {"position", l_pos->text()},
 				                          {"login",    l_login->text()},

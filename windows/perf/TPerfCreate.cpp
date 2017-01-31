@@ -14,7 +14,7 @@ TPerfCreate::TPerfCreate() {
 
 	p_name = new QLineEdit;
 	p_auth = new QLineEdit;
-	p_type = new TComboBox("p__types");
+	p_type = new TComboBox("p_types");
 
 	connect(p_add, &QPushButton::clicked, this, &TPerfCreate::add);
 

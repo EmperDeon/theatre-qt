@@ -1,6 +1,7 @@
 #include <windows/TMainWindow.h>
 #include <QApplication>
 #include <QtCore/QFile>
+#include <utils/TDB.h>
 
 
 class QApplication;
@@ -19,6 +20,9 @@ int main(int argc, char **argv) {
 
 	TMainWindow *w = new TMainWindow;
 	w->show();
+
+//	TDB db;
+//	qDebug() << db.getPerms();
 
 	return a.exec();
 }
