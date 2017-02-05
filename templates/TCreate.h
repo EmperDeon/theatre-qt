@@ -1,6 +1,5 @@
 #ifndef THEATRE_ADMIN_TCREATE_H
 #define THEATRE_ADMIN_TCREATE_H
-
 #include <QtWidgets/QtWidgets>
 
 class TCreate : public QWidget {
@@ -12,10 +11,13 @@ protected:
 public:
 	TCreate();
 
-	virtual void create() {};
+	void create();
 
 	virtual void reset() {};
 
+	virtual QString getPath() = 0;
+
+	virtual QMap<QString, QString> getParams() = 0;
 };
 
 

@@ -19,22 +19,6 @@ TPosterEdit::TPosterEdit() {
 	load();
 }
 
-void TPosterEdit::submit() {
-	if (QMessageBox::question(this, "Сохранение в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
-	    QMessageBox::Yes) {
-		QString o = TDB().request("posters/edit", {
-				{"id",        QString::number(id)},
-				{"t_perf_id", name->getIndex()},
-				{"hall_id",   hall->getIndex()},
-				{"date",      date->dateTime().toString("dd.MM.yyyy hh:mm")}
-
-		}).toString();
-
-		if (o == "successful")
-			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
-	}
-}
-
 void TPosterEdit::reset() {
 	id = obj["id"].toInt();
 
@@ -43,7 +27,16 @@ void TPosterEdit::reset() {
 	date->setDateTime(QDateTime::fromString(obj["date"].toString(), "dd.MM.yyyy hh:mm"));
 }
 
-void TPosterEdit::load() {
-	obj = TDB().request("posters/" + c_box->getIndex()).toObject();
-	reset();
+QString TPosterEdit::getPath() {
+	return "posters";
+}
+
+QMap<QString, QString> TPosterEdit::getParams() {
+	return {
+			{"id",        QString::number(id)},
+			{"t_perf_id", name->getIndex()},
+			{"hall_id",   hall->getIndex()},
+			{"date",      date->dateTime().toString("dd.MM.yyyy hh:mm")}
+
+	};
 }

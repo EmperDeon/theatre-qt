@@ -7,9 +7,7 @@
 #include <utils/TListBox.h>
 
 class TTheatreCreate : public TCreate {
-	QLineEdit *name;
-	QLineEdit *phone;
-	QLineEdit *address;
+	QLineEdit *name, *phone, *address;
 	QTextEdit *desc;
 
 	TListBox *list;
@@ -17,9 +15,11 @@ class TTheatreCreate : public TCreate {
 public:
 	TTheatreCreate();
 
-	virtual void create();
-
 	virtual void reset();
+
+	QString getPath() override;
+
+	QMap<QString, QString> getParams() override;
 
 };
 

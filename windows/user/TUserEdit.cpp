@@ -25,24 +25,6 @@ TUserEdit::TUserEdit() {
 	load();
 }
 
-void TUserEdit::submit() {
-	if (QMessageBox::question(this, "Сохранение в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
-	    QMessageBox::Yes) {
-		QString o = TDB().request("u_apis/edit", {
-				{"id",       QString::number(id)},
-				{"fio",      l_fio->text()},
-				{"position", l_pos->text()},
-				{"login",    l_login->text()},
-				{"password", l_passw->text()},
-				{"phone",    l_phone->text()},
-				{"perms",    l_perms->getIds().join(',')}
-		}).toString();
-
-		if (o == "successful")
-			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
-	}
-}
-
 void TUserEdit::reset() {
 	id = obj["id"].toInt();
 
@@ -55,7 +37,18 @@ void TUserEdit::reset() {
 	l_perms->setIds(obj["perms"].toString().split(','));
 }
 
-void TUserEdit::load() {
-	obj = TDB().request("u_apis/" + c_box->getIndex()).toObject();
-	reset();
+QString TUserEdit::getPath() {
+	return "u_apis";
+}
+
+QMap<QString, QString> TUserEdit::getParams() {
+	return {
+			{"id",       QString::number(id)},
+			{"fio",      l_fio->text()},
+			{"position", l_pos->text()},
+			{"login",    l_login->text()},
+			{"password", l_passw->text()},
+			{"phone",    l_phone->text()},
+			{"perms",    l_perms->getIds().join(',')}
+	};
 }

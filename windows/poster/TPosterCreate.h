@@ -8,16 +8,17 @@
 #include <utils/TComboBox.h>
 
 class TPosterCreate : public TCreate {
-	TComboBox *name;
-	TComboBox *hall;
+	TComboBox *name, *hall;
 	QDateTimeEdit *date;
 
 public:
 	TPosterCreate();
 
-	virtual void create();
-
 	virtual void reset();
+
+	QString getPath() override;
+
+	QMap<QString, QString> getParams() override;
 
 };
 

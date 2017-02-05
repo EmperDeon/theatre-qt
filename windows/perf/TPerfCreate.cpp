@@ -61,34 +61,6 @@ void TPerfCreate::add() {
 	p_wgt->setVisible(sv);
 }
 
-void TPerfCreate::create() {
-	if (QMessageBox::question(this, "Создание записи в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
-	    QMessageBox::Yes) {
-
-		QMap<QString, QString> map;
-
-		if (p_wgt->isVisible()) {
-			map["name"] = p_name->text();
-			map["author"] = p_auth->text();
-			map["type_id"] = p_type->getIndex();
-
-		} else {
-			map["perf_id"] = p_box->getIndex();
-		}
-
-		map["desc"] = e_desc->toPlainText();
-		map["desc_s"] = e_desc_s->toPlainText();
-
-		QString o = TDB().request("t_perfs/create", map).toString();
-
-		if (o == "successful") {
-			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
-			p_box->load("performances");
-			reset();
-		}
-	}
-}
-
 void TPerfCreate::reset() {
 	p_box->setEnabled(true);
 	p_wgt->setVisible(false);
@@ -101,4 +73,26 @@ void TPerfCreate::reset() {
 
 	e_desc->clear();
 	e_desc_s->clear();
+}
+
+QString TPerfCreate::getPath() {
+	return "t_perfs";
+}
+
+QMap<QString, QString> TPerfCreate::getParams() {
+	QMap<QString, QString> map;
+
+	if (p_wgt->isVisible()) {
+		map["name"] = p_name->text();
+		map["author"] = p_auth->text();
+		map["type_id"] = p_type->getIndex();
+
+	} else {
+		map["perf_id"] = p_box->getIndex();
+	}
+
+	map["desc"] = e_desc->toPlainText();
+	map["desc_s"] = e_desc_s->toPlainText();
+
+	return map;
 }

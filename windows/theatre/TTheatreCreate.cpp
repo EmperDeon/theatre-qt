@@ -17,33 +17,27 @@ TTheatreCreate::TTheatreCreate() {
 	layout->addRow("Залы:", list);
 }
 
-void TTheatreCreate::create() {
-	if (QMessageBox::question(this, "Создание записи в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
-	    QMessageBox::Yes) {
-		QString o = TDB().request("theatres/create", {
-				                          {"name",      name->text()},
-				                          {"tel_num",   phone->text()},
-				                          {"address",   address->text()},
-				                          {"desc",      desc->toPlainText()},
-
-				                          {"halls_new", list->getAdded().join(',')}
-		                          }
-
-		).toString();
-
-		if (o == "successful") {
-			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
-			reset();
-		}
-	}
-}
-
 void TTheatreCreate::reset() {
 	name->clear();
 	phone->clear();
 	address->clear();
 	desc->clear();
 
+}
+
+QString TTheatreCreate::getPath() {
+	return "theatres";
+}
+
+QMap<QString, QString> TTheatreCreate::getParams() { // TODO: Fix
+	return {
+			{"name",      name->text()},
+			{"tel_num",   phone->text()},
+			{"address",   address->text()},
+			{"desc",      desc->toPlainText()},
+
+			{"halls_new", list->getAdded().join(',')}
+	};
 }
 
 

@@ -22,12 +22,14 @@
 #include <windows/user/TUsers.h>
 #include <windows/user/TUserCreate.h>
 #include <windows/user/TUserEdit.h>
+#include <windows/hall/THallCreate.h>
 
 
 TMainWindow::TMainWindow() {
 	QWidget *nw = new QWidget;
 	l = new QHBoxLayout;
 	w_menu = new TMainMenu(this);
+	l_status = new QLabel;
 
 	l->setContentsMargins(0, 0, 0, 0);
 
@@ -39,7 +41,7 @@ TMainWindow::TMainWindow() {
 	changeCurrent("main");
 	resize(800, 500);
 
-	this->statusBar()->showMessage("213", 10000);
+	this->statusBar()->addPermanentWidget(l_status);
 }
 
 void TMainWindow::changeCurrent(QString s) {
@@ -71,7 +73,8 @@ void TMainWindow::changeCurrent(QString s) {
 		});
 
 	} else if (s == "main") {
-		w_curr = getNewMainWidget();
+//		w_curr = getNewLoadWidget();
+		w_curr = new THallCreate;
 
 	} else if (s == "theatres_create") {
 		w_curr = new TTheatreCreate;
@@ -177,4 +180,13 @@ QWidget *TMainWindow::getNewLoadWidget() {
 
 	w->setLayout(l);
 	return w;
+}
+
+void TMainWindow::showStatusMessage(QString s) {
+	l_status->setStyleSheet(QString("color: ") + (s.startsWith("Успешно") ? "green" : "red"));
+	l_status->setText(s);
+
+	QTimer::singleShot((s.startsWith("Успешно") ? 1500 : 5000), [=]() {
+		l_status->clear();
+	});
 }

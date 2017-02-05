@@ -1,3 +1,4 @@
+#include <utils/TDB.h>
 #include "TCreate.h"
 
 TCreate::TCreate() {
@@ -19,4 +20,17 @@ TCreate::TCreate() {
 	l->addSpacing(10);
 
 	setLayout(l);
+}
+
+void TCreate::create() {
+	if (QMessageBox::question(this, "Создание записи в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
+	    QMessageBox::Yes) {
+		QString o = TDB().request(getPath() + "/create", getParams()).toString();
+
+		if (o == "successful") {
+			reset();
+			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
+		}
+	}
+
 }

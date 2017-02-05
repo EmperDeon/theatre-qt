@@ -6,8 +6,6 @@
 
 
 class TEdit : public QWidget {
-Q_OBJECT
-
 	QPushButton *b_create, *b_reset;
 
 protected:
@@ -16,18 +14,21 @@ protected:
 	TComboBox *c_box;
 	QFormLayout *layout;
 
+	void changeIndex(int i);
+
 public:
 	TEdit();
 
-	virtual void submit() {};
+	void submit();
 
 	virtual void reset() {};
 
-	virtual void load() {};
+	void load();
 
-public slots:
+	virtual QString getPath() { return ""; };
 
-	void changeIndex(int i);
+	virtual QMap<QString, QString> getParams() = 0;
+
 };
 
 

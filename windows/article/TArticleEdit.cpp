@@ -12,23 +12,8 @@ TArticleEdit::TArticleEdit() {
 	layout->addRow("Краткое описание:", desc_s);
 	layout->addRow("Описание:", desc);
 
-	c_box->load("articles");
+	c_box->load(getPath());
 	load();
-}
-
-void TArticleEdit::submit() {
-	if (QMessageBox::question(this, "Сохранение в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
-	    QMessageBox::Yes) {
-		QString o = TDB().request("articles/edit", {
-				{"id",     QString::number(id)},
-				{"name",   name->text()},
-				{"desc_s", desc_s->toPlainText()},
-				{"desc",   desc->toPlainText()}
-		}).toString();
-
-		if (o == "successful")
-			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
-	}
 }
 
 void TArticleEdit::reset() {
@@ -39,7 +24,15 @@ void TArticleEdit::reset() {
 	desc->setText(obj["desc"].toString());
 }
 
-void TArticleEdit::load() {
-	obj = TDB().request("articles/" + c_box->getIndex()).toObject();
-	reset();
+QString TArticleEdit::getPath() {
+	return "articles";
+}
+
+QMap<QString, QString> TArticleEdit::getParams() {
+	return {
+			{"id",     QString::number(id)},
+			{"name",   name->text()},
+			{"desc_s", desc_s->toPlainText()},
+			{"desc",   desc->toPlainText()}
+	};
 }

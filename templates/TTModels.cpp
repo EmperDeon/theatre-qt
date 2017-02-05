@@ -1,10 +1,6 @@
-//
-// Created by ilya on 12/14/2016.
-//
-
 #include "TTModels.h"
 
-TTModel::TTModel() {
+TTModels::TTModels() {
 	QVBoxLayout *l = new QVBoxLayout;
 
 	// Scroll

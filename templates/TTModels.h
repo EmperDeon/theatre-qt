@@ -1,15 +1,14 @@
-#ifndef THEATRE_ADMIN_TTMODEL_H
-#define THEATRE_ADMIN_TTMODEL_H
-
+#ifndef THEATRE_ADMIN_TTMODELS_H
+#define THEATRE_ADMIN_TTMODELS_H
 #include <QtWidgets/QtWidgets>
 
-class TTModel : public QWidget {
+class TTModels : public QWidget {
 protected:
 	QVBoxLayout *layout;
 
 public:
-	TTModel();
+	TTModels();
 };
 
 
-#endif //THEATRE_ADMIN_TTMODEL_H
+#endif //THEATRE_ADMIN_TTMODELS_H

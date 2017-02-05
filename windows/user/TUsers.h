@@ -3,9 +3,9 @@
 #include <QtWidgets>
 #include <templates/TTModels.h>
 
-class TTModel;
+class TTModels;
 
-class TUsers : public TTModel { // Отображение всех юзеров
+class TUsers : public TTModels { // Отображение всех юзеров
 
 public:
 	TUsers();

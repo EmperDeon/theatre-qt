@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include "TMainMenu.h"
+#include <QDebug>
 
 class TMainMenu;
 
@@ -12,6 +13,9 @@ class TMainWindow : public QMainWindow {
 	QWidget *w_curr = nullptr;
 	bool loadingWidget = false;
 
+	// StatusBar permanent label
+	QLabel *l_status;
+
 	QWidget *getNewMainWidget();
 
 	QWidget *getNewLoadWidget();
@@ -20,6 +24,19 @@ public:
 	TMainWindow();
 
 	void changeCurrent(QString s);
+
+	void showStatusMessage(QString s);
+
+	// Singleton function for TDB
+	static TMainWindow *getInstance() {
+		static TMainWindow *instance = nullptr;
+
+		if (!instance) {
+			instance = new TMainWindow;
+		}
+
+		return instance;
+	}
 };
 
 

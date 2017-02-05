@@ -4,6 +4,7 @@
 #include <QtWidgets/QScrollArea>
 #include <QtCore/QPropertyAnimation>
 #include <QtCore/QParallelAnimationGroup>
+#include <QtConcurrent/QtConcurrent>
 #include "TMainMenu.h"
 
 TMainMenu::TMainMenu(TMainWindow *w) : wnd(w) {
@@ -12,7 +13,7 @@ TMainMenu::TMainMenu(TMainWindow *w) : wnd(w) {
 
 	b_hide = new QPushButton(tr("Свернуть меню <"));
 
-	reformMenu();
+	QTimer::singleShot(50, this, &TMainMenu::reformMenu);
 
 	connect(b_hide, &QPushButton::clicked, this, &TMainMenu::hideMenu);
 

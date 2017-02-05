@@ -21,9 +21,11 @@ public:
 
 	void add();
 
-	virtual void create() override;
-
 	virtual void reset() override;
+
+	QString getPath() override;
+
+	QMap<QString, QString> getParams() override;
 };
 
 

@@ -3,7 +3,7 @@
 #include <windows/user/TUser.h>
 
 // TUsers
-TUsers::TUsers() : TTModel() {
+TUsers::TUsers() : TTModels() {
 	// Fill scroll with widgets
 	QJsonArray users = TDB().request("u_apis").toArray();
 

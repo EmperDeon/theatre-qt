@@ -1,26 +1,21 @@
 #ifndef TPOSTER_H
 #define TPOSTER_H
-
-#include <QtWidgets/QtWidgets>
-#include <QtCore/QJsonObject>
 #include <utils/TComboBox.h>
+#include <templates/TTModel.h>
 
-class TPoster : public QWidget {
-	QPushButton *b_edt;
-	QPushButton *b_del;
-	int id;
 
+class TPoster : public TTModel {
 	QLineEdit *l_name, *l_hall;
 	QDateTimeEdit *l_date;
 
 public:
 	TPoster(QJsonObject o);
 
-	void edt();
+	virtual QString getPath() override;
 
-	void save();
+	virtual void setFEnabled(bool b) override;
 
-	void del();
+	QMap<QString, QString> getParams() override;
 };
 
 

@@ -11,11 +11,11 @@ class TUserEdit : public TEdit {
 public:
 	TUserEdit();
 
-	virtual void submit();
-
 	virtual void reset();
 
-	virtual void load();
+	virtual QString getPath() override;
+
+	QMap<QString, QString> getParams() override;
 };
 
 

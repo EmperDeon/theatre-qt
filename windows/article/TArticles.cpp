@@ -3,7 +3,7 @@
 #include <windows/article/TArticle.h>
 
 
-TArticles::TArticles() : TTModel() {
+TArticles::TArticles() : TTModels() {
 	// Fill scroll with widgets
 	QJsonArray users = TDB().request("articles").toArray();
 

@@ -16,9 +16,10 @@ set(P_S
         dialogs/TDCheck.cpp
         dialogs/TDLogin.cpp
 
-        templates/TTModels.cpp
         templates/TCreate.cpp
         templates/TEdit.cpp
+        templates/TTModel.cpp
+        templates/TTModels.cpp
 
         res/res.rc
 
@@ -40,6 +41,8 @@ set(P_S
         windows/article/TArticleCreate.cpp
         windows/article/TArticleEdit.cpp
         windows/article/TArticles.cpp
+
+        windows/hall/THallCreate.cpp
 
         windows/perf/TPerf.cpp
         windows/perf/TPerfCreate.cpp
@@ -67,9 +70,10 @@ set(P_H
         dialogs/TDCheck.h
         dialogs/TDLogin.h
 
-        templates/TTModels.h
         templates/TCreate.h
         templates/TEdit.h
+        templates/TTModel.h
+        templates/TTModels.h
 
         utils/TCheckBox.h
         utils/TComboBox.h
@@ -89,6 +93,8 @@ set(P_H
         windows/article/TArticleCreate.h
         windows/article/TArticleEdit.h
         windows/article/TArticles.h
+
+        windows/hall/THallCreate.h
 
         windows/perf/TPerf.h
         windows/perf/TPerfCreate.h

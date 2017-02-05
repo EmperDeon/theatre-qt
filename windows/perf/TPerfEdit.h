@@ -23,11 +23,11 @@ public:
 
 	void add();
 
-	virtual void submit() override;
+	virtual void reset();
 
-	virtual void reset() override;
+	virtual QString getPath() override;
 
-	virtual void load() override;
+	QMap<QString, QString> getParams() override;
 };
 
 

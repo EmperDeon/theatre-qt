@@ -3,38 +3,29 @@
 
 
 TArticleCreate::TArticleCreate() {
-	name = new QLineEdit();
-	desc_s = new QTextEdit();
-	desc = new QTextEdit();
-
+	name = new QLineEdit;
+	desc_s = new QTextEdit;
+	desc = new QTextEdit;
 
 	layout->addRow("Заголовок:", name);
 	layout->addRow("Краткое Описание:", desc_s);
 	layout->addRow("Описание:", desc);
-
-}
-
-void TArticleCreate::create() {
-	if (QMessageBox::question(this, "Создание записи в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
-	    QMessageBox::Yes) {
-		QString o = TDB().request("articles/create", {
-				                          {"name",   name->text()},
-				                          {"desc_s", desc_s->toPlainText()},
-				                          {"desc",   desc->toPlainText()}
-		                          }
-
-		).toString();
-
-		if (o == "successful") {
-			reset();
-			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
-		}
-	}
 }
 
 void TArticleCreate::reset() {
 	name->clear();
 	desc_s->clear();
 	desc->clear();
+}
 
+QString TArticleCreate::getPath() {
+	return "articles";
+}
+
+QMap<QString, QString> TArticleCreate::getParams() {
+	return {
+			{"name",   name->text()},
+			{"desc_s", desc_s->toPlainText()},
+			{"desc",   desc->toPlainText()}
+	};
 }

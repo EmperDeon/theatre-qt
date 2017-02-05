@@ -38,6 +38,8 @@ public:
 	void writeToLog(QString path, QMap<QString, QString> params, QString r_type);
 
 	QString getResponseCode() const;
+
+	QString getCodeDesc(QString path);
 };
 
 

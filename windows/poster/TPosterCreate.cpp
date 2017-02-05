@@ -17,27 +17,21 @@ TPosterCreate::TPosterCreate() {
 
 }
 
-void TPosterCreate::create() {
-	if (QMessageBox::question(this, "Создание записи в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
-	    QMessageBox::Yes) {
-		QString o = TDB().request("posters/create", {
-				                          {"t_perf_id", name->getIndex()},
-				                          {"hall_id",   hall->getIndex()},
-				                          {"date",      date->dateTime().toString("dd.MM.yyyy hh:mm")}
-		                          }
-
-		).toString();
-
-		if (o == "successful") {
-			reset();
-			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
-		}
-	}
-}
-
 void TPosterCreate::reset() {
 	name->setCurrentText(0);
 	hall->setCurrentText(0);
 	date->setDate(QDate::currentDate());
 	date->setTime(QTime(0, 0));
+}
+
+QString TPosterCreate::getPath() {
+	return "posters";
+}
+
+QMap<QString, QString> TPosterCreate::getParams() {
+	return {
+			{"t_perf_id", name->getIndex()},
+			{"hall_id",   hall->getIndex()},
+			{"date",      date->dateTime().toString("dd.MM.yyyy hh:mm")} // TODO: Fix to current datetime format
+	};
 }

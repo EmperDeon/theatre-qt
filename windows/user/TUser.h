@@ -1,23 +1,19 @@
 #ifndef THEATRE_ADMIN_TUSER_H
 #define THEATRE_ADMIN_TUSER_H
-
 #include <utils/TCheckBox.h>
-#include <QtCore/QJsonObject>
-#include <QtWidgets/QtWidgets>
+#include <templates/TTModel.h>
 
-class TUser : public QFrame {
-	int id;
+class TUser : public TTModel {
 	QLineEdit *l_fio, *l_pos, *l_login, *l_phone;
-	QPushButton *b_edt, *b_del;
 
 public:
 	TUser(QJsonObject o);
 
-	void edt();
+	virtual QString getPath() override;
 
-	void del();
+	virtual void setFEnabled(bool b) override;
 
-	void save();
+	QMap<QString, QString> getParams() override;
 };
 
 

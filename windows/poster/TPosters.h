@@ -4,7 +4,7 @@
 #include <QtWidgets/QtWidgets>
 #include <templates/TTModels.h>
 
-class TPosters : public TTModel {
+class TPosters : public TTModels {
 
 public:
 	TPosters();

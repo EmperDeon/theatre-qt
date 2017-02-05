@@ -64,33 +64,6 @@ void TPerfEdit::add() {
 	p_wgt->setVisible(sv);
 }
 
-void TPerfEdit::submit() {
-	if (QMessageBox::question(this, "Создание записи в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
-	    QMessageBox::Yes) {
-
-		QMap<QString, QString> map;
-
-		if (p_wgt->isVisible()) {
-			map["name"] = p_name->text();
-			map["author"] = p_auth->text();
-			map["type_id"] = p_type->getIndex();
-
-		} else {
-			map["perf_id"] = p_box->getIndex();
-		}
-		map["id"] = QString::number(id);
-		map["desc"] = e_desc->toPlainText();
-		map["desc_s"] = e_desc_s->toPlainText();
-
-		QString o = TDB().request("t_perfs/edit", map).toString();
-
-		if (o == "successful") {
-			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
-			p_box->load("performances");
-		}
-	}
-}
-
 void TPerfEdit::reset() {
 	id = obj["id"].toInt();
 
@@ -107,7 +80,24 @@ void TPerfEdit::reset() {
 	e_desc_s->setText(obj["desc_s"].toString());
 }
 
-void TPerfEdit::load() {
-	obj = TDB().request("t_perfs/" + c_box->getIndex()).toObject();
-	reset();
+QString TPerfEdit::getPath() {
+	return "t_perfs";
+}
+
+QMap<QString, QString> TPerfEdit::getParams() {
+	QMap<QString, QString> map;
+
+	if (p_wgt->isVisible()) {
+		map["name"] = p_name->text();
+		map["author"] = p_auth->text();
+		map["type_id"] = p_type->getIndex();
+
+	} else {
+		map["perf_id"] = p_box->getIndex();
+	}
+	map["id"] = QString::number(id);
+	map["desc"] = e_desc->toPlainText();
+	map["desc_s"] = e_desc_s->toPlainText();
+
+	return map;
 }

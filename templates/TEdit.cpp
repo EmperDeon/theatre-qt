@@ -1,3 +1,4 @@
+#include <utils/TDB.h>
 #include "TEdit.h"
 
 TEdit::TEdit() {
@@ -9,7 +10,7 @@ TEdit::TEdit() {
 	b_create = new QPushButton("Сохранить");
 	b_reset = new QPushButton("Сбросить");
 
-	connect(c_box, SIGNAL(currentIndexChanged(int)), this, SLOT(changeIndex(int)));
+	connect(c_box, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &TEdit::changeIndex);
 	connect(b_create, &QPushButton::clicked, this, &TEdit::submit);
 	connect(b_reset, &QPushButton::clicked, this, &TEdit::reset);
 
@@ -29,4 +30,19 @@ TEdit::TEdit() {
 void TEdit::changeIndex(int i) {
 	Q_UNUSED(i);
 	load();
+}
+
+void TEdit::load() {
+	obj = TDB().request(getPath() + "/" + c_box->getIndex()).toObject();
+	reset();
+}
+
+void TEdit::submit() {
+	if (QMessageBox::question(this, "Сохранение в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
+	    QMessageBox::Yes) {
+		QString o = TDB().request(getPath() + "/edit", getParams()).toString();
+
+		if (o == "successful")
+			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
+	}
 }

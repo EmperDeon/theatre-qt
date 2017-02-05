@@ -13,11 +13,11 @@ class TPosterEdit : public TEdit {
 public:
 	TPosterEdit();
 
-	virtual void submit();
-
 	virtual void reset();
 
-	virtual void load();
+	virtual QString getPath() override;
+
+	QMap<QString, QString> getParams() override;
 };
 
 

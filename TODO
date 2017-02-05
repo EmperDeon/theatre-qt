@@ -1,10 +1,4 @@
-TODO: [Later]
-TODO:  Write TModel for main models (posters, users, etc.)
+TODO:  Write TModel for main models (posters, users, etc.) ?-Do i really need it-?
 TODO:  Models - Booking, Comments, Reviews, Statistics
-TODO:  *Later* Loading screen for menu
-FIXME: !!Multiple widgets!!  ^^^^^
-
-TODO: Logging request and responses to file
-TODO: Response status, to status bar
 
 FIXME: View TPerf, Posters,

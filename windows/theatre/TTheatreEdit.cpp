@@ -20,36 +20,6 @@ TTheatreEdit::TTheatreEdit() {
 	load();
 }
 
-void TTheatreEdit::submit() {
-	if (!list->getItems().isEmpty()) {
-		if (QMessageBox::warning(this, "Внимание !",
-		                         "При удалении зала, удаялтся также и все афиши в этом зале. \nПродолжить ?",
-		                         QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
-			return;
-		}
-	}
-
-	if (QMessageBox::question(this, "Сохранение в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
-	    QMessageBox::Yes) {
-
-
-		QString o = TDB().request("theatres/edit", {
-				{"id",        QString::number(id)},
-				{"name",      name->text()},
-				{"tel_num",   phone->text()},
-				{"address",   address->text()},
-				{"desc",      desc->toPlainText()},
-
-				{"halls_del", list->getItems().join(',')},
-				{"halls_new", list->getAdded().join(',')}
-		}).toString();
-
-		if (o == "successful") {
-			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
-		}
-	}
-}
-
 void TTheatreEdit::reset() {
 	id = obj["id"].toInt();
 
@@ -59,7 +29,26 @@ void TTheatreEdit::reset() {
 	desc->setText(obj["desc"].toString());
 }
 
-void TTheatreEdit::load() {
-	obj = TDB().request("theatres/" + c_box->getIndex()).toObject();
-	reset();
+QString TTheatreEdit::getPath() {
+	return "theatres";
+}
+
+QMap<QString, QString> TTheatreEdit::getParams() {
+//	if (!list->getItems().isEmpty()) { TODO: Think
+//		if (QMessageBox::warning(this, "Внимание !",
+//		                         "При удалении зала, удаялтся также и все афиши в этом зале. \nПродолжить ?",
+//		                         QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
+//			return;
+//		}
+//	}
+	return {
+			{"id",        QString::number(id)},
+			{"name",      name->text()},
+			{"tel_num",   phone->text()},
+			{"address",   address->text()},
+			{"desc",      desc->toPlainText()},
+
+			{"halls_del", list->getItems().join(',')},
+			{"halls_new", list->getAdded().join(',')}
+	};
 }

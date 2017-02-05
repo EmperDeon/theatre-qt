@@ -20,26 +20,6 @@ TUserCreate::TUserCreate() {
 	layout->addRow("Права доступа:", l_perms);
 }
 
-void TUserCreate::create() {
-	if (QMessageBox::question(this, "Создание записи в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
-	    QMessageBox::Yes) {
-		QString o = TDB().request("u_apis/create", {
-				                          {"fio",      l_fio->text()},
-				                          {"position", l_pos->text()},
-				                          {"login",    l_login->text()},
-				                          {"password", l_passw->text()},
-				                          {"phone",    l_phone->text()},
-				                          {"perms",    l_perms->getIds().join(',')}
-		                          }
-		).toString();
-
-		if (o == "successful") {
-			reset();
-			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");
-		}
-	}
-}
-
 void TUserCreate::reset() {
 	l_fio->clear();
 	l_pos->clear();
@@ -47,4 +27,19 @@ void TUserCreate::reset() {
 	l_passw->clear();
 	l_perms->clear();
 	l_phone->clear();
+}
+
+QString TUserCreate::getPath() {
+	return "u_apis";
+}
+
+QMap<QString, QString> TUserCreate::getParams() {
+	return {
+			{"fio",      l_fio->text()},
+			{"position", l_pos->text()},
+			{"login",    l_login->text()},
+			{"password", l_passw->text()},
+			{"phone",    l_phone->text()},
+			{"perms",    l_perms->getIds().join(',')} // TODO: Fix
+	};
 }

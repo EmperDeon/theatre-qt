@@ -1,27 +1,23 @@
-#ifndef THEATRE_ADMIN_edit1theatre_H
-#define THEATRE_ADMIN_edit1theatre_H
-
-#include <QtWidgets/QtWidgets>
+#ifndef THEATRE_ADMIN_TheatreEdit_H
+#define THEATRE_ADMIN_TheatreEdit_H
 #include <utils/TCheckBox.h>
 #include <templates/TEdit.h>
 #include <utils/TListBox.h>
 
 class TTheatreEdit : public TEdit {
+	QLineEdit *name, *phone, *address;
 	QTextEdit *desc;
-	QLineEdit *name;
-	QLineEdit *phone;
-	QLineEdit *address;
 
 	TListBox *list;
 
 public:
 	TTheatreEdit();
 
-	virtual void submit();
-
 	virtual void reset();
 
-	virtual void load();
+	virtual QString getPath() override;
+
+	QMap<QString, QString> getParams() override;
 };
 
 

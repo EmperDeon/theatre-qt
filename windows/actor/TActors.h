@@ -6,9 +6,9 @@
 #include "TActor.h"
 
 
-class TTModel;
+class TTModels;
 
-class TActors : public TTModel {
+class TActors : public TTModels {
 Q_OBJECT
 public:
 	QPushButton *add;

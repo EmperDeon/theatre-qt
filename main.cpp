@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 
 	a.setStyleSheet(readStyleSheet());
 
-	TMainWindow *w = new TMainWindow;
+	TMainWindow *w = TMainWindow::getInstance();
 	w->show();
 
 //	TDB db;

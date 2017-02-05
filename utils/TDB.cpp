@@ -4,7 +4,8 @@
 #include <QtCore/QJsonArray>
 #include <QtCore/QJsonDocument>
 #include <QtNetwork/QNetworkReply>
-#include <QtWidgets/QMessageBox>
+#include <QtWidgets>
+#include <windows/TMainWindow.h>
 #include "dialogs/TDLogin.h"
 #include "TDB.h"
 
@@ -13,18 +14,9 @@ TDB::TDB() {
 }
 
 QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
-	qDebug() << "Request:" << path << ", params:" << params;
+	// Join all parameters to string
+	QString keys = params.keys().join(", ");
 
-//	if (params.contains("desc")) {
-//		QString desc = params["desc"];
-//		desc = desc.replace('\n', "<br>");
-//		params["desc"] = desc;
-//	}
-//	if (params.contains("desc_s")) {
-//		QString desc = params["desc_s"];
-//		desc = desc.replace('\n', "<br>");
-//		params["desc_s"] = desc;
-//	}
 
 	checkAndRefreshToken();
 	params.insert("token", token);
@@ -37,7 +29,15 @@ QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
 		r_type = "GET";
 
 	QJsonValue r = GET(path, params, r_type);
+
+	qDebug() << QString("[ %1] '%2'  params: '%3'")
+			.arg(r_type, 4).arg(path, 18).arg(keys)
+			.toStdString().c_str();
+
 	hasErrors();
+
+	TMainWindow *main_w = TMainWindow::getInstance();
+	main_w->showStatusMessage(getCodeDesc(path));
 
 	writeToLog(path, params, r_type);
 
@@ -104,7 +104,7 @@ void TDB::getToken() {
 				{"login", cred["login"].toString()},
 				{"pass",  cred["password"].toString()}
 		}, "POST").toObject();
-		qDebug() << o;
+
 		if (hasErrors()) {
 			getToken();
 
@@ -211,50 +211,99 @@ void TDB::writeToLog(QString path, QMap<QString, QString> params, QString r_type
 	o["params"] = t;
 
 	// Save
+	QJsonArray a;
+	QFile f("log.json");
+	if (f.open(QFile::ReadOnly)) {
+		a = QJsonDocument::fromJson(f.readAll()).array();
+		f.close();
+	}
+
+	a << o;
+
+	f.open(QFile::WriteOnly);
+	f.write(QJsonDocument(a).toJson());
+	f.close();
 }
 
 QString TDB::getResponseCode() const {
 	switch (lastError) {
 		case QNetworkReply::NoError:
-			return "200 OK";
-		case QNetworkReply::ConnectionRefusedError:
-		case QNetworkReply::RemoteHostClosedError:
-		case QNetworkReply::HostNotFoundError:
-		case QNetworkReply::TimeoutError:
-		case QNetworkReply::OperationCanceledError:
-		case QNetworkReply::SslHandshakeFailedError:
-		case QNetworkReply::TemporaryNetworkFailureError:
-		case QNetworkReply::NetworkSessionFailedError:
-		case QNetworkReply::BackgroundRequestNotAllowedError:
-		case QNetworkReply::TooManyRedirectsError:
-		case QNetworkReply::InsecureRedirectError:
-		case QNetworkReply::UnknownNetworkError:
-		case QNetworkReply::ProxyConnectionRefusedError:
-		case QNetworkReply::ProxyConnectionClosedError:
-		case QNetworkReply::ProxyNotFoundError:
-		case QNetworkReply::ProxyTimeoutError:
-		case QNetworkReply::ProxyAuthenticationRequiredError:
-		case QNetworkReply::UnknownProxyError:
-		case QNetworkReply::ContentAccessDenied:
-		case QNetworkReply::ContentOperationNotPermittedError:
-		case QNetworkReply::ContentNotFoundError:
-			return "404";
+			return "200";
 		case QNetworkReply::AuthenticationRequiredError:
 			return "401";
-		case QNetworkReply::ContentReSendError:
-		case QNetworkReply::ContentConflictError:
-		case QNetworkReply::ContentGoneError:
+		case QNetworkReply::ContentNotFoundError:
+			return "404";
+		case QNetworkReply::ContentOperationNotPermittedError:
+			return "403";
 		case QNetworkReply::UnknownContentError:
-		case QNetworkReply::ProtocolUnknownError:
-		case QNetworkReply::ProtocolInvalidOperationError:
-		case QNetworkReply::ProtocolFailure:
+			return "422";
 		case QNetworkReply::InternalServerError:
 			return "500";
+
+//		case QNetworkReply::NoError:                           return "200 OK";
+//		case QNetworkReply::AuthenticationRequiredError:       return "401 Auth required";
+//		case QNetworkReply::ContentNotFoundError:              return "404 Not found";
+//		case QNetworkReply::ContentOperationNotPermittedError: return "403 || 405 Not permitted";
+//		case QNetworkReply::UnknownContentError:               return "422 Validation error";
+//		case QNetworkReply::InternalServerError:               return "500 Internal error";
+
+		case QNetworkReply::ProxyAuthenticationRequiredError:
+			return "407";
+		case QNetworkReply::ContentConflictError:
+			return "409";
+		case QNetworkReply::ContentGoneError:
+			return "410";
+		case QNetworkReply::ProtocolInvalidOperationError:
+			return "400";
 		case QNetworkReply::OperationNotImplementedError:
 			return "501";
 		case QNetworkReply::ServiceUnavailableError:
 			return "503";
 		case QNetworkReply::UnknownServerError:
+			return "502 .. 511";
+
+		case QNetworkReply::HostNotFoundError:
+			return "Error No host";
+		case QNetworkReply::ConnectionRefusedError:
+			return "Error ConnectionRefused";
+		case QNetworkReply::RemoteHostClosedError:
+			return "Error RemoteHostClosed";
+		case QNetworkReply::TimeoutError:
+			return "Error Timeout";
+		case QNetworkReply::OperationCanceledError:
+			return "Error OperationCanceled";
+		case QNetworkReply::SslHandshakeFailedError:
+			return "Error SslHandshakeFailed";
+		case QNetworkReply::TemporaryNetworkFailureError:
+			return "Error TemporaryNetworkFailure";
+		case QNetworkReply::NetworkSessionFailedError:
+			return "Error NetworkSessionFailed";
+		case QNetworkReply::BackgroundRequestNotAllowedError:
+			return "Error BackgroundRequestNotAllowed";
+		case QNetworkReply::TooManyRedirectsError:
+			return "Error TooManyRedirects";
+		case QNetworkReply::InsecureRedirectError:
+			return "Error InsecureRedirect";
+		case QNetworkReply::UnknownNetworkError:
+			return "Error UnknownNetwork";
+		case QNetworkReply::ProxyConnectionRefusedError:
+			return "Error ProxyConnectionRefused";
+		case QNetworkReply::ProxyConnectionClosedError:
+			return "Error ProxyConnectionClosed";
+		case QNetworkReply::ProxyNotFoundError:
+			return "Error ProxyNotFound";
+		case QNetworkReply::ProxyTimeoutError:
+			return "Error ProxyTimeout";
+		case QNetworkReply::UnknownProxyError:
+			return "Error UnknownProxy";
+		case QNetworkReply::ContentAccessDenied:
+			return "Error ContentAccessDenied";
+		case QNetworkReply::ContentReSendError:
+			return "Error ContentReSend";
+		case QNetworkReply::ProtocolUnknownError:
+			return "Error ProtocolUnknown";
+		case QNetworkReply::ProtocolFailure:
+			return "Error ProtocolFailure";
 
 		default:
 			return "";
@@ -274,6 +323,109 @@ QString TDB::getResponseCode() const {
 //			205 => 'Reset Content',
 //			206 => 'Partial Content',
 
+}
+
+QString TDB::getCodeDesc(QString path) {
+	switch (lastError) {
+		case QNetworkReply::NoError: {
+			QString r = "Успешно ";
+			if (path.endsWith("create")) {
+				r += "создано";
+
+			} else if (path.endsWith("update")) {
+				r += "изменено";
+
+			} else if (path.endsWith("destroy")) {
+				r += "удалено";
+
+			} else if (path.endsWith("restore")) {
+				r += "восстановлено";
+
+			} else {
+				return "Успешное другое действие";
+			}
+			return r;
+		}
+
+		case QNetworkReply::AuthenticationRequiredError:
+			return "Ошибка авторизации";
+		case QNetworkReply::ContentNotFoundError:
+			return "Элемент не найден";
+		case QNetworkReply::ContentOperationNotPermittedError:
+			return "Недостаточно прав для совершения действия";
+		case QNetworkReply::UnknownContentError:
+			return "?Ошибка валидации?";
+		case QNetworkReply::InternalServerError:
+			return "Внутренняя ошибка сервера, обратитесь к администратору";
+
+//		case QNetworkReply::NoError:                           return "200 OK";
+//		case QNetworkReply::AuthenticationRequiredError:       return "401 Auth required";
+//		case QNetworkReply::ContentNotFoundError:              return "404 Not found";
+//		case QNetworkReply::ContentOperationNotPermittedError: return "403 || 405 Not permitted";
+//		case QNetworkReply::UnknownContentError:               return "422 Validation error";
+//		case QNetworkReply::InternalServerError:               return "500 Internal error";
+
+		case QNetworkReply::ProxyAuthenticationRequiredError:
+			return "407";
+		case QNetworkReply::ContentConflictError:
+			return "409";
+		case QNetworkReply::ContentGoneError:
+			return "410";
+		case QNetworkReply::ProtocolInvalidOperationError:
+			return "400";
+		case QNetworkReply::OperationNotImplementedError:
+			return "501";
+		case QNetworkReply::ServiceUnavailableError:
+			return "503";
+		case QNetworkReply::UnknownServerError:
+			return "502 .. 511";
+
+		case QNetworkReply::HostNotFoundError:
+			return "Ошибка подключения к серверу";
+		case QNetworkReply::ConnectionRefusedError:
+			return "Error ConnectionRefused";
+		case QNetworkReply::RemoteHostClosedError:
+			return "Error RemoteHostClosed";
+		case QNetworkReply::TimeoutError:
+			return "Error Timeout";
+		case QNetworkReply::OperationCanceledError:
+			return "Error OperationCanceled";
+		case QNetworkReply::SslHandshakeFailedError:
+			return "Error SslHandshakeFailed";
+		case QNetworkReply::TemporaryNetworkFailureError:
+			return "Error TemporaryNetworkFailure";
+		case QNetworkReply::NetworkSessionFailedError:
+			return "Error NetworkSessionFailed";
+		case QNetworkReply::BackgroundRequestNotAllowedError:
+			return "Error BackgroundRequestNotAllowed";
+		case QNetworkReply::TooManyRedirectsError:
+			return "Error TooManyRedirects";
+		case QNetworkReply::InsecureRedirectError:
+			return "Error InsecureRedirect";
+		case QNetworkReply::UnknownNetworkError:
+			return "Error UnknownNetwork";
+		case QNetworkReply::ProxyConnectionRefusedError:
+			return "Error ProxyConnectionRefused";
+		case QNetworkReply::ProxyConnectionClosedError:
+			return "Error ProxyConnectionClosed";
+		case QNetworkReply::ProxyNotFoundError:
+			return "Error ProxyNotFound";
+		case QNetworkReply::ProxyTimeoutError:
+			return "Error ProxyTimeout";
+		case QNetworkReply::UnknownProxyError:
+			return "Error UnknownProxy";
+		case QNetworkReply::ContentAccessDenied:
+			return "Error ContentAccessDenied";
+		case QNetworkReply::ContentReSendError:
+			return "Error ContentReSend";
+		case QNetworkReply::ProtocolUnknownError:
+			return "Error ProtocolUnknown";
+		case QNetworkReply::ProtocolFailure:
+			return "Error ProtocolFailure";
+
+		default:
+			return "";
+	}
 }
 
 

@@ -11,9 +11,11 @@ class TUserCreate : public TCreate {
 public:
 	TUserCreate();
 
-	virtual void create();
-
 	virtual void reset();
+
+	QString getPath() override;
+
+	QMap<QString, QString> getParams() override;
 
 };
 

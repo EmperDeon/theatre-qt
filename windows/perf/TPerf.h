@@ -1,26 +1,20 @@
 #ifndef THEATRE_ADMIN_TPERF_H
 #define THEATRE_ADMIN_TPERF_H
-
-#include <QtWidgets/QtWidgets>
-#include <QtCore/QJsonObject>
 #include <utils/TComboBox.h>
+#include <templates/TTModel.h>
 
-class TPerf : public QWidget {
-	QPushButton *b_edt;
-	QPushButton *b_del;
-	int id;
-
+class TPerf : public TTModel {
 	QLineEdit *l_name, *l_auth, *l_type;
 	QTextEdit *e_desc_s;
 
 public:
 	TPerf(QJsonObject o);
 
-	void edt();
+	virtual QString getPath() override;
 
-	void save();
+	virtual void setFEnabled(bool b) override;
 
-	void del();
+	QMap<QString, QString> getParams() override;
 };
 
 

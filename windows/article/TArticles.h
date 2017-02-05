@@ -4,9 +4,9 @@
 #include <QtWidgets>
 #include <templates/TTModels.h>
 
-class TTModel;
+class TTModels;
 
-class TArticles : public TTModel {
+class TArticles : public TTModels {
 
 public:
 	TArticles();
