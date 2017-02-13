@@ -1,8 +1,9 @@
 #ifndef THEATRE_ADMIN_TDB_H
 #define THEATRE_ADMIN_TDB_H
 
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QHttpPart>
 #include <QJsonObject>
 #include "TConfig.h"
 
@@ -40,6 +41,15 @@ public:
 	QString getResponseCode() const;
 
 	QString getCodeDesc(QString path);
+
+	QJsonValue uploadFiles(QMap<QString, QString> files, QMap<QString, QString> params = QMap<QString, QString>());
+
+	// TODO: Maybe mak these static
+	QJsonValue upload(QMap<QString, QIODevice *> io, QMap<QString, QString> params = QMap<QString, QString>());
+
+	void appendStringPart(QHttpMultiPart *multipart, QString k, QString v) const;
+
+	void appendFilePart(QHttpMultiPart *multipart, QString k, QIODevice *v) const;
 };
 
 

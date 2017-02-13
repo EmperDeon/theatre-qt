@@ -6,7 +6,6 @@
 QLabel[menuLink=true] { /* Sub link */
     padding-left: 3px;
     color: black;
-
 }
 
 QLabel[menuLink=false] {

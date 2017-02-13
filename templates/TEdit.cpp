@@ -40,7 +40,7 @@ void TEdit::load() {
 void TEdit::submit() {
 	if (QMessageBox::question(this, "Сохранение в БД", "Вы уверены, что хотите сохранить эти данные ?") ==
 	    QMessageBox::Yes) {
-		QString o = TDB().request(getPath() + "/edit", getParams()).toString();
+		QString o = TDB().request(getPath() + "/update", getParams()).toString();
 
 		if (o == "successful")
 			QMessageBox::information(this, "Сохранение в БД", "Успешно сохранено");

@@ -27,6 +27,7 @@ set(P_S
         utils/TComboBox.cpp
         utils/TConfig.cpp
         utils/TDB.cpp
+        utils/TFileUpload.cpp
         utils/TListBox.cpp
 
         windows/TChoose.cpp
@@ -42,7 +43,11 @@ set(P_S
         windows/article/TArticleEdit.cpp
         windows/article/TArticles.cpp
 
+        windows/hall/THall.cpp
         windows/hall/THallCreate.cpp
+        windows/hall/THallEdit.cpp
+        windows/hall/THallPreview.cpp
+        windows/hall/THalls.cpp
 
         windows/perf/TPerf.cpp
         windows/perf/TPerfCreate.cpp
@@ -79,6 +84,7 @@ set(P_H
         utils/TComboBox.h
         utils/TConfig.h
         utils/TDB.h
+        utils/TFileUpload.h
         utils/TListBox.h
 
         windows/TChoose.h
@@ -94,7 +100,11 @@ set(P_H
         windows/article/TArticleEdit.h
         windows/article/TArticles.h
 
+        windows/hall/THall.h
         windows/hall/THallCreate.h
+        windows/hall/THallEdit.h
+        windows/hall/THallPreview.h
+        windows/hall/THalls.h
 
         windows/perf/TPerf.h
         windows/perf/TPerfCreate.h

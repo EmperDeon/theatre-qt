@@ -6,6 +6,7 @@
 #include <templates/TCreate.h>
 #include <utils/TComboBox.h>
 #include <templates/TEdit.h>
+#include <utils/TFileUpload.h>
 
 class TPerfEdit : public TEdit {
 	// Global perfs
@@ -14,6 +15,7 @@ class TPerfEdit : public TEdit {
 	QPushButton *p_add;
 	QWidget *p_wgt;
 
+	TFileUpload *e_img;
 	TComboBox *p_box;
 
 	QTextEdit *e_desc, *e_desc_s;

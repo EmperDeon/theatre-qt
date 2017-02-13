@@ -3,5 +3,6 @@
         <file>qss.qss</file>
         <file>icon.ico</file>
         <file>loading.gif</file>
+        <file>none.png</file>
     </qresource>
 </RCC>

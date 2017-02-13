@@ -38,6 +38,7 @@ TPerfEdit::TPerfEdit() {
 	// Global performance
 
 	// Theatre performance
+	e_img = new TFileUpload;
 	e_desc = new QTextEdit;
 	e_desc_s = new QTextEdit;
 
@@ -45,6 +46,9 @@ TPerfEdit::TPerfEdit() {
 	// Theatre performance
 
 	layout->addWidget(gr);
+
+	layout->addWidget(new QLabel("Изображение:"));
+	layout->addWidget(e_img);
 
 	layout->addWidget(new QLabel("Краткое описание:"));
 	layout->addWidget(e_desc_s);
@@ -76,6 +80,8 @@ void TPerfEdit::reset() {
 	p_auth->clear();
 	p_type->setCurrentIndex(0);
 
+	e_img->load(obj["img"].toString());
+
 	e_desc->setText(obj["desc"].toString());
 	e_desc_s->setText(obj["desc_s"].toString());
 }
@@ -95,7 +101,9 @@ QMap<QString, QString> TPerfEdit::getParams() {
 	} else {
 		map["perf_id"] = p_box->getIndex();
 	}
+
 	map["id"] = QString::number(id);
+	map["img"] = e_img->getUrl();
 	map["desc"] = e_desc->toPlainText();
 	map["desc_s"] = e_desc_s->toPlainText();
 

@@ -1,4 +1,5 @@
-TODO:  Write TModel for main models (posters, users, etc.) ?-Do i really need it-?
-TODO:  Models - Booking, Comments, Reviews, Statistics
+TODO: Write TModel for main models (posters, users, etc.) ?-Do i really need it-?
+TODO: Models - Booking, Comments, Reviews, Statistics
+TODO: Save and Load data in model to file
 
-FIXME: View TPerf, Posters,
+TODO: Maybe add full screen view of preview in TFileUpload

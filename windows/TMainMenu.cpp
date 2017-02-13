@@ -144,15 +144,18 @@ void TMainMenu::createStructure() {
 //			"article_delete"
 //	}; //TDB().getPerms();
 
-
 	Ie("theatres");
 		IeSI("theatres_choose", "Сменить текущий театр");
 		IeSI("theatres_create", "Создать новый театр");
 	IeC("theatres", "Театры");
 
-
 	Ie("theatres_update");
 	IeC("theatres_update", "Редактировать текущий театр");
+
+	Ie("t_halls");
+		IeSI("t_halls_update", "Изменить зал");
+		IeSI("t_halls_create", "Создать новый зал");
+	IeC("t_halls", "Залы");
 
 	Ie("t_perfs");
 		IeSI("t_perfs_create", "Добавление спектакля");

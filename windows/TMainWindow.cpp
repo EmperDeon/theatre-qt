@@ -23,6 +23,9 @@
 #include <windows/user/TUserCreate.h>
 #include <windows/user/TUserEdit.h>
 #include <windows/hall/THallCreate.h>
+#include <windows/hall/THalls.h>
+#include <windows/hall/THall.h>
+#include <utils/TFileUpload.h>
 
 
 TMainWindow::TMainWindow() {
@@ -74,7 +77,8 @@ void TMainWindow::changeCurrent(QString s) {
 
 	} else if (s == "main") {
 //		w_curr = getNewLoadWidget();
-		w_curr = new THallCreate;
+//		w_curr = new THallCreate;
+		w_curr = new TFileUpload("772aa60e47cc9cb3c55628a785ab1af11358a2e0f9cd7ee4870b7dad6cfd230f");
 
 	} else if (s == "theatres_create") {
 		w_curr = new TTheatreCreate;
@@ -84,6 +88,9 @@ void TMainWindow::changeCurrent(QString s) {
 
 	} else if (s == "theatres") {
 		w_curr = new TTheatres;
+
+	} else if (s == "t_halls") {
+		w_curr = new THalls;
 
 	} else if (s == "u_apis") {
 		w_curr = new TUsers;

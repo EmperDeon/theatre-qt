@@ -17,7 +17,6 @@ QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
 	// Join all parameters to string
 	QString keys = params.keys().join(", ");
 
-
 	checkAndRefreshToken();
 	params.insert("token", token);
 
@@ -48,8 +47,8 @@ QJsonValue TDB::GET(QString path, QMap<QString, QString> params, QString r_type)
 	QTime requestTime;
 	requestTime.start();
 
-//	QUrl c("https://api-theatre.herokuapp.com/" + path);
-	QUrl c("http://127.0.0.1:3000/" + path);
+	QUrl c("https://api-theatre.herokuapp.com/" + path);
+//	QUrl c("http://127.0.0.1:3000/" + path);
 
 	QUrlQuery q; // Query items
 	for (QString k : params.keys())
@@ -426,6 +425,75 @@ QString TDB::getCodeDesc(QString path) {
 		default:
 			return "";
 	}
+}
+
+QJsonValue TDB::uploadFiles(QMap<QString, QString> files, QMap<QString, QString> params) {
+	QMap<QString, QIODevice *> io;
+
+	for (QString k : files.keys()) {
+		QFile *f = new QFile(files[k]);
+		f->open(QIODevice::ReadOnly);
+
+		io[k] = f;
+	}
+
+	return upload(io, params);
+}
+
+QJsonValue TDB::upload(QMap<QString, QIODevice *> io, QMap<QString, QString> params) {
+	QUrl c("https://api-theatre.herokuapp.com/utils/upload");
+
+	QHttpMultiPart *multipart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+
+	for (QString k : io.keys()) {
+		appendFilePart(multipart, k, io[k]);
+	}
+
+	for (QString k : params.keys()) {
+		appendStringPart(multipart, k, params[k]);
+	}
+
+	QNetworkRequest request(c);
+	QNetworkReply *rep = manager.post(request, multipart);
+	multipart->setParent(rep);
+
+	QEventLoop wait;
+	QObject::connect(&manager, SIGNAL(finished(QNetworkReply * )), &wait, SLOT(quit()));
+	QTimer::singleShot(60000, &wait, SLOT(quit()));
+	wait.exec();
+
+	lastReply = QJsonDocument::fromJson(rep->readAll()).object();
+	lastError = rep->error();
+
+	qDebug() << QString("[ %1] '%2'  params: '%3'")
+			.arg("POST", 4).arg("utils/upload", 18).arg((io.keys() + params.keys()).join(", "))
+			.toStdString().c_str();
+
+	hasErrors();
+
+	return lastReply["response"];
+}
+
+void TDB::appendFilePart(QHttpMultiPart *multipart, QString k, QIODevice *v) const {
+	QHttpPart file_part;
+
+	file_part.setHeader(QNetworkRequest::ContentDispositionHeader,
+	                    "form-data; name=\"" + k + "\"; filename=\"" + k + "\"");
+	file_part.setHeader(QNetworkRequest::ContentTypeHeader, "image/png");
+
+	file_part.setBodyDevice(v);
+	v->setParent(multipart);
+
+	multipart->append(file_part);
+}
+
+void TDB::appendStringPart(QHttpMultiPart *multipart, QString k, QString v) const {
+	QHttpPart r;
+
+	r.setHeader(QNetworkRequest::ContentDispositionHeader, "form-data; name=\"" + k + "\"");
+	r.setBody(v.toUtf8());
+
+	multipart->append(r);
 }
 
 
