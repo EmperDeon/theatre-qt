@@ -20,9 +20,9 @@ public:
 
 	void load(QString t);
 
-	QStringList getAdded();
+	QString getAdded();
 
-	QStringList getItems();
+	QString getItems();
 };
 
 

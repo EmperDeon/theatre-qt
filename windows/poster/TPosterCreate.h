@@ -8,7 +8,7 @@
 #include <utils/TComboBox.h>
 
 class TPosterCreate : public TCreate {
-	TComboBox *name, *hall;
+	TComboBox *name;
 	QDateTimeEdit *date;
 
 public:

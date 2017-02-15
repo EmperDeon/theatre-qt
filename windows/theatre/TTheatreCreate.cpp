@@ -7,6 +7,7 @@ TTheatreCreate::TTheatreCreate() {
 	phone = new QLineEdit();
 	address = new QLineEdit();
 	desc = new QTextEdit();
+	img = new TFileUpload();
 
 	list = new TListBox;
 
@@ -14,6 +15,7 @@ TTheatreCreate::TTheatreCreate() {
 	layout->addRow("Телефонный номер:", phone);
 	layout->addRow("Адрес:", address);
 	layout->addRow("Описание:", desc);
+	layout->addRow("Изображение:", img);
 	layout->addRow("Залы:", list);
 }
 
@@ -22,7 +24,7 @@ void TTheatreCreate::reset() {
 	phone->clear();
 	address->clear();
 	desc->clear();
-
+	img->clear();
 }
 
 QString TTheatreCreate::getPath() {
@@ -31,12 +33,13 @@ QString TTheatreCreate::getPath() {
 
 QMap<QString, QString> TTheatreCreate::getParams() { // TODO: Fix
 	return {
-			{"name",      name->text()},
-			{"tel_num",   phone->text()},
-			{"address",   address->text()},
-			{"desc",      desc->toPlainText()},
+			{"name",    name->text()},
+			{"tel_num", phone->text()},
+			{"address", address->text()},
+			{"desc",    desc->toPlainText()},
+			{"img",     img->getUrl()},
 
-			{"halls_new", list->getAdded().join(',')}
+			{"t_halls", list->getAdded()}
 	};
 }
 

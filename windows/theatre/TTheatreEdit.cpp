@@ -2,10 +2,11 @@
 #include "TTheatreEdit.h"
 
 TTheatreEdit::TTheatreEdit() {
-	name = new QLineEdit();
-	phone = new QLineEdit();
-	address = new QLineEdit();
-	desc = new QTextEdit();
+	name = new QLineEdit;
+	phone = new QLineEdit;
+	address = new QLineEdit;
+	desc = new QTextEdit;
+	img = new TFileUpload;
 	list = new TListBox("t_halls");
 
 	layout->setMargin(0);
@@ -14,9 +15,13 @@ TTheatreEdit::TTheatreEdit() {
 	layout->addRow("Телефонный номер:", phone);
 	layout->addRow("Адрес:", address);
 	layout->addRow("Описание:", desc);
+	layout->addRow("Изображение:", img);
 	layout->addRow("Залы:", list);
 
-	c_box->setVisible(false);
+	c_box->load(getPath());
+	if (c_box->count() == 1)
+		c_box->setVisible(false);
+
 	load();
 }
 
@@ -27,6 +32,9 @@ void TTheatreEdit::reset() {
 	phone->setText(obj["tel_num"].toString());
 	address->setText(obj["address"].toString());
 	desc->setText(obj["desc"].toString());
+	img->load(obj["img"].toString());
+
+	list->load("t_halls");
 }
 
 QString TTheatreEdit::getPath() {
@@ -41,14 +49,16 @@ QMap<QString, QString> TTheatreEdit::getParams() {
 //			return;
 //		}
 //	}
-	return {
-			{"id",        QString::number(id)},
-			{"name",      name->text()},
-			{"tel_num",   phone->text()},
-			{"address",   address->text()},
-			{"desc",      desc->toPlainText()},
 
-			{"halls_del", list->getItems().join(',')},
-			{"halls_new", list->getAdded().join(',')}
+	return {
+			{"id",          QString::number(id)},
+			{"name",        name->text()},
+			{"tel_num",     phone->text()},
+			{"address",     address->text()},
+			{"desc",        desc->toPlainText()},
+			{"img",         img->getUrl()},
+
+			{"t_halls_del", list->getItems()},
+			{"t_halls_new", list->getAdded()}
 	};
 }

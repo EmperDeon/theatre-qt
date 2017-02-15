@@ -87,3 +87,15 @@ void TFileUpload::load(QString u) {
 		l_img->setPixmap(getPreview(url));
 	});
 }
+
+QString TFileUpload::getUrl() const {
+	if (url == "")
+		return "none.png";
+
+	return url;
+}
+
+void TFileUpload::clear() {
+	l_img->clear();
+	url = "";
+}

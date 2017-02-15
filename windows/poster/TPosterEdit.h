@@ -6,7 +6,7 @@
 #include <templates/TEdit.h>
 
 class TPosterEdit : public TEdit {
-	TComboBox *name, *hall;
+	TComboBox *name;
 	QDateTimeEdit *date;
 
 

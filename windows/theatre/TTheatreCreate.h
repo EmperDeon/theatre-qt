@@ -5,10 +5,12 @@
 #include <utils/TCheckBox.h>
 #include <templates/TCreate.h>
 #include <utils/TListBox.h>
+#include <utils/TFileUpload.h>
 
 class TTheatreCreate : public TCreate {
 	QLineEdit *name, *phone, *address;
 	QTextEdit *desc;
+	TFileUpload *img;
 
 	TListBox *list;
 

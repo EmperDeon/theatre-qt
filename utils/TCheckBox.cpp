@@ -4,10 +4,10 @@
 #include "TDB.h"
 
 TCheckBox::TCheckBox(QString t) {
-	QJsonArray a = TDB().request("utils/lists/", {{"name", t}}).toArray();
+	QJsonObject a = TDB().request("utils/lists/", {{"name", t}}).toObject();
 
-	for (QJsonValue v : a) {
-		map.insert(v.toObject()["name"].toString(), QString::number(v.toObject()["id"].toInt()));
+	for (QString v : a.keys()) {
+		map.insert(a[v].toString(), QString::number(v.toInt()));
 	}
 }
 
@@ -29,4 +29,26 @@ void TCheckBox::setIds(QStringList l) {
 			this->addItem(v);
 	}
 
+}
+
+QString TCheckBox::getIds() {
+	QJsonArray r;
+
+	for (QString s : selected)
+		r << s.toInt();
+
+	return QJsonDocument(r).toJson();
+}
+
+void TCheckBox::setIds(QJsonArray l) {
+	selected.clear();
+
+	for (QJsonValue v : l)
+		selected << QString::number(v.toInt());
+
+	this->clear();
+	for (QString v : map.keys()) {
+		if (l.contains(map[v]))
+			this->addItem(v);
+	}
 }

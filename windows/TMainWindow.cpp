@@ -76,9 +76,8 @@ void TMainWindow::changeCurrent(QString s) {
 		});
 
 	} else if (s == "main") {
-//		w_curr = getNewLoadWidget();
+		w_curr = getNewMainWidget();
 //		w_curr = new THallCreate;
-		w_curr = new TFileUpload("772aa60e47cc9cb3c55628a785ab1af11358a2e0f9cd7ee4870b7dad6cfd230f");
 
 	} else if (s == "theatres_create") {
 		w_curr = new TTheatreCreate;

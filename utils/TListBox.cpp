@@ -15,13 +15,6 @@ TListBox::TListBox(QString t) : QGroupBox("Редактирование спис
 	hl->addWidget(b_add);
 	hl->addWidget(b_rem);
 
-	QPushButton *b = new QPushButton("debug");
-	connect(b, &QPushButton::clicked, this, [=]() {
-		qDebug() << getAdded();
-		qDebug() << getItems();
-	});
-	hl->addWidget(b);
-
 	l->addLayout(hl);
 	l->addWidget(list);
 
@@ -32,11 +25,12 @@ TListBox::TListBox(QString t) : QGroupBox("Редактирование спис
 }
 
 void TListBox::load(QString t) {
-	QJsonArray a = TDB().request("utils/lists", {{"name", t}}).toArray();
+	list->clear();
+	QJsonObject a = TDB().request("utils/hashes", {{"name", t}}).toObject();
 
-	for (QJsonValue v : a) {
-		map.insert(v.toObject()["name"].toString(), QString::number(v.toObject()["id"].toInt()));
-		list->addItem(v.toObject()["name"].toString());
+	for (QString k : a.keys()) {
+		map.insert(a[k].toString(), QString::number(k.toInt()));
+		list->addItem(a[k].toString());
 	}
 }
 
@@ -68,23 +62,23 @@ void TListBox::rem() {
 	}
 }
 
-QStringList TListBox::getAdded() {
-	QStringList r;
+QString TListBox::getAdded() {
+	QJsonArray r;
 
 	for (QString s : added) {
 		if (!map.contains(s))
 			r << s;
 	}
 
-	return r;
+	return QJsonDocument(r).toJson();
 }
 
-QStringList TListBox::getItems() {
-	QStringList r;
+QString TListBox::getItems() {
+	QJsonArray r;
 
 	for (QString s : removed) {
 		r << map[s];
 	}
 
-	return r;
+	return QJsonDocument(r).toJson();
 }

@@ -32,9 +32,9 @@ void TUserEdit::reset() {
 	l_pos->setText(obj["position"].toString());
 	l_login->setText(obj["login"].toString());
 	l_passw->setText("");
-	l_phone->setText(obj["phone"].toString());
+	l_phone->setText(obj["tel_num"].toString());
 
-	l_perms->setIds(obj["perms"].toString().split(','));
+	l_perms->setIds(obj["perms"].toArray());
 }
 
 QString TUserEdit::getPath() {
@@ -48,7 +48,7 @@ QMap<QString, QString> TUserEdit::getParams() {
 			{"position", l_pos->text()},
 			{"login",    l_login->text()},
 			{"password", l_passw->text()},
-			{"phone",    l_phone->text()},
-			{"perms",    l_perms->getIds().join(',')}
+			{"tel_num",  l_phone->text()},
+			{"perms",    l_perms->getIds()}
 	};
 }

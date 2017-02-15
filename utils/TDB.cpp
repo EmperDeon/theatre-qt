@@ -47,8 +47,8 @@ QJsonValue TDB::GET(QString path, QMap<QString, QString> params, QString r_type)
 	QTime requestTime;
 	requestTime.start();
 
-	QUrl c("https://api-theatre.herokuapp.com/" + path);
-//	QUrl c("http://127.0.0.1:3000/" + path);
+//	QUrl c("https://api-theatre.herokuapp.com/" + path);
+	QUrl c("http://127.0.0.1:3000/" + path);
 
 	QUrlQuery q; // Query items
 	for (QString k : params.keys())
@@ -441,7 +441,8 @@ QJsonValue TDB::uploadFiles(QMap<QString, QString> files, QMap<QString, QString>
 }
 
 QJsonValue TDB::upload(QMap<QString, QIODevice *> io, QMap<QString, QString> params) {
-	QUrl c("https://api-theatre.herokuapp.com/utils/upload");
+//	QUrl c("https://api-theatre.herokuapp.com/utils/upload");
+	QUrl c("http://127.0.0.1:3000/utils/upload");
 
 	QHttpMultiPart *multipart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 

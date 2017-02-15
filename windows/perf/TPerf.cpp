@@ -4,7 +4,7 @@
 TPerf::TPerf(QJsonObject o) : TTModel(o) {
 	l_name = new QLineEdit(o["perf"].toObject()["name"].toString());
 	l_auth = new QLineEdit(o["perf"].toObject()["author"].toString());
-	l_type = new QLineEdit(o["type"].toObject()["type"].toString());
+	l_type = new QLineEdit(o["type"].toObject()["name"].toString());
 	e_desc_s = new QTextEdit(o["desc_s"].toString());
 
 	l_name->setEnabled(false);

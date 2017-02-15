@@ -25,5 +25,5 @@ QMap<QString, QString> TArticle::getParams() {
 }
 
 QString TArticle::getPath() {
-	return "article";
+	return "articles";
 }

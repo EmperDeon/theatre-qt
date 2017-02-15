@@ -4,6 +4,7 @@
 #include <QtWidgets/QtWidgets>
 #include <templates/TCreate.h>
 #include <utils/TComboBox.h>
+#include <utils/TFileUpload.h>
 
 class TPerfCreate : public TCreate {
 	// Global perfs
@@ -14,7 +15,9 @@ class TPerfCreate : public TCreate {
 
 	TComboBox *p_box;
 
+	TComboBox *e_hall;
 	QTextEdit *e_desc, *e_desc_s;
+	TFileUpload *e_img;
 
 public:
 	TPerfCreate();

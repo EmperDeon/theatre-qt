@@ -39,7 +39,7 @@ QMap<QString, QString> TUserCreate::getParams() {
 			{"position", l_pos->text()},
 			{"login",    l_login->text()},
 			{"password", l_passw->text()},
-			{"phone",    l_phone->text()},
-			{"perms",    l_perms->getIds().join(',')} // TODO: Fix
+			{"tel_num",  l_phone->text()},
+			{"perms",    l_perms->getIds()}
 	};
 }

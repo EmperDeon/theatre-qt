@@ -33,8 +33,10 @@ void TEdit::changeIndex(int i) {
 }
 
 void TEdit::load() {
-	obj = TDB().request(getPath() + "/" + c_box->getIndex()).toObject();
-	reset();
+	if (c_box->getIndex() > 0) {
+		obj = TDB().request(getPath() + "/" + c_box->getIndex()).toObject();
+		reset();
+	}
 }
 
 void TEdit::submit() {

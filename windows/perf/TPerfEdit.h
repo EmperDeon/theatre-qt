@@ -15,10 +15,11 @@ class TPerfEdit : public TEdit {
 	QPushButton *p_add;
 	QWidget *p_wgt;
 
-	TFileUpload *e_img;
 	TComboBox *p_box;
 
+	TComboBox *e_hall;
 	QTextEdit *e_desc, *e_desc_s;
+	TFileUpload *e_img;
 
 public:
 	TPerfEdit();

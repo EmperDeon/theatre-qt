@@ -3,10 +3,12 @@
 #include <utils/TCheckBox.h>
 #include <templates/TEdit.h>
 #include <utils/TListBox.h>
+#include <utils/TFileUpload.h>
 
 class TTheatreEdit : public TEdit {
 	QLineEdit *name, *phone, *address;
 	QTextEdit *desc;
+	TFileUpload *img;
 
 	TListBox *list;
 

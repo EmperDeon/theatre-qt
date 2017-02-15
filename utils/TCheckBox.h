@@ -2,6 +2,7 @@
 #define THEATRE_ADMIN_TCHECKBOX_H
 
 #include <QtWidgets/QListWidget>
+#include <QtCore/QtCore>
 
 class TCheckBox;
 
@@ -14,9 +15,11 @@ public:
 
 	void clearList() { selected.clear(); }
 
+	void setIds(QJsonArray l);
+
 	void setIds(QStringList l);
 
-	QStringList getIds() { return selected; }
+	QString getIds();
 
 protected:
 	virtual void mouseDoubleClickEvent(QMouseEvent *event) override;

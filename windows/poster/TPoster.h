@@ -5,7 +5,7 @@
 
 
 class TPoster : public TTModel {
-	QLineEdit *l_name, *l_hall;
+	QLineEdit *l_name;
 	QDateTimeEdit *l_date;
 
 public:

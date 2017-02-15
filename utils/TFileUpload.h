@@ -12,9 +12,11 @@ public:
 
 	void upload();
 
-	QString getUrl() const { return url; }
+	QString getUrl() const;
 
 	void load(QString u);
+
+	void clear();
 
 	static QPixmap getPreview(QString u);
 

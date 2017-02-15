@@ -1,5 +1,13 @@
 TODO: Write TModel for main models (posters, users, etc.) ?-Do i really need it-?
-TODO: Models - Booking, Comments, Reviews, Statistics
-TODO: Save and Load data in model to file
-
+TODO: Save temporary data
+TODO: Perms checks: delete/restore buttons
 TODO: Maybe add full screen view of preview in TFileUpload
+TODO: Gallery for theatres, performances, actors, articles
+
+TODO: Models - Booking, Comments, Reviews, Statistics
+
+TODO: Write Actor Classes
+TODO: TModel: add timestamps, 'deleted' menu
+TODO: Separate menus for admin
+TODO: TPerformances fixes
+

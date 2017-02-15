@@ -37,19 +37,27 @@ TPerfCreate::TPerfCreate() {
 	// Global performance
 
 	// Theatre performance
+	e_hall = new TComboBox("t_halls");
 	e_desc = new QTextEdit;
 	e_desc_s = new QTextEdit;
+	e_img = new TFileUpload();
 
 	e_desc_s->setMaximumHeight(100);
 	// Theatre performance
 
 	layout->addWidget(gr);
 
+	layout->addWidget(new QLabel("Зал:"));
+	layout->addWidget(e_hall);
+
 	layout->addWidget(new QLabel("Краткое описание:"));
 	layout->addWidget(e_desc_s);
 
 	layout->addWidget(new QLabel("Полное описание:"));
 	layout->addWidget(e_desc);
+
+	layout->addWidget(new QLabel("Изображение:"));
+	layout->addWidget(e_img);
 }
 
 void TPerfCreate::add() {
@@ -71,8 +79,10 @@ void TPerfCreate::reset() {
 	p_auth->clear();
 	p_type->setCurrentIndex(0);
 
+	e_hall->setCurrentIndex(0);
 	e_desc->clear();
 	e_desc_s->clear();
+	e_img->clear();
 }
 
 QString TPerfCreate::getPath() {
@@ -83,16 +93,20 @@ QMap<QString, QString> TPerfCreate::getParams() {
 	QMap<QString, QString> map;
 
 	if (p_wgt->isVisible()) {
-		map["name"] = p_name->text();
-		map["author"] = p_auth->text();
-		map["type_id"] = p_type->getIndex();
+		QJsonObject perf;
+		perf["name"] = p_name->text();
+		perf["author"] = p_auth->text();
+		perf["type_id"] = p_type->getIndex();
+		map["perf_new"] = QJsonDocument(perf).toJson();
 
 	} else {
 		map["perf_id"] = p_box->getIndex();
 	}
 
+	map["t_hall_id"] = e_hall->getIndex();
 	map["desc"] = e_desc->toPlainText();
 	map["desc_s"] = e_desc_s->toPlainText();
+	map["img"] = e_img->getUrl();
 
 	return map;
 }

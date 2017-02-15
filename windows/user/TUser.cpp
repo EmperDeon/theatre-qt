@@ -7,7 +7,7 @@ TUser::TUser(QJsonObject o) : TTModel(o) {
 	l_pos = new QLineEdit(o["position"].toString());
 
 	l_login = new QLineEdit(o["login"].toString());
-	l_phone = new QLineEdit(o["phone"].toString());
+	l_phone = new QLineEdit(o["tel_num"].toString());
 
 	l_fio->setEnabled(false);
 	l_pos->setEnabled(false);
@@ -43,7 +43,7 @@ QMap<QString, QString> TUser::getParams() {
 			{"fio",      l_fio->text()},
 			{"position", l_pos->text()},
 			{"login",    l_login->text()},
-			{"phone",    l_phone->text()}
+			{"tel_num",  l_phone->text()}
 
 	};
 }
