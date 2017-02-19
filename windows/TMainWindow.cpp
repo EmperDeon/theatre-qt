@@ -26,6 +26,7 @@
 #include <windows/hall/THalls.h>
 #include <windows/hall/THall.h>
 #include <utils/TFileUpload.h>
+#include <windows/del/TDeleted.h>
 
 
 TMainWindow::TMainWindow() {
@@ -76,8 +77,12 @@ void TMainWindow::changeCurrent(QString s) {
 		});
 
 	} else if (s == "main") {
-		w_curr = getNewMainWidget();
-//		w_curr = new THallCreate;
+//		w_curr = getNewMainWidget();
+		w_curr = new THallCreate;
+
+	} else if (s == "deleted") {
+//		w_curr = getNewMainWidget();
+		w_curr = new TDeleted;
 
 	} else if (s == "theatres_create") {
 		w_curr = new TTheatreCreate;

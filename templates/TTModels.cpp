@@ -9,7 +9,9 @@ TTModels::TTModels() {
 	layout = new QVBoxLayout;
 
 	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 5, 0);
 	layout->setAlignment(Qt::AlignTop);
+
 	w->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 	w->setLayout(layout);
 
@@ -20,6 +22,8 @@ TTModels::TTModels() {
 	scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 	scroll->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
 	scroll->setFrameStyle(QFrame::NoFrame);
+
+	setBackgroundRole(QPalette::Base);
 
 	l->addWidget(scroll);
 	setLayout(l);

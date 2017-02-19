@@ -8,10 +8,15 @@ TTModel::TTModel(QJsonObject o) {
 
 	b_edt = new QPushButton("Изменить");
 	b_del = new QPushButton("Удалить");
+	l_upd = new QLabel;
+	QLabel *l_upd_l = new QLabel("Последнее изменение:");
 
 	b_edt->setMaximumWidth(100);
 	b_del->setMaximumWidth(100);
+	l_upd->setText(o["timestamps"].toObject()["updated_at"].toString());
 
+	l_upd->setEnabled(false);
+	l_upd->setStyleSheet("font-size: 11px");
 
 	connect(b_edt, &QPushButton::clicked, this, &TTModel::edt);
 	connect(b_del, &QPushButton::clicked, this, &TTModel::del);
@@ -29,6 +34,11 @@ TTModel::TTModel(QJsonObject o) {
 
 	setLayout(l);
 	setFrameStyle(QFrame::StyledPanel);
+
+	QTimer::singleShot(0, [=]() {
+		layout->addRow(new QLabel(""));
+		layout->addRow(l_upd_l, l_upd);
+	});
 }
 
 void TTModel::edt() {

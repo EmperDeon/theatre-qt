@@ -6,6 +6,7 @@
 
 class TTModel : public QFrame {
 	QPushButton *b_edt, *b_del;
+	QLabel *l_upd;
 
 protected:
 	int id;

@@ -185,6 +185,11 @@ void TMainMenu::createStructure() {
 	menuStructure << QJsonObject{{"action", ""},
 	                             {"name",   ""},
 	                             {"sub",    QJsonArray{}}};
+
+	menuStructure << QJsonObject{{"action", "deleted"},
+	                             {"name",   "Отобразить удаленные"},
+	                             {"sub",    QJsonArray{}}};
+
 	menuStructure << QJsonObject{{"action", "logout"},
 	                             {"name",   "Сменить пользователя"},
 	                             {"sub",    QJsonArray{}}};

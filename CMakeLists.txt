@@ -43,6 +43,9 @@ set(P_S
         windows/article/TArticleEdit.cpp
         windows/article/TArticles.cpp
 
+        windows/del/TDeleted.cpp
+        windows/del/TDeletedTab.cpp
+
         windows/hall/THall.cpp
         windows/hall/THallCreate.cpp
         windows/hall/THallEdit.cpp
@@ -99,6 +102,9 @@ set(P_H
         windows/article/TArticleCreate.h
         windows/article/TArticleEdit.h
         windows/article/TArticles.h
+
+        windows/del/TDeleted.h
+        windows/del/TDeletedTab.h
 
         windows/hall/THall.h
         windows/hall/THallCreate.h
