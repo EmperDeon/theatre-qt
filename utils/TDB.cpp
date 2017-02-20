@@ -21,11 +21,17 @@ QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
 	params.insert("token", token);
 
 	QString r_type;
-	if (path.endsWith("/create") || path.endsWith("/update") || path.endsWith("/destroy") ||
-	    path.endsWith("/restore") || path == "auth_api/perms")
+	if (
+			path.endsWith("/create") ||
+			path.endsWith("/update") ||
+			path.endsWith("/destroy") ||
+			path.endsWith("/restore") ||
+			path.startsWith("auth_api")
+			) {
 		r_type = "POST";
-	else
+	} else {
 		r_type = "GET";
+	}
 
 	QJsonValue r = GET(path, params, r_type);
 
@@ -188,6 +194,8 @@ QStringList TDB::getPerms() {
 	QJsonArray o = request("auth_api/perms").toArray();
 	for (QJsonValue v : o)
 		r << v.toString();
+
+	conf.set("lastPerms", o);
 
 	return r;
 }

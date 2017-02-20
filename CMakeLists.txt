@@ -62,6 +62,8 @@ set(P_S
         windows/poster/TPosterEdit.cpp
         windows/poster/TPosters.cpp
 
+        windows/settings/TWSettings.cpp
+
         windows/theatre/TTheatre.cpp
         windows/theatre/TTheatres.cpp
         windows/theatre/TTheatreCreate.cpp
@@ -121,6 +123,8 @@ set(P_H
         windows/poster/TPosterCreate.h
         windows/poster/TPosterEdit.h
         windows/poster/TPosters.h
+
+        windows/settings/TWSettings.h
 
         windows/theatre/TTheatre.h
         windows/theatre/TTheatres.h

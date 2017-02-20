@@ -24,9 +24,8 @@
 #include <windows/user/TUserEdit.h>
 #include <windows/hall/THallCreate.h>
 #include <windows/hall/THalls.h>
-#include <windows/hall/THall.h>
-#include <utils/TFileUpload.h>
 #include <windows/del/TDeleted.h>
+#include <windows/settings/TWSettings.h>
 
 
 TMainWindow::TMainWindow() {
@@ -42,7 +41,6 @@ TMainWindow::TMainWindow() {
 	nw->setLayout(l);
 	this->setCentralWidget(nw);
 
-	changeCurrent("main");
 	resize(800, 500);
 
 	this->statusBar()->addPermanentWidget(l_status);
@@ -60,10 +58,6 @@ void TMainWindow::changeCurrent(QString s) {
 	auto loadW = getNewLoadWidget();
 	l->addWidget(loadW);
 
-//
-//	QEventLoop wait;
-//	QTimer::singleShot(3000, &wait, SLOT(quit()));
-//	wait.exec();
 
 
 	if (s == "logout") {
@@ -77,12 +71,14 @@ void TMainWindow::changeCurrent(QString s) {
 		});
 
 	} else if (s == "main") {
-//		w_curr = getNewMainWidget();
-		w_curr = new THallCreate;
+		w_curr = getNewMainWidget();
+//		w_curr = new THallCreate;
 
 	} else if (s == "deleted") {
-//		w_curr = getNewMainWidget();
 		w_curr = new TDeleted;
+
+	} else if (s == "settings") {
+		w_curr = new TWSettings;
 
 	} else if (s == "theatres_create") {
 		w_curr = new TTheatreCreate;

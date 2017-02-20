@@ -190,9 +190,16 @@ void TMainMenu::createStructure() {
 	                             {"name",   "Отобразить удаленные"},
 	                             {"sub",    QJsonArray{}}};
 
+	menuStructure << QJsonObject{{"action", "settings"},
+	                             {"name",   "Настройки пользователя"},
+	                             {"sub",    QJsonArray{}}};
+
 	menuStructure << QJsonObject{{"action", "logout"},
 	                             {"name",   "Сменить пользователя"},
 	                             {"sub",    QJsonArray{}}};
+
+	QJsonValue w = TDB().request("auth_api/get_settings", {{"key", "main_widget"}});
+	wnd->changeCurrent(w.isNull() ? "main" : w.toString());
 }
 
 void TMainMenu::reformMenu() {

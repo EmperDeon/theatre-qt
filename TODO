@@ -7,7 +7,6 @@ TODO: Gallery for theatres, performances, actors, articles
 TODO: Models - Booking, Comments, Reviews, Statistics
 
 TODO: Write Actor Classes
-TODO: TModel: add timestamps, 'deleted' menu
 TODO: Separate menus for admin
 TODO: TPerformances fixes
 
