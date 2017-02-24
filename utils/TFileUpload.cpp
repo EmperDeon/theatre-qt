@@ -19,10 +19,13 @@ void TFileUpload::upload() {
 	QString file = QFileDialog::getOpenFileName(this, "Загрузка изображения", "", "Изображения (*.png *.jpg)");
 
 	QPixmap i(file);
+
+	if (i.width() < 32 || i.height() < 32)
+		return;
+
 	if (i.width() > 2000 || i.height() > 2000)
 		QMessageBox::warning(this, "Внимание",
 		                     "Размер файла больше чем 2000 пикселей по ширине или высоте \nПроцесс преобразования может занять более 30 секунд");
-
 
 	// First image - original
 	i = i.scaledToHeight(1000, Qt::SmoothTransformation);
@@ -58,7 +61,7 @@ void TFileUpload::upload() {
 }
 
 QPixmap TFileUpload::getPreview(QString u) {
-	if (u != "none") {
+	if (u != "no_img") {
 		QJsonValue v = TDB().request("utils/preview", {{"url", u}});
 		return getImage(v);
 
@@ -90,7 +93,7 @@ void TFileUpload::load(QString u) {
 
 QString TFileUpload::getUrl() const {
 	if (url == "")
-		return "none.png";
+		return "no_img";
 
 	return url;
 }

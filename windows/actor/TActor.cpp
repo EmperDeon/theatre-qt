@@ -1,35 +1,33 @@
 #include "TActor.h"
 
-TActor::TActor(QJsonObject o) {
+
+TActor::TActor(QJsonObject o) : TTModel(o) {
 	name = new QLineEdit(o["name"].toString());
-	bio = new QTextEdit(o["bio"].toString());
+	desc = new QTextEdit(o["desc"].toString());
 
-	l_name = new QLabel("Фио");
-	l_bio = new QLabel("Описание:");
+	name->setEnabled(false);
+	desc->setEnabled(false);
 
-	l_name->setBuddy(name);
-	l_bio->setBuddy(bio);
-
-	edit = new QPushButton("Изменить");
-	del = new QPushButton("Удалить");
-
-	l = new QHBoxLayout;
-	l1 = new QVBoxLayout;
-	l2 = new QVBoxLayout;
-
-	l1->addWidget(edit);
-	l1->addWidget(del);
-	l1->setAlignment(Qt::AlignTop);
-
-	l2->addWidget(l_name);
-	l2->addWidget(name);
-	l2->addWidget(l_bio);
-	l2->addWidget(bio);
-	l->addLayout(l2);
-	l->addLayout(l1);
-
-
-	setLayout(l);
-
-
+	layout->addRow("ФИО:", name);
+	layout->addRow("Биография:", desc);
 }
+
+void TActor::setFEnabled(bool b) {
+	name->setEnabled(b);
+	desc->setEnabled(b);
+}
+
+QMap<QString, QString> TActor::getParams() {
+	return {
+			{"id",   QString::number(id)},
+			{"name", name->text()},
+			{"desc", desc->toPlainText()}
+	};
+}
+
+QString TActor::getPath() {
+	return "actors";
+}
+
+
+

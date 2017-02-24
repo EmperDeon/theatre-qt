@@ -37,6 +37,7 @@ set(P_S
         windows/actor/TActor.cpp
         windows/actor/TActors.cpp
         windows/actor/TActorCreate.cpp
+        windows/actor/TActorEdit.cpp
 
         windows/article/TArticle.cpp
         windows/article/TArticleCreate.cpp
@@ -45,6 +46,9 @@ set(P_S
 
         windows/del/TDeleted.cpp
         windows/del/TDeletedTab.cpp
+
+        windows/hall/draw/THallCanvas.cpp
+        windows/hall/draw/THallTools.cpp
 
         windows/hall/THall.cpp
         windows/hall/THallCreate.cpp
@@ -99,6 +103,7 @@ set(P_H
         windows/actor/TActor.h
         windows/actor/TActors.h
         windows/actor/TActorCreate.h
+        windows/actor/TActorEdit.h
 
         windows/article/TArticle.h
         windows/article/TArticleCreate.h
@@ -107,6 +112,9 @@ set(P_H
 
         windows/del/TDeleted.h
         windows/del/TDeletedTab.h
+
+        windows/hall/draw/THallCanvas.h
+        windows/hall/draw/THallTools.h
 
         windows/hall/THall.h
         windows/hall/THallCreate.h

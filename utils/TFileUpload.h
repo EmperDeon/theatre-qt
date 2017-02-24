@@ -8,7 +8,7 @@ class TFileUpload : public QWidget {
 	QString url;
 
 public:
-	TFileUpload(QString u = "none");
+	TFileUpload(QString u = "no_img");
 
 	void upload();
 

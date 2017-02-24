@@ -1,8 +1,9 @@
-#ifndef TARTICLE_H
-#define TARTICLE_H
-#include <utils/TCheckBox.h>
-#include <utils/TDB.h>
+#ifndef THEATRE_ADMIN_TARTICLE_H
+#define THEATRE_ADMIN_TARTICLE_H
+
+#include <QtWidgets/QtWidgets>
 #include <templates/TTModel.h>
+
 
 class TArticle : public TTModel {
 	QLineEdit *title;
@@ -18,4 +19,5 @@ public:
 	QMap<QString, QString> getParams() override;
 
 };
-#endif // TARTICLE_H
+
+#endif // THEATRE_ADMIN_TARTICLE_H

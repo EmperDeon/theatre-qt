@@ -1,29 +1,22 @@
-#ifndef ACTOR_H
-#define ACTOR_H
-
+#ifndef THEATRE_ADMIN_TACTOR_H
+#define THEATRE_ADMIN_TACTOR_H
 #include <QtWidgets/QtWidgets>
+#include <templates/TTModel.h>
 
 
-class TActor : public QWidget {
-Q_OBJECT
-public:
+class TActor : public TTModel {
 	QLineEdit *name;
-	QTextEdit *bio;
+	QTextEdit *desc;
 
-	QLabel *l_name;
-	QLabel *l_bio;
-
-	QPushButton *edit;
-	QPushButton *del;
-
-	QHBoxLayout *l;
-	QVBoxLayout *l1;
-	QVBoxLayout *l2;
-
+public:
 	TActor(QJsonObject o);
 
-public slots:
+	virtual QString getPath() override;
+
+	virtual void setFEnabled(bool b) override;
+
+	QMap<QString, QString> getParams() override;
 
 };
 
-#endif // ACTORS_H
+#endif // THEATRE_ADMIN_TACTORS_H

@@ -1,33 +1,31 @@
 #include "TActorCreate.h"
+#include <utils/TDB.h>
+
 
 TActorCreate::TActorCreate() {
 	name = new QLineEdit;
-	bio = new QTextEdit;
+	desc = new QTextEdit;
+	img = new TFileUpload;
 
-	l_name = new QLabel("ФИО");
-	l_bio = new QLabel("Биография");
+	layout->addRow("ФИО:", name);
+	layout->addRow("Биография:", desc);
+	layout->addRow("Фотография:", img);
+}
 
-	l_name->setBuddy(name);
-	l_bio->setBuddy(bio);
+void TActorCreate::reset() {
+	name->clear();
+	desc->clear();
+	img->clear();
+}
 
-	entr = new QPushButton("Добавить");
-	cancel = new QPushButton("Отмена");
+QString TActorCreate::getPath() {
+	return "actors";
+}
 
-	l_name->setBuddy(name);
-	l_bio->setBuddy(bio);
-
-	l = new QVBoxLayout;
-	lh = new QHBoxLayout;
-
-	lh->addWidget(entr);
-	lh->addWidget(cancel);
-
-	l->addWidget(l_name);
-	l->addWidget(name);
-	l->addWidget(l_bio);
-	l->addWidget(bio);
-	l->addLayout(lh);
-	setLayout(l);
-
-
+QMap<QString, QString> TActorCreate::getParams() {
+	return {
+			{"name", name->text()},
+			{"desc", desc->toPlainText()},
+			{"img",  img->getUrl()}
+	};
 }

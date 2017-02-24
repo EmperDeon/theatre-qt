@@ -1,5 +1,6 @@
 #include "TArticle.h"
 
+
 TArticle::TArticle(QJsonObject o) : TTModel(o) {
 	title = new QLineEdit(o["name"].toString());
 	desc = new QTextEdit(o["desc_s"].toString());

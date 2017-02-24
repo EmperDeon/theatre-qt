@@ -26,6 +26,9 @@
 #include <windows/hall/THalls.h>
 #include <windows/del/TDeleted.h>
 #include <windows/settings/TWSettings.h>
+#include <windows/actor/TActors.h>
+#include <windows/actor/TActorCreate.h>
+#include <windows/actor/TActorEdit.h>
 
 
 TMainWindow::TMainWindow() {
@@ -71,8 +74,8 @@ void TMainWindow::changeCurrent(QString s) {
 		});
 
 	} else if (s == "main") {
-		w_curr = getNewMainWidget();
-//		w_curr = new THallCreate;
+//		w_curr = getNewMainWidget();
+		w_curr = new THallCreate;
 
 	} else if (s == "deleted") {
 		w_curr = new TDeleted;
@@ -130,6 +133,15 @@ void TMainWindow::changeCurrent(QString s) {
 
 	} else if (s == "posters_update") {
 		w_curr = new TPosterEdit;
+
+	} else if (s == "actors") {
+		w_curr = new TActors;
+
+	} else if (s == "actors_create") {
+		w_curr = new TActorCreate;
+
+	} else if (s == "actors_update") {
+		w_curr = new TActorEdit;
 
 	}
 

@@ -3,15 +3,17 @@
 #define GET_C(c) QColor(c, c, c)
 
 #include <QtWidgets/QtWidgets>
+#include <windows/hall/draw/THallCanvas.h>
+#include <windows/hall/draw/THallTools.h>
+
+class THallCanvas;
+
+class THallTools;
 
 class THall : public QWidget {
-	int w = 100, h = 100;
-	int cw = 15, ch = 15;
+	THallCanvas *w_canvas;
+	THallTools *w_tools;
 
-	int *map;
-
-	// Mouse-related
-	int r_start_x = -1, r_start_y = -1;
 
 public:
 	THall();
@@ -20,16 +22,7 @@ public:
 
 	void crop();
 
-protected:
-	void paintEvent(QPaintEvent *event) override;
 
-	void mousePressEvent(QMouseEvent *event) override;
-
-	void mouseMoveEvent(QMouseEvent *event) override;
-
-	void mouseReleaseEvent(QMouseEvent *event) override;
-
-	void swapIf(int &i1, int &i2);
 };
 
 

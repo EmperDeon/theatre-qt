@@ -1,25 +1,24 @@
-#ifndef THEATRE_ADMIN_create_actor_H
-#define THEATRE_ADMIN_create_actor_H
-
+#ifndef THEATRE_ADMIN_TACTORCREATE_H
+#define THEATRE_ADMIN_TACTORCREATE_H
 #include <QtWidgets/QtWidgets>
+#include <templates/TCreate.h>
+#include <utils/TFileUpload.h>
 
 
-class TActorCreate : public QWidget {
-Q_OBJECT
-public:
+class TActorCreate : public TCreate {
 	QLineEdit *name;
-	QTextEdit *bio;
+	QTextEdit *desc;
+	TFileUpload *img;
 
-	QLabel *l_name;
-	QLabel *l_bio;
-
-	QPushButton *entr;
-	QPushButton *cancel;
-
-	QVBoxLayout *l;
-	QHBoxLayout *lh;
 public:
 	TActorCreate();
+
+	virtual void reset() override;
+
+	QString getPath() override;
+
+	QMap<QString, QString> getParams() override;
 };
 
-#endif // CREATE_ACTOR_H
+
+#endif // THEATRE_ADMIN_TACTORCREATE_H
