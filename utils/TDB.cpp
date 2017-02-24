@@ -1,24 +1,15 @@
-#include <QtCore/QUrlQuery>
-#include <QtCore/QEventLoop>
-#include <QtCore/QTimer>
-#include <QtCore/QJsonArray>
-#include <QtCore/QJsonDocument>
-#include <QtNetwork/QNetworkReply>
+#include "TDB.h"
 #include <QtWidgets>
 #include <windows/TMainWindow.h>
 #include "dialogs/TDLogin.h"
-#include "TDB.h"
 
-TDB::TDB() {
-	token = conf.getS("token");
-}
 
 QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
 	// Join all parameters to string
 	QString keys = params.keys().join(", ");
 
 	checkAndRefreshToken();
-	params.insert("token", token);
+	params.insert("token", TConfig::getS("token"));
 
 	QString r_type;
 	if (
@@ -101,7 +92,7 @@ void TDB::getToken() {
 		exit(0); // TODO: prettify
 
 	} else {
-		conf.set("login", cred["login"]);
+		TConfig::set("login", cred["login"]);
 
 		QJsonObject o = GET("auth_api/new", QMap<QString, QString>{
 				{"login", cred["login"].toString()},
@@ -112,17 +103,15 @@ void TDB::getToken() {
 			getToken();
 
 		} else {
-			token = o["auth_token"].toString();
-			conf.set("token", token);
+			QString token = o["auth_token"].toString();
+			TConfig::set("token", token);
 
 		}
 	}
-
-	conf.save();
 }
 
 void TDB::checkAndRefreshToken() {
-	GET("auth_api/check", {{"token", token}}, "POST").toString();
+	GET("auth_api/check", {{"token", TConfig::getS("token")}}, "POST").toString();
 
 	if (hasErrors()) {
 		checkAndRefreshToken();
@@ -193,7 +182,7 @@ QStringList TDB::getPerms() {
 	for (QJsonValue v : o)
 		r << v.toString();
 
-	conf.set("lastPerms", o);
+	TConfig::set("lastPerms", o);
 
 	return r;
 }

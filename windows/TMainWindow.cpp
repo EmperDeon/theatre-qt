@@ -78,9 +78,7 @@ void TMainWindow::changeCurrent(QString s) {
 		w_curr = new TWSettings;
 
 	} else if (s == "logout") {
-		TConfig conf;
-		conf.rem("token");
-		conf.save();
+		TConfig::rem("token");
 
 		w_curr = getNewMainWidget();
 

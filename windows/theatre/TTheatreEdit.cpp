@@ -7,7 +7,7 @@ TTheatreEdit::TTheatreEdit() {
 	address = new QLineEdit;
 	desc = new QTextEdit;
 	img = new TFileUpload;
-	list = new TListBox("t_halls");
+	halls = new TListBox("t_halls");
 
 	layout->setMargin(0);
 
@@ -16,7 +16,7 @@ TTheatreEdit::TTheatreEdit() {
 	layout->addRow("Адрес:", address);
 	layout->addRow("Описание:", desc);
 	layout->addRow("Изображение:", img);
-	layout->addRow("Залы:", list);
+	layout->addRow("Залы:", halls);
 
 	c_box->load(getPath());
 	if (c_box->count() == 1)
@@ -34,7 +34,7 @@ void TTheatreEdit::reset() {
 	desc->setText(obj["desc"].toString());
 	img->load(obj["img"].toString());
 
-	list->load("t_halls");
+	halls->load("t_halls");
 }
 
 QString TTheatreEdit::getPath() {
@@ -42,7 +42,7 @@ QString TTheatreEdit::getPath() {
 }
 
 QMap<QString, QString> TTheatreEdit::getParams() {
-//	if (!list->getItems().isEmpty()) { TODO: Think
+//	if (!halls->getItems().isEmpty()) { TODO: Think
 //		if (QMessageBox::warning(this, "Внимание !",
 //		                         "При удалении зала, удаялтся также и все афиши в этом зале. \nПродолжить ?",
 //		                         QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
@@ -58,7 +58,7 @@ QMap<QString, QString> TTheatreEdit::getParams() {
 			{"desc",        desc->toPlainText()},
 			{"img",         img->getUrl()},
 
-			{"t_halls_del", list->getItems()},
-			{"t_halls_new", list->getAdded()}
+			{"t_halls_del", halls->getItems()},
+			{"t_halls_new", halls->getAdded()}
 	};
 }

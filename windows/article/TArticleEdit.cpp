@@ -5,10 +5,12 @@ TArticleEdit::TArticleEdit() {
 	name = new QLineEdit();
 	desc = new QTextEdit();
 	desc_s = new QTextEdit();
+	img = new TFileUpload;
 
 	layout->setMargin(0);
 
 	layout->addRow("Заголовок:", name);
+	layout->addRow("Изображение:", img);
 	layout->addRow("Краткое описание:", desc_s);
 	layout->addRow("Описание:", desc);
 
@@ -22,6 +24,7 @@ void TArticleEdit::reset() {
 	name->setText(obj["name"].toString());
 	desc_s->setText(obj["desc_s"].toString());
 	desc->setText(obj["desc"].toString());
+	img->load(obj["img"].toString());
 }
 
 QString TArticleEdit::getPath() {
@@ -33,6 +36,7 @@ QMap<QString, QString> TArticleEdit::getParams() {
 			{"id",     QString::number(id)},
 			{"name",   name->text()},
 			{"desc_s", desc_s->toPlainText()},
-			{"desc",   desc->toPlainText()}
+			{"desc",   desc->toPlainText()},
+			{"img",    img->getUrl()}
 	};
 }

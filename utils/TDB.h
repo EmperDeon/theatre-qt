@@ -1,10 +1,9 @@
 #ifndef THEATRE_ADMIN_TDB_H
 #define THEATRE_ADMIN_TDB_H
-
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QHttpPart>
-#include <QJsonObject>
+#include <QtCore/QtCore>
 #include "TConfig.h"
 
 class TDB {
@@ -12,9 +11,6 @@ class TDB {
 	QJsonObject lastReply;
 	int lastTime;
 	QNetworkReply::NetworkError lastError;
-
-	QString token;
-	TConfig conf;
 
 	QStringList roles;
 
@@ -27,7 +23,7 @@ class TDB {
 	bool hasErrors();
 
 public:
-	TDB();
+	TDB() {}
 
 	QJsonValue request(QString path, QMap<QString, QString> params = QMap<QString, QString>());
 

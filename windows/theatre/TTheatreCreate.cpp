@@ -9,14 +9,14 @@ TTheatreCreate::TTheatreCreate() {
 	desc = new QTextEdit();
 	img = new TFileUpload();
 
-	list = new TListBox;
+	halls = new TListBox;
 
 	layout->addRow("Название:", name);
 	layout->addRow("Телефонный номер:", phone);
 	layout->addRow("Адрес:", address);
 	layout->addRow("Описание:", desc);
 	layout->addRow("Изображение:", img);
-	layout->addRow("Залы:", list);
+	layout->addRow("Залы:", halls);
 }
 
 void TTheatreCreate::reset() {
@@ -39,7 +39,7 @@ QMap<QString, QString> TTheatreCreate::getParams() { // TODO: Fix
 			{"desc",    desc->toPlainText()},
 			{"img",     img->getUrl()},
 
-			{"t_halls", list->getAdded()}
+			{"t_halls", halls->getAdded()}
 	};
 }
 

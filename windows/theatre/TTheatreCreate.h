@@ -1,8 +1,6 @@
 #ifndef THEATRE_ADMIN_TBOOKING_H
 #define THEATRE_ADMIN_TBOOKING_H
-
 #include <QtWidgets/QtWidgets>
-#include <utils/TCheckBox.h>
 #include <templates/TCreate.h>
 #include <utils/TListBox.h>
 #include <utils/TFileUpload.h>
@@ -12,7 +10,7 @@ class TTheatreCreate : public TCreate {
 	QTextEdit *desc;
 	TFileUpload *img;
 
-	TListBox *list;
+	TListBox *halls;
 
 public:
 	TTheatreCreate();

@@ -1,12 +1,13 @@
-#ifndef TARTICLECREATE_H
-#define TARTICLECREATE_H
+#ifndef THEATRE_ADMIN_TARTICLECREATE_H
+#define THEATRE_ADMIN_TARTICLECREATE_H
 #include <utils/TCheckBox.h>
 #include <templates/TCreate.h>
+#include <utils/TFileUpload.h>
 
 class TArticleCreate : public TCreate {
 	QLineEdit *name;
 	QTextEdit *desc_s, *desc;
-
+	TFileUpload *img;
 
 public:
 	TArticleCreate();
@@ -19,4 +20,4 @@ public:
 };
 
 
-#endif // TARTICLECREATE_H
+#endif // THEATRE_ADMIN_TARTICLECREATE_H

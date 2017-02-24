@@ -33,7 +33,7 @@ TWSettings::TWSettings() {
 }
 
 void TWSettings::fillMainW() {
-	QJsonArray perms = TConfig().get("lastPerms").toArray();
+	QJsonArray perms = TConfig::get("lastPerms").toArray();
 
 	QMap <QString, QString> desc = {
 			{"Список театров",        "theatres"},

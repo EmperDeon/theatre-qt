@@ -1,55 +1,50 @@
 #include <QtCore/QFile>
 #include <QtCore/QJsonDocument>
-#include <QDebug>
 #include "TConfig.h"
 
-TConfig::TConfig() {
-	reload();
-}
-
-void TConfig::reload() {
-	QFile f(fileName);
+QJsonObject TConfig::load() {
+	QFile f("config.json");
 	if (f.exists()) {
 		f.open(QFile::ReadOnly);
-		obj = QJsonDocument::fromJson(f.readAll()).object();
-		f.close();
+		return QJsonDocument::fromJson(f.readAll()).object();
 
 	} else {
-		obj = QJsonObject();
-
+		return QJsonObject();
 	}
 }
 
-void TConfig::save() {
-	QFile f(fileName);
+void TConfig::save(QJsonObject o) {
+	QFile f("config.json");
 	f.open(QFile::WriteOnly);
-	f.write(QJsonDocument(obj).toJson());
+	f.write(QJsonDocument(o).toJson());
 	f.close();
 }
 
-TConfig::~TConfig() {
-	save();
-}
+QJsonValue TConfig::get(QString key, QJsonValue def) {
+	QJsonObject obj = load();
 
-QJsonValue TConfig::get(QString key, QJsonValue def) const {
 	return obj.contains(key) ? obj.value(key) : def;
 }
 
-bool TConfig::has(QString key) const {
-	return obj.contains(key);
-}
+QString TConfig::getS(QString key, QString def) {
+	QJsonObject obj = load();
 
-void TConfig::set(QString key, QJsonValue val) {
-	obj.insert(key, val);
-
-	save();
-}
-
-QString TConfig::getS(QString key, QString def) const {
 	return obj.contains(key) ? obj.value(key).toString(def) : def;
 }
 
+void TConfig::set(QString key, QJsonValue val) {
+	QJsonObject obj = load();
+
+	obj.insert(key, val);
+
+	save(obj);
+}
+
 void TConfig::rem(QString key) {
+	QJsonObject obj = load();
+
 	obj.remove(key);
+
+	save(obj);
 }
 

@@ -1,13 +1,14 @@
-#ifndef TARTICLEEDIT_H
-#define TARTICLEEDIT_H
-
+#ifndef THEATRE_ADMIN_TARTICLEEDIT_H
+#define THEATRE_ADMIN_TARTICLEEDIT_H
 #include <QtWidgets/QtWidgets>
 #include <utils/TCheckBox.h>
 #include <templates/TEdit.h>
+#include <utils/TFileUpload.h>
 
 class TArticleEdit : public TEdit {
 	QTextEdit *desc, *desc_s;
 	QLineEdit *name;
+	TFileUpload *img;
 
 public:
 	TArticleEdit();
@@ -20,4 +21,4 @@ public:
 };
 
 
-#endif // TARTICLEEDIT_H
+#endif // THEATRE_ADMIN_TARTICLEEDIT_H
