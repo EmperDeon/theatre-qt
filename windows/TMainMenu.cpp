@@ -93,93 +93,54 @@ void TMainMenu::hideMenu() {
                 QJsonArray s
 
 // Add sub entry (Insert entry Sub if)
-#define IeSI(a, b) if(perms.contains( a )) \
-                    s << QJsonObject{ \
-                        {"action", a}, \
-                        {"name", b} \
-                    }
+#define IeSI(t, a, n) if(perms.contains( QString(t) + "_edit" )) \
+                        s << QJsonObject{{"action", QString(t) + "_" + a}, {"name", n}}
 
 // Add new end
-#define IeC(a, b)   menuStructure << QJsonObject{ \
-                    {"action", a}, \
-                    {"name", b}, \
-                    {"sub", s} \
-                    }; \
-                   }
+#define IeC(a, b)   menuStructure << QJsonObject{{"action", a}, {"name", b}, {"sub", s}}; }
 
 
 void TMainMenu::createStructure() {
 	menuStructure = QJsonArray();
 
 	QStringList perms = TDB().getPerms();
-//		 	"theatres",
-//            "theatre_choose",
-//			"theatre_create",
-//			"theatre_edit",
-//			"theatre_delete",
-//
-//			"users",
-//			"user_create",
-//			"user_edit",
-//			"user_delete",
-//
-//			"actors",
-//			"actor_create",
-//			"actor_edit",
-//			"actor_delete",
-//
-//			"perfs",
-//			"perf_create",
-//			"perf_edit",
-//			"perf_delete",
-//
-//			"posters",
-//			"poster_create",
-//			"poster_edit",
-//			"poster_delete",
-//
-//			"articles",
-//			"article_create",
-//			"article_edit",
-//			"article_delete"
-//	}; //TDB().getPerms();
 
 	Ie("theatres");
-		IeSI("theatres_choose", "Сменить текущий театр");
-		IeSI("theatres_create", "Создать новый театр");
+		IeSI("theatres", "choose", "Сменить текущий театр");
+		IeSI("theatres", "create", "Создать новый театр");
 	IeC("theatres", "Театры");
 
 	Ie("theatres_update");
 	IeC("theatres_update", "Редактировать текущий театр");
 
 	Ie("t_halls");
-		IeSI("t_halls_update", "Изменить зал");
-		IeSI("t_halls_create", "Создать новый зал");
+		IeSI("t_halls", "update", "Изменить зал");
+		IeSI("t_halls", "create", "Создать новый зал");
 	IeC("t_halls", "Залы");
 
 	Ie("t_perfs");
-		IeSI("t_perfs_create", "Добавление спектакля");
-		IeSI("t_perfs_update", "Редактирование спектактля");
+		IeSI("t_perfs", "create", "Добавление спектакля");
+		IeSI("t_perfs", "update", "Редактирование спектактля");
 	IeC("t_perfs", "Репертуар");
 
 	Ie("posters");
-		IeSI("posters_create", "Добавление афиши");
-		IeSI("posters_update", "Редактирование афиши");
+		IeSI("posters", "create", "Добавление афиши");
+		IeSI("posters", "update", "Редактирование афиши");
 	IeC("posters", "Афиша");
 
 	Ie("articles");
-		IeSI("articles_create", "Добавление статьи");
-		IeSI("articles_update", "Редактирование статьи");
+		IeSI("articles", "create", "Добавление статьи");
+		IeSI("articles", "update", "Редактирование статьи");
 	IeC("articles", "Новости");
 
 	Ie("actors");
-		IeSI("actors_create", "Добавление актеров");
-		IeSI("actors_update", "Редактирование данных об актере");
+		IeSI("actors", "create", "Добавление актеров");
+		IeSI("actors", "update", "Редактирование данных об актере");
 	IeC("actors", "Актеры");
 
 	Ie("u_apis");
-		IeSI("u_apis_create", "Добавление сотрудника");
-		IeSI("u_apis_update", "Редактирование данных о сотруднике");
+		IeSI("u_apis", "create", "Добавление сотрудника");
+		IeSI("u_apis", "update", "Редактирование данных о сотруднике");
 	IeC("u_apis", "Сотрудники");
 
 	menuStructure << QJsonObject{{"action", ""},

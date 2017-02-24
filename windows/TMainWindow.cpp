@@ -47,6 +47,8 @@ TMainWindow::TMainWindow() {
 	resize(800, 500);
 
 	this->statusBar()->addPermanentWidget(l_status);
+
+	changeCurrent("null");
 }
 
 void TMainWindow::changeCurrent(QString s) {
@@ -62,16 +64,8 @@ void TMainWindow::changeCurrent(QString s) {
 	l->addWidget(loadW);
 
 
-
-	if (s == "logout") {
-		TConfig conf;
-		conf.rem("token");
-		conf.save();
-		changeCurrent("main");
-
-		QTimer::singleShot(100, [=]() {
-			w_menu->reformMenu();
-		});
+	if (s == "null") {
+		w_curr = new QWidget;
 
 	} else if (s == "main") {
 //		w_curr = getNewMainWidget();
@@ -82,6 +76,17 @@ void TMainWindow::changeCurrent(QString s) {
 
 	} else if (s == "settings") {
 		w_curr = new TWSettings;
+
+	} else if (s == "logout") {
+		TConfig conf;
+		conf.rem("token");
+		conf.save();
+
+		w_curr = getNewMainWidget();
+
+		QTimer::singleShot(100, [=]() {
+			w_menu->reformMenu();
+		});
 
 	} else if (s == "theatres_create") {
 		w_curr = new TTheatreCreate;
@@ -148,7 +153,7 @@ void TMainWindow::changeCurrent(QString s) {
 	if (w_curr != nullptr) {
 		l->addWidget(w_curr);
 	} else {
-		w_curr = new QLabel("No Widget"), l->addWidget(w_curr, Qt::AlignCenter);
+		w_curr = new QLabel("No Widget"), l->addWidget(w_curr);
 	}
 
 	loadW->deleteLater();

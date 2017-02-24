@@ -36,7 +36,7 @@ QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
 	QJsonValue r = GET(path, params, r_type);
 
 	qDebug() << QString("[ %1] '%2'  params: '%3'")
-			.arg(r_type, 4).arg(path, 18).arg(keys)
+			.arg(r_type, 4).arg(path, 22).arg(keys)
 			.toStdString().c_str();
 
 	hasErrors();
@@ -80,8 +80,6 @@ QJsonValue TDB::GET(QString path, QMap<QString, QString> params, QString r_type)
 		qDebug() << "Something wrong, r_type = " << r_type;
 		return QJsonValue();
 	}
-
-//	qDebug() << c << q.toString();
 
 	QEventLoop wait;
 	QObject::connect(&manager, SIGNAL(finished(QNetworkReply * )), &wait, SLOT(quit()));
