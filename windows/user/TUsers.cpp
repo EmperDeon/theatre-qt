@@ -11,4 +11,12 @@ TUsers::TUsers() : TTModels() {
 		layout->addWidget(new TUser(v.toObject()));
 
 }
+
+QJsonArray TUsers::getPerms() {
+	return TConfig::get("lastPerms").toArray();
+}
+
+bool TUsers::hasPerm(QString k) {
+	return getPerms().contains(k);
+}
 // TUsers

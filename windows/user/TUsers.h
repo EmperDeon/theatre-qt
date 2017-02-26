@@ -9,6 +9,10 @@ class TUsers : public TTModels { // Отображение всех юзеров
 
 public:
 	TUsers();
+
+	static QJsonArray getPerms();
+
+	static bool hasPerm(QString k);
 };
 
 

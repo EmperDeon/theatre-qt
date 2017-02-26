@@ -1,4 +1,5 @@
 #include <utils/TDB.h>
+#include <windows/user/TUsers.h>
 #include "TTModel.h"
 
 TTModel::TTModel(QJsonObject o) {
@@ -6,30 +7,24 @@ TTModel::TTModel(QJsonObject o) {
 
 	id = o["id"].toInt();
 
-	b_edt = new QPushButton("Изменить");
-	b_del = new QPushButton("Удалить");
+
+	layout = new QFormLayout;
+
+	// Form
 	l_upd = new QLabel;
 	QLabel *l_upd_l = new QLabel("Последнее изменение:");
 
-	b_edt->setMaximumWidth(100);
-	b_del->setMaximumWidth(100);
-	l_upd->setText(o["timestamps"].toObject()["updated_at"].toString());
-
 	l_upd->setEnabled(false);
 	l_upd->setStyleSheet("font-size: 11px");
-
-	connect(b_edt, &QPushButton::clicked, this, &TTModel::edt);
-	connect(b_del, &QPushButton::clicked, this, &TTModel::del);
-
-
-	layout = new QFormLayout;
-	QVBoxLayout *vl = new QVBoxLayout;
-	vl->setAlignment(Qt::AlignTop);
-	vl->addWidget(b_edt);
-	vl->addWidget(b_del);
+	l_upd->setText(o["timestamps"].toObject()["updated_at"].toString());
 
 	l->addLayout(layout);
+
+	QVBoxLayout *vl = new QVBoxLayout;
+	vl->setAlignment(Qt::AlignTop);
+
 	l->addLayout(vl);
+
 	l->addSpacing(10);
 
 	setLayout(l);
@@ -38,6 +33,20 @@ TTModel::TTModel(QJsonObject o) {
 	QTimer::singleShot(0, [=]() {
 		layout->addRow(new QLabel(""));
 		layout->addRow(l_upd_l, l_upd);
+
+		if (TUsers::hasPerm(getPath() + "_edit")) {
+			b_edt = new QPushButton("Изменить");
+			b_del = new QPushButton("Удалить");
+
+			b_edt->setMaximumWidth(100);
+			b_del->setMaximumWidth(100);
+
+			connect(b_edt, &QPushButton::clicked, this, &TTModel::edt);
+			connect(b_del, &QPushButton::clicked, this, &TTModel::del);
+
+			vl->addWidget(b_edt);
+			vl->addWidget(b_del);
+		}
 	});
 }
 

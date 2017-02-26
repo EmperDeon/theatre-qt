@@ -1,5 +1,6 @@
 #include <utils/TDB.h>
 #include "TWSettings.h"
+#include <windows/user/TUsers.h>
 
 TWSettings::TWSettings() {
 	QVBoxLayout *l = new QVBoxLayout;
@@ -33,7 +34,7 @@ TWSettings::TWSettings() {
 }
 
 void TWSettings::fillMainW() {
-	QJsonArray perms = TConfig::get("lastPerms").toArray();
+	QJsonArray perms = TUsers::getPerms();
 
 	QMap <QString, QString> desc = {
 			{"Список театров",        "theatres"},
