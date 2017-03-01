@@ -31,8 +31,6 @@ TTModel::TTModel(QJsonObject o) {
 	setFrameStyle(QFrame::StyledPanel);
 
 	QTimer::singleShot(0, [=]() {
-		layout->addRow(new QLabel(""));
-		layout->addRow(l_upd_l, l_upd);
 
 		if (TUsers::hasPerm(getPath() + "_edit")) {
 			b_edt = new QPushButton("Изменить");
@@ -46,6 +44,10 @@ TTModel::TTModel(QJsonObject o) {
 
 			vl->addWidget(b_edt);
 			vl->addWidget(b_del);
+
+			// Last edited row
+			layout->addRow(new QLabel(""));
+			layout->addRow(l_upd_l, l_upd);
 		}
 	});
 }

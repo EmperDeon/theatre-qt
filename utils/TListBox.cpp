@@ -77,7 +77,7 @@ QString TListBox::getItems() {
 	QJsonArray r;
 
 	for (QString s : removed) {
-		r << map[s];
+		r << map[s].toInt();
 	}
 
 	return QJsonDocument(r).toJson();

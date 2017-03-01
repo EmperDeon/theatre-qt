@@ -110,8 +110,11 @@ void TMainMenu::createStructure() {
 		IeSI("theatres", "create", "Создать новый театр");
 	IeC("theatres", "Театры");
 
-	Ie("theatres_update");
-	IeC("theatres_update", "Редактировать текущий театр");
+	if (!perms.contains("theatres_update")) {
+		QJsonArray s;
+		menuStructure << QJsonObject{{"action", "theatres_update"},
+		                             {"name",   "Редактировать текущий театр"}};
+	};
 
 	Ie("t_halls");
 		IeSI("t_halls", "update", "Изменить зал");
@@ -144,20 +147,19 @@ void TMainMenu::createStructure() {
 	IeC("u_apis", "Сотрудники");
 
 	menuStructure << QJsonObject{{"action", ""},
-	                             {"name",   ""},
-	                             {"sub",    QJsonArray{}}};
+	                             {"name",   ""}};
+
+	Ie("perfs_approve");
+	IeC("perfs_approve", "Глоб. спектакли");
 
 	menuStructure << QJsonObject{{"action", "deleted"},
-	                             {"name",   "Отобразить удаленные"},
-	                             {"sub",    QJsonArray{}}};
+	                             {"name",   "Отобразить удаленные"}};
 
 	menuStructure << QJsonObject{{"action", "settings"},
-	                             {"name",   "Настройки пользователя"},
-	                             {"sub",    QJsonArray{}}};
+	                             {"name",   "Настройки пользователя"}};
 
 	menuStructure << QJsonObject{{"action", "logout"},
-	                             {"name",   "Сменить пользователя"},
-	                             {"sub",    QJsonArray{}}};
+	                             {"name",   "Сменить пользователя"}};
 
 	QJsonValue w = TDB().request("auth_api/get_settings", {{"key", "main_widget"}});
 	wnd->changeCurrent(w.isNull() ? "main" : w.toString());

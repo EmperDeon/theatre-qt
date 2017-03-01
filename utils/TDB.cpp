@@ -17,6 +17,8 @@ QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
 			path.endsWith("/update") ||
 			path.endsWith("/destroy") ||
 			path.endsWith("/restore") ||
+			path.endsWith("/approve") ||
+			path.endsWith("/approval") ||
 			path.startsWith("auth_api")
 			) {
 		r_type = "POST";
@@ -43,6 +45,7 @@ QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
 QJsonValue TDB::GET(QString path, QMap<QString, QString> params, QString r_type) {
 	QTime requestTime;
 	requestTime.start();
+// TODO: Move to config
 
 //	QUrl c("https://api-theatre.herokuapp.com/" + path);
 	QUrl c("http://127.0.0.1:3000/" + path);

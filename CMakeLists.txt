@@ -57,6 +57,7 @@ set(P_S
         windows/hall/THalls.cpp
 
         windows/perf/TPerf.cpp
+        windows/perf/TPerfApprove.cpp
         windows/perf/TPerfCreate.cpp
         windows/perf/TPerfEdit.cpp
         windows/perf/TPerfs.cpp
@@ -123,6 +124,7 @@ set(P_H
         windows/hall/THalls.h
 
         windows/perf/TPerf.h
+        windows/perf/TPerfApprove.h
         windows/perf/TPerfCreate.h
         windows/perf/TPerfEdit.h
         windows/perf/TPerfs.h

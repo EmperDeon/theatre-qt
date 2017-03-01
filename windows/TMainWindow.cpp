@@ -29,6 +29,7 @@
 #include <windows/actor/TActors.h>
 #include <windows/actor/TActorCreate.h>
 #include <windows/actor/TActorEdit.h>
+#include <windows/perf/TPerfApprove.h>
 
 
 TMainWindow::TMainWindow() {
@@ -44,7 +45,7 @@ TMainWindow::TMainWindow() {
 	nw->setLayout(l);
 	this->setCentralWidget(nw);
 
-	resize(800, 500);
+//	resize(800, 500);
 
 	this->statusBar()->addPermanentWidget(l_status);
 
@@ -68,14 +69,17 @@ void TMainWindow::changeCurrent(QString s) {
 		w_curr = new QWidget;
 
 	} else if (s == "main") {
-//		w_curr = getNewMainWidget();
-		w_curr = new THallCreate;
+		w_curr = getNewMainWidget();
+//		w_curr = new THallCreate;
 
 	} else if (s == "deleted") {
 		w_curr = new TDeleted;
 
 	} else if (s == "settings") {
 		w_curr = new TWSettings;
+
+	} else if (s == "perfs_approve") {
+		w_curr = new TPerfApprove;
 
 	} else if (s == "logout") {
 		TConfig::rem("token");

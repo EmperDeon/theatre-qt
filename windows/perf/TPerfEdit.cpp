@@ -102,7 +102,7 @@ QMap<QString, QString> TPerfEdit::getParams() {
 		QJsonObject perf;
 		perf["name"] = p_name->text();
 		perf["author"] = p_auth->text();
-		perf["type_id"] = p_type->getIndex();
+		perf["p_type_id"] = p_type->getIndex();
 		map["perf_new"] = QJsonDocument(perf).toJson();
 
 	} else {
