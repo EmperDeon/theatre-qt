@@ -14,7 +14,16 @@ class TDB {
 
 	QStringList roles;
 
-	QJsonValue GET(QString path, QMap<QString, QString> params, QString r_type);
+
+	QUrl prepareReq(QString path);
+
+	QJsonValue processReq(QNetworkReply *rep);
+
+	QJsonValue GET(QString path, QMap<QString, QString> params);
+
+	QJsonValue POST(QString path, QMap<QString, QString> params);
+
+	QJsonValue POST(QString path, QHttpMultiPart *part);
 
 	void getToken();
 
@@ -46,6 +55,8 @@ public:
 	void appendStringPart(QHttpMultiPart *multipart, QString k, QString v) const;
 
 	void appendFilePart(QHttpMultiPart *multipart, QString k, QIODevice *v) const;
+
+	static bool isLocal();
 };
 
 

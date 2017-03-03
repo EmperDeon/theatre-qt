@@ -3,14 +3,20 @@
 #include <windows/TMainWindow.h>
 #include "dialogs/TDLogin.h"
 
+#define TDB_LOCAL "http://192.168.1.54:3000/"
+#define TDB_REMOTE "https://api-theatre.herokuapp.com/"
 
 QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
+	QTime requestTime;
+	requestTime.start();
+
 	// Join all parameters to string
 	QString keys = params.keys().join(", ");
 
 	checkAndRefreshToken();
 	params.insert("token", TConfig::getS("token"));
 
+	QJsonValue r;
 	QString r_type;
 	if (
 			path.endsWith("/create") ||
@@ -21,12 +27,13 @@ QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
 			path.endsWith("/approval") ||
 			path.startsWith("auth_api")
 			) {
+		r = POST(path, params);
 		r_type = "POST";
+
 	} else {
+		r = GET(path, params);
 		r_type = "GET";
 	}
-
-	QJsonValue r = GET(path, params, r_type);
 
 	qDebug() << QString("[ %1] '%2'  params: '%3'")
 			.arg(r_type, 4).arg(path, 22).arg(keys)
@@ -37,44 +44,25 @@ QJsonValue TDB::request(QString path, QMap<QString, QString> params) {
 	TMainWindow *main_w = TMainWindow::getInstance();
 	main_w->showStatusMessage(getCodeDesc(path));
 
+	lastTime = requestTime.elapsed();
 	writeToLog(path, params, r_type);
 
 	return r;
 }
 
-QJsonValue TDB::GET(QString path, QMap<QString, QString> params, QString r_type) {
-	QTime requestTime;
-	requestTime.start();
-// TODO: Move to config
+QUrl TDB::prepareReq(QString path) {
+	QUrl c;
 
-//	QUrl c("https://api-theatre.herokuapp.com/" + path);
-	QUrl c("http://127.0.0.1:3000/" + path);
-
-	QUrlQuery q; // Query items
-	for (QString k : params.keys())
-		q.addQueryItem(k, params[k]);
-
-
-	QNetworkRequest req;
-	QNetworkReply *rep;
-
-	if (r_type == "GET") {
-		c.setQuery(q);
-
-		req.setUrl(c);
-		rep = manager.get(req);
-
-	} else if (r_type == "POST") {
-		req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-
-		req.setUrl(c);
-		rep = manager.post(req, q.toString(QUrl::FullyEncoded).toUtf8());
-
+	if (isLocal()) {
+		c.setUrl(TDB_LOCAL + path);
 	} else {
-		qDebug() << "Something wrong, r_type = " << r_type;
-		return QJsonValue();
+		c.setUrl(TDB_REMOTE + path);
 	}
 
+	return c;
+}
+
+QJsonValue TDB::processReq(QNetworkReply *rep) {
 	QEventLoop wait;
 	QObject::connect(&manager, SIGNAL(finished(QNetworkReply * )), &wait, SLOT(quit()));
 	QTimer::singleShot(60000, &wait, SLOT(quit()));
@@ -82,11 +70,53 @@ QJsonValue TDB::GET(QString path, QMap<QString, QString> params, QString r_type)
 
 	lastReply = QJsonDocument::fromJson(rep->readAll()).object();
 	lastError = rep->error();
-	lastTime = requestTime.elapsed();
 
 	rep->deleteLater();
 
 	return lastReply["response"];
+}
+
+QJsonValue TDB::GET(QString path, QMap<QString, QString> params) {
+	QNetworkRequest req;
+	QNetworkReply *rep;
+	QUrl c = prepareReq(path);
+
+	QUrlQuery q; // Query items
+	for (QString k : params.keys())
+		q.addQueryItem(k, params[k]);
+
+	c.setQuery(q);
+
+	req.setUrl(c);
+	rep = manager.get(req);
+
+	return processReq(rep);
+}
+
+QJsonValue TDB::POST(QString path, QMap<QString, QString> params) {
+	QNetworkRequest req;
+	QNetworkReply *rep;
+
+	req.setUrl(prepareReq(path));
+
+	QUrlQuery q; // Query items
+	for (QString k : params.keys())
+		q.addQueryItem(k, params[k]);
+
+	req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+	rep = manager.post(req, q.toString(QUrl::FullyEncoded).toUtf8());
+
+	return processReq(rep);
+}
+
+QJsonValue TDB::POST(QString path, QHttpMultiPart *m) {
+	QNetworkRequest request(prepareReq(path));
+
+	QNetworkReply *rep = manager.post(request, m);
+	m->setParent(rep);
+
+	return processReq(rep);
 }
 
 void TDB::getToken() {
@@ -97,10 +127,10 @@ void TDB::getToken() {
 	} else {
 		TConfig::set("login", cred["login"]);
 
-		QJsonObject o = GET("auth_api/new", QMap<QString, QString>{
+		QJsonObject o = POST("auth_api/new", {
 				{"login", cred["login"].toString()},
 				{"pass",  cred["password"].toString()}
-		}, "POST").toObject();
+		}).toObject();
 
 		if (hasErrors()) {
 			getToken();
@@ -114,7 +144,7 @@ void TDB::getToken() {
 }
 
 void TDB::checkAndRefreshToken() {
-	GET("auth_api/check", {{"token", TConfig::getS("token")}}, "POST").toString();
+	POST("auth_api/check", {{"token", TConfig::getS("token")}}).toString();
 
 	if (hasErrors()) {
 		checkAndRefreshToken();
@@ -439,9 +469,6 @@ QJsonValue TDB::uploadFiles(QMap<QString, QString> files, QMap<QString, QString>
 }
 
 QJsonValue TDB::upload(QMap<QString, QIODevice *> io, QMap<QString, QString> params) {
-//	QUrl c("https://api-theatre.herokuapp.com/utils/upload");
-	QUrl c("http://127.0.0.1:3000/utils/upload");
-
 	QHttpMultiPart *multipart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
 	for (QString k : io.keys()) {
@@ -452,17 +479,7 @@ QJsonValue TDB::upload(QMap<QString, QIODevice *> io, QMap<QString, QString> par
 		appendStringPart(multipart, k, params[k]);
 	}
 
-	QNetworkRequest request(c);
-	QNetworkReply *rep = manager.post(request, multipart);
-	multipart->setParent(rep);
-
-	QEventLoop wait;
-	QObject::connect(&manager, SIGNAL(finished(QNetworkReply * )), &wait, SLOT(quit()));
-	QTimer::singleShot(60000, &wait, SLOT(quit()));
-	wait.exec();
-
-	lastReply = QJsonDocument::fromJson(rep->readAll()).object();
-	lastError = rep->error();
+	QJsonValue r = POST("utils/upload", multipart);
 
 	qDebug() << QString("[ %1] '%2'  params: '%3'")
 			.arg("POST", 4).arg("utils/upload", 18).arg((io.keys() + params.keys()).join(", "))
@@ -470,7 +487,7 @@ QJsonValue TDB::upload(QMap<QString, QIODevice *> io, QMap<QString, QString> par
 
 	hasErrors();
 
-	return lastReply["response"];
+	return r;
 }
 
 void TDB::appendFilePart(QHttpMultiPart *multipart, QString k, QIODevice *v) const {
@@ -493,6 +510,11 @@ void TDB::appendStringPart(QHttpMultiPart *multipart, QString k, QString v) cons
 	r.setBody(v.toUtf8());
 
 	multipart->append(r);
+}
+
+bool TDB::isLocal() {
+	QStringList arg = qApp->arguments();
+	return arg.count() > 1 && arg.last() == "-local";
 }
 
 

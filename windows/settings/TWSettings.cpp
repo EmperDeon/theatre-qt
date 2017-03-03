@@ -52,6 +52,7 @@ void TWSettings::fillMainW() {
 			{"Создание афиш",         "posters_create"},
 			{"Создание новостей",     "articles_create"},
 			{"Создание спектаклей",   "t_perfs_create"},
+			{"Создание залов",        "t_halls_create"},
 
 			{"Изменение театров",     "theatres_update"},
 			{"Изменение сотрудников", "u_apis_update"},
@@ -67,7 +68,10 @@ void TWSettings::fillMainW() {
 	s_main_w->clear();
 
 	for (QString k : desc.keys()) {
-		if (perms.contains(desc[k]))
+		QString d = desc[k];
+		d.replace(QRegExp("create|update|destroy|restore"), "edit");
+
+		if (perms.contains(d))
 			s_main_w->addItem(k, desc[k]);
 	}
 }

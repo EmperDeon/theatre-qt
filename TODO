@@ -1,13 +1,14 @@
-TODO: Write TModel for main models (posters, users, etc.) ?-Do i really need it-?
+TODO: Write TModel for main models (posters, users, etc.)
 TODO: Save temporary data
-TODO: Perms checks: delete/restore buttons
 TODO: Maybe add full screen view of preview in TFileUpload
 TODO: Gallery for theatres, performances, actors, articles
 
 TODO: Models - Booking, Comments, Reviews, Statistics
 
-TODO: Write Actor Classes
 TODO: Separate menus for admin
-TODO: TPerformances fixes
 
+TODO: Нужно ли глоб. админам вообще добавление спектаклей, афиш и т.д.
 TODO: Оставить меню Theatres не админам ?
+TODO: Выводить ли неподтвержденные спектакли на сайте
+TODO:  Если не выводить, зачем вообще подтверждение ?
+TODO: Вложенные комменты ?

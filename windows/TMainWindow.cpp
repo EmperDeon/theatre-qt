@@ -70,7 +70,6 @@ void TMainWindow::changeCurrent(QString s) {
 
 	} else if (s == "main") {
 		w_curr = getNewMainWidget();
-//		w_curr = new THallCreate;
 
 	} else if (s == "deleted") {
 		w_curr = new TDeleted;
@@ -90,6 +89,7 @@ void TMainWindow::changeCurrent(QString s) {
 			w_menu->reformMenu();
 		});
 
+
 	} else if (s == "theatres_create") {
 		w_curr = new TTheatreCreate;
 
@@ -101,6 +101,9 @@ void TMainWindow::changeCurrent(QString s) {
 
 	} else if (s == "t_halls") {
 		w_curr = new THalls;
+
+	} else if (s == "t_halls_create") {
+		w_curr = new THallCreate;
 
 	} else if (s == "u_apis") {
 		w_curr = new TUsers;
