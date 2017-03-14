@@ -14,6 +14,7 @@ class THall : public QWidget {
 	THallCanvas *w_canvas;
 	THallTools *w_tools;
 
+	QScrollBar *s_w, *s_h;
 
 public:
 	THall();
@@ -22,7 +23,20 @@ public:
 
 	void crop();
 
+	int getCurrentTool();
 
+	void setCurrentTool(int i);
+
+	void load();
+
+	void save();
+
+	void changeScale(int mw, int mh);
+
+	void setScroll(int x, int y);
+
+protected:
+	void keyReleaseEvent(QKeyEvent *event) override;
 };
 
 

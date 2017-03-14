@@ -52,7 +52,7 @@ THallCreate::THallCreate() {
 }
 
 void THallCreate::save() {
-
+	hall->save();
 }
 
 void THallCreate::reset() {

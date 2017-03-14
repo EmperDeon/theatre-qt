@@ -2,7 +2,7 @@
 #define THEATRE_ADMIN_THALLCREATE_H
 
 #include <QtWidgets>
-#include "THall.h"
+#include "windows/hall/draw/THall.h"
 
 class THallCreate : public QWidget {
 	THall *hall;
@@ -17,7 +17,6 @@ public:
 	void reset();
 
 	void setSize();
-
 };
 
 

@@ -47,10 +47,10 @@ set(P_S
         windows/del/TDeleted.cpp
         windows/del/TDeletedTab.cpp
 
+        windows/hall/draw/THall.cpp
         windows/hall/draw/THallCanvas.cpp
         windows/hall/draw/THallTools.cpp
 
-        windows/hall/THall.cpp
         windows/hall/THallCreate.cpp
         windows/hall/THallEdit.cpp
         windows/hall/THallPreview.cpp
@@ -114,10 +114,10 @@ set(P_H
         windows/del/TDeleted.h
         windows/del/TDeletedTab.h
 
+        windows/hall/draw/THall.h
         windows/hall/draw/THallCanvas.h
         windows/hall/draw/THallTools.h
 
-        windows/hall/THall.h
         windows/hall/THallCreate.h
         windows/hall/THallEdit.h
         windows/hall/THallPreview.h

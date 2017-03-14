@@ -3,7 +3,7 @@
 #include <windows/TMainWindow.h>
 #include "dialogs/TDLogin.h"
 
-#define TDB_LOCAL "http://192.168.1.54:3000/"
+#define TDB_LOCAL "http://127.0.0.1:3000/"
 #define TDB_REMOTE "https://api-theatre.herokuapp.com/"
 
 QJsonValue TDB::request(QString path, QMap<QString, QString> params) {

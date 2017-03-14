@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 	a.setStyleSheet(readStyleSheet());
 
 	TMainWindow *w = TMainWindow::getInstance();
-	w->show();
+	w->showMaximized();
 
 //	TDB db;
 //	qDebug() << db.getPerms();
