@@ -6,14 +6,13 @@ THall::THall() {
 	w_tools = new THallTools;
 	l->addWidget(w_tools);
 
+	// Center
 	QVBoxLayout *c_v = new QVBoxLayout;
 	QVBoxLayout *c_v1 = new QVBoxLayout;
 	QHBoxLayout *c_h = new QHBoxLayout;
 
-	w_canvas = new THallCanvas(this);
-
-	s_w = new QScrollBar;
-	s_h = new QScrollBar;
+	QScrollBar *s_w = new QScrollBar, *s_h = new QScrollBar;
+	w_canvas = new THallCanvas(this, s_w, s_h);
 
 	s_w->setOrientation(Qt::Horizontal);
 
@@ -35,6 +34,7 @@ THall::THall() {
 	c_h->addLayout(c_v1);
 
 	l->addLayout(c_h);
+	// Center
 
 	load();
 
@@ -61,20 +61,16 @@ int THall::getCurrentTool() {
 	return w_tools->getCurrentId();
 }
 
-void THall::setCurrentTool(int i) {
-	w_tools->setCurrentId(i);
-}
-
 void THall::keyReleaseEvent(QKeyEvent *event) {
 	switch (event->key()) {
 		case Qt::Key_1:
-			setCurrentTool(0);
+			w_tools->setCurrentId(0);
 			break;
 		case Qt::Key_2:
-			setCurrentTool(1);
+			w_tools->setCurrentId(1);
 			break;
 		case Qt::Key_3:
-			setCurrentTool(2);
+			w_tools->setCurrentId(2);
 			break;
 
 		case Qt::Key_Right:
@@ -113,12 +109,6 @@ void THall::save() {
 	f.close();
 }
 
-void THall::changeScale(int mw, int mh) {
-	s_w->setMaximum(mw);
-	s_h->setMaximum(mh);
-}
-
-void THall::setScroll(int x, int y) {
-	s_w->setValue(x);
-	s_h->setValue(y);
+THallSeatSett THall::getSeatSettings() {
+	return w_tools->getSeatSettings();
 }

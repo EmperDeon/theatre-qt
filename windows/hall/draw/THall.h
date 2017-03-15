@@ -7,14 +7,11 @@
 #include <windows/hall/draw/THallTools.h>
 
 class THallCanvas;
-
 class THallTools;
 
 class THall : public QWidget {
 	THallCanvas *w_canvas;
 	THallTools *w_tools;
-
-	QScrollBar *s_w, *s_h;
 
 public:
 	THall();
@@ -25,15 +22,11 @@ public:
 
 	int getCurrentTool();
 
-	void setCurrentTool(int i);
+	THallSeatSett getSeatSettings();
 
 	void load();
 
 	void save();
-
-	void changeScale(int mw, int mh);
-
-	void setScroll(int x, int y);
 
 protected:
 	void keyReleaseEvent(QKeyEvent *event) override;

@@ -5,14 +5,14 @@ void THallCanvas::paintEvent(QPaintEvent *event) {
 	p.setRenderHint(QPainter::Antialiasing, false);
 
 	// Offset
-	mw = (w * cs) - size().width() + 200;
-	mh = (h * cs) - size().height() + 200;
+	mw = (w * cs) - width() + 200;
+	mh = (h * cs) - height() + 200;
 
-	ox = ox > mw ? mw : ox;
-	oy = oy > mh ? mh : oy;
+	off_x = off_x > mw ? mw : off_x;
+	off_y = off_y > mh ? mh : off_y;
 
-	ox = ox < 0 ? 0 : ox;
-	oy = oy < 0 ? 0 : oy;
+	off_x = off_x < 0 ? 0 : off_x;
+	off_y = off_y < 0 ? 0 : off_y;
 	// Offset
 
 
@@ -23,7 +23,7 @@ void THallCanvas::paintEvent(QPaintEvent *event) {
 	p.drawRect(0, 0, width(), height());
 	p.setPen(QPen(GET_C(243)));
 
-	p.translate(-ox, -oy);
+	p.translate(-off_x, -off_y);
 
 	for (int x = 1; x <= w; x++)
 		p.drawLine(x * cs, 1, x * cs, h * cs - 2);
@@ -48,21 +48,50 @@ void THallCanvas::paintEvent(QPaintEvent *event) {
 
 			p.drawRect(x * cs, y * cs, cs, cs);
 		}
-
-	p.translate(0, 0);
+	// Areas
 
 	// Draw border around
 	p.setPen(GET_C(172));
 	p.setBrush(Qt::NoBrush); // 235
 
-	p.drawRect(ox, oy, ox + width() - 1, oy + height() - 1);
+	p.drawRect(off_x, off_y, off_x + width() - 1, off_y + height() - 1);
+
+
+	// Form text overlay data
+	for (int i = 0; i < w * h; i++)
+		seat_t[i] = 0;
+
+	for (THallSeat s : seat_n) {
+		int x = s.x, y = s.y, st = s.st, i = getCell(x, y);
+
+		while (i == 1) {
+			seat_t[x + y * w] = st++;
+
+			x += s.left ? -1 : 1;
+			i = getCell(x, y);
+		}
+	}
+
+	// Draw text overlay
+	p.setPen(Qt::white);
+	p.setFont(QFont("Tahoma", int(cs * 0.65)));
+
+	for (int x = 0; x < w; x++)
+		for (int y = 0; y < h; y++) {
+			if (int i = seat_t[x + y * w]) {
+				p.drawText(x * cs, y * cs, cs, cs, Qt::AlignCenter, QString::number(i));
+			}
+		}
+
+
+	// Finish drawing
 	p.end();
 	event->accept();
 }
 
 int THallCanvas::getCell(int x, int y) const {
 	if (x < w && y < h) {
-		int i = map[x + y * w];
+		int i = seat_s[x + y * w];
 
 		return i;
 	} else
@@ -71,17 +100,14 @@ int THallCanvas::getCell(int x, int y) const {
 
 void THallCanvas::setCell(int x, int y, int f) {
 	if (x < w && y < h)
-		map[x + y * w] = f;
+		seat_s[x + y * w] = f;
 }
 
-THallCanvas::THallCanvas(THall *wn) : wnd(wn) {
-
-
-}
+THallCanvas::THallCanvas(THall *wn, QScrollBar *s_w, QScrollBar *s_h) : wnd(wn), scroll_w(s_w), scroll_h(s_h) {}
 
 void THallCanvas::mousePressEvent(QMouseEvent *event) {
-	r_start_x = ((event->x() + ox) / cs);
-	r_start_y = ((event->y() + oy) / cs);
+	r_start_x = ((event->x() + off_x) / cs);
+	r_start_y = ((event->y() + off_y) / cs);
 
 	mouseMoveEvent(event);
 }
@@ -93,11 +119,11 @@ void THallCanvas::mouseMoveEvent(QMouseEvent *event) {
 		case 0:
 		case 1: {
 			int fill = (st == 0) ? 1 : 0;
-			int start_x = event->buttons() == Qt::RightButton ? r_start_x : ((event->x() + ox) / cs);
-			int start_y = event->buttons() == Qt::RightButton ? r_start_y : ((event->y() + oy) / cs);
+			int start_x = event->buttons() == Qt::RightButton ? r_start_x : ((event->x() + off_x) / cs);
+			int start_y = event->buttons() == Qt::RightButton ? r_start_y : ((event->y() + off_y) / cs);
 
-			int end_x = ((event->x() + ox) / cs) + 1;
-			int end_y = ((event->y() + oy) / cs) + 1;
+			int end_x = ((event->x() + off_x) / cs) + 1;
+			int end_y = ((event->y() + off_y) / cs) + 1;
 
 			if (end_x <= start_x) {
 				start_x++;
@@ -117,7 +143,7 @@ void THallCanvas::mouseMoveEvent(QMouseEvent *event) {
 
 			if (event->buttons() == Qt::RightButton) {
 				for (int x = 0; x < w * h; x++) {
-					int m = map[x], f = 0;
+					int m = seat_s[x], f = 0;
 
 					switch (m) {
 						case 0:
@@ -135,7 +161,7 @@ void THallCanvas::mouseMoveEvent(QMouseEvent *event) {
 						default:;
 					}
 
-					map[x] = f;
+					seat_s[x] = f;
 				}
 
 				for (int x = start_x; x < end_x; x++)
@@ -163,8 +189,33 @@ void THallCanvas::mouseMoveEvent(QMouseEvent *event) {
 
 		}
 			break;
-		case 2:
+		case 2: {
+			int cx = (event->x() + off_x) / cs, cy = ((event->y() + off_y) / cs);
+			QPair<int, THallSeat> seat = getSeatAt(cx, cy);
+			THallSeatSett sett = wnd->getSeatSettings();
 
+			if (event->buttons() == Qt::RightButton) {
+				if (seat.first != -1)
+					seat_n.removeAt(seat.first);
+
+			} else {
+				THallSeat t = seat.second;
+
+				t.st = sett.st;
+				t.left = sett.left;
+				t.x = cx;
+				t.y = cy;
+
+				if (seat.first == -1) {
+					seat_n.append(t);
+
+				} else {
+					seat_n.replace(seat.first, t);
+				}
+			}
+
+//			std::sort(seat_n.begin(), seat_n.end(), [](THallSeat v1, THallSeat v2){ return v1.x < v2.x; });
+		}
 			break;
 		default:
 			qDebug() << "Unsupported, " + QString::number(st);
@@ -182,7 +233,7 @@ void THallCanvas::mouseReleaseEvent(QMouseEvent *event) {
 	r_start_y = -1;
 
 	for (int x = 0; x < w * h; x++) {
-		int m = map[x], f = 0;
+		int m = seat_s[x], f = 0;
 
 		switch (m) {
 			case 0:
@@ -200,17 +251,17 @@ void THallCanvas::mouseReleaseEvent(QMouseEvent *event) {
 			default:;
 		}
 
-		map[x] = f;
+		seat_s[x] = f;
 	}
 
 	update();
 }
 
 void THallCanvas::setSize(int w, int h) {
-	int *nmap = new int[w * h], *omap = map;
+	int *nmap = new int[w * h], *omap = seat_s;
 	int ow = this->w, oh = this->h;
 
-	// Clear new map
+	// Clear new seat_s
 	for (int i = 0; i < w * h; i++)
 		nmap[i] = 0;
 
@@ -222,7 +273,7 @@ void THallCanvas::setSize(int w, int h) {
 
 	this->w = w;
 	this->h = h;
-	this->map = nmap;
+	this->seat_s = nmap;
 	delete omap;
 
 	update();
@@ -242,7 +293,7 @@ void THallCanvas::wheelEvent(QWheelEvent *event) {
 	double inc = event->delta() > 0 ? cs * 1.25 : cs * 0.8;
 	inc -= cs;
 
-	int tox = ((event->x() + ox) / cs), toy = ((event->y() + oy) / cs);
+	int tox = ((event->x() + off_x) / cs), toy = ((event->y() + off_y) / cs);
 
 	// Cell size
 	cs += inc;
@@ -250,19 +301,22 @@ void THallCanvas::wheelEvent(QWheelEvent *event) {
 	cs = cs > 40 ? 40 : cs;
 
 	// Offset
-	ox = tox * cs - event->x();
-	oy = toy * cs - event->y();
+	off_x = tox * cs - event->x();
+	off_y = toy * cs - event->y();
 
 	update();
 
-	wnd->changeScale(cs * w - width() + 200, cs * h - height() + 200);
-	wnd->setScroll(ox, oy);
+	scroll_w->setMaximum(mw);
+	scroll_h->setMaximum(mh);
+	scroll_w->setValue(off_x);
+	scroll_h->setValue(off_y);
+
 	event->accept();
 }
 
 void THallCanvas::moveView(int x, int y) {
-	ox += x * (cs * 1.1);
-	oy += y * (cs * 1.1);
+	off_x += x * (cs * 1.1);
+	off_y += y * (cs * 1.1);
 
 	update();
 }
@@ -317,9 +371,10 @@ void THallCanvas::fromJson(QJsonObject o) {
 
 	cs = o["cs"].toInt(20);
 
-	map = new int[w * h];
+	seat_s = new int[w * h];
+	seat_t = new int[w * h];
 	for (int i = 0; i < w * h; i++)
-		map[i] = 0;
+		seat_s[i] = 0;
 
 	for (QJsonValue v : o["sectors"].toArray()) {
 		QJsonObject t = v.toObject();
@@ -330,15 +385,30 @@ void THallCanvas::fromJson(QJsonObject o) {
 			setCell(x, ty, 1);
 	}
 
+	seat_n << THallSeat(2, 1, 1);
+	seat_n << THallSeat(1, 2, 2);
+	seat_n << THallSeat(3, 3, 3, false);
+	seat_n << THallSeat(4, 4, 4);
+
 	update();
 }
 
 void THallCanvas::scrollW(int p) {
-	ox = p;
+	off_x = p;
 	update();
 }
 
 void THallCanvas::scrollH(int p) {
-	oy = p;
+	off_y = p;
 	update();
+}
+
+QPair<int, THallSeat> THallCanvas::getSeatAt(int cx, int cy) {
+	for (int i = 0; i < seat_n.count(); i++) {
+		THallSeat s = seat_n.at(i);
+		if (s.x == cx && s.y == cy)
+			return QPair<int, THallSeat>(i, s);
+	}
+
+	return QPair<int, THallSeat>(-1, THallSeat());
 }

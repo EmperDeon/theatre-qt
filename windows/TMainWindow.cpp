@@ -69,7 +69,8 @@ void TMainWindow::changeCurrent(QString s) {
 		w_curr = new QWidget;
 
 	} else if (s == "main") {
-		w_curr = getNewMainWidget();
+//		w_curr = getNewMainWidget();
+		w_curr = new THallCreate;
 
 	} else if (s == "deleted") {
 		w_curr = new TDeleted;

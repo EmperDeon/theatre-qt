@@ -26,3 +26,11 @@ int main(int argc, char **argv) {
 
 	return a.exec();
 }
+
+void operator delete(void *p, std::size_t) {
+	std::free(p);
+}
+
+void operator delete[](void *p, std::size_t) {
+	std::free(p);
+}
