@@ -57,10 +57,6 @@ void THall::crop() {
 
 }
 
-int THall::getCurrentTool() {
-	return w_tools->getCurrentId();
-}
-
 void THall::keyReleaseEvent(QKeyEvent *event) {
 	switch (event->key()) {
 		case Qt::Key_1:
@@ -109,6 +105,10 @@ void THall::save() {
 	f.close();
 }
 
-THallSeatSett THall::getSeatSettings() {
-	return w_tools->getSeatSettings();
-}
+int THall::getCurrentTool() { return w_tools->getCurrentId(); }
+
+THallSeatSett THall::getSeatSettings() { return w_tools->getSeatSettings(); }
+
+QMap<int, THallSect> THall::getSectors() { return w_tools->getSectors(); }
+
+QPair<int, THallSect *> THall::getCurrentSect() { return w_tools->getCurrentSect(); }

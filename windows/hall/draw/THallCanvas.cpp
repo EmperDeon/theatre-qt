@@ -31,15 +31,16 @@ void THallCanvas::paintEvent(QPaintEvent *event) {
 	for (int y = 1; y <= h; y++)
 		p.drawLine(1, y * cs, w * cs - 2, y * cs);
 
-	// Areas
+	// Seats
 	for (int x = 0; x < w; x++)
 		for (int y = 0; y < h; y++) {
 			int i = getCell(x, y);
 			if (i == 1) {
-				p.setBrush(QBrush(QColor(170, 170, 255)));
+//				p.setBrush(QBrush(QColor(170, 170, 255)));
+				p.setBrush(QBrush(GET_C(175)));
 
 			} else if (i == 2 || i == 3) {
-				p.setBrush(QBrush(GET_C(150)));
+				p.setBrush(QBrush(GET_C(200)));
 
 			} else {
 				p.setBrush(QBrush(GET_C(223)));
@@ -48,11 +49,31 @@ void THallCanvas::paintEvent(QPaintEvent *event) {
 
 			p.drawRect(x * cs, y * cs, cs, cs);
 		}
-	// Areas
+	// Seats
+
+
+	// Sectors
+	for (int i = 0; i < w * h; i++)
+		sect_s[i] = 0;
+
+	const QMap<int, THallSect> &map = wnd->getSectors();
+	for (int s : map.keys()) {
+		for (THallCoord c : map[s].coords) {
+			p.setBrush(map[s].color);
+
+			p.drawRect(c.x * cs, c.y * cs, cs, cs);
+
+			sect_s[c.x + c.y * w] = s + 1;
+		}
+	}
+
+
+	// Sectors
+
 
 	// Draw border around
 	p.setPen(GET_C(172));
-	p.setBrush(Qt::NoBrush); // 235
+	p.setBrush(Qt::NoBrush);
 
 	p.drawRect(off_x, off_y, off_x + width() - 1, off_y + height() - 1);
 
@@ -62,19 +83,23 @@ void THallCanvas::paintEvent(QPaintEvent *event) {
 		seat_t[i] = 0;
 
 	for (THallSeat s : seat_n) {
-		int x = s.x, y = s.y, st = s.st, i = getCell(x, y);
+		int x = s.x, y = s.y, st = s.st, i = getCell(x, y), curr_s = sect_s[x + y * w];
 
-		while (i == 1) {
+		while ((i == 0 || i == 1 || i == 3) && x > -1 && x < w && sect_s[x + y * w] == curr_s) {
 			seat_t[x + y * w] = st++;
 
 			x += s.left ? -1 : 1;
 			i = getCell(x, y);
+
+			if (i == 0 || curr_s == 0) {
+				break;
+			}
 		}
 	}
 
 	// Draw text overlay
 	p.setPen(Qt::white);
-	p.setFont(QFont("Tahoma", int(cs * 0.65)));
+	p.setFont(QFont("Tahoma", int(cs * 0.5)));
 
 	for (int x = 0; x < w; x++)
 		for (int y = 0; y < h; y++) {
@@ -213,8 +238,28 @@ void THallCanvas::mouseMoveEvent(QMouseEvent *event) {
 					seat_n.replace(seat.first, t);
 				}
 			}
+		}
+			break;
 
-//			std::sort(seat_n.begin(), seat_n.end(), [](THallSeat v1, THallSeat v2){ return v1.x < v2.x; });
+		case 3: {
+			int cx = (event->x() + off_x) / cs, cy = ((event->y() + off_y) / cs);
+			auto sect = wnd->getCurrentSect();
+			auto s = &sect.second->coords;
+
+			THallCoord t = THallCoord(cx, cy);
+
+			if (event->buttons() == Qt::LeftButton) {
+				if (!sect_n.contains(t)) {
+					sect_n.append(t);
+					s->append(t);
+
+				}
+			} else {
+				if (s->contains(t)) {
+					sect_n.removeOne(t);
+					s->removeOne(t);
+				}
+			}
 		}
 			break;
 		default:
@@ -372,6 +417,7 @@ void THallCanvas::fromJson(QJsonObject o) {
 	cs = o["cs"].toInt(20);
 
 	seat_s = new int[w * h];
+	sect_s = new int[w * h];
 	seat_t = new int[w * h];
 	for (int i = 0; i < w * h; i++)
 		seat_s[i] = 0;
