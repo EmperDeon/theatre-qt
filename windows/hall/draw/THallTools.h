@@ -29,6 +29,10 @@ public:
 
 	QPair<int, THallSect *> getCurrentSect();
 
+	QJsonArray toJson();
+
+	void fromJson(QJsonArray o);
+
 	void updateSect();
 };
 

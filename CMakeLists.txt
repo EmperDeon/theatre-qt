@@ -47,14 +47,14 @@ set(P_S
         windows/del/TDeleted.cpp
         windows/del/TDeletedTab.cpp
 
-        windows/hall/draw/THall.cpp
-        windows/hall/draw/THallCanvas.cpp
-        windows/hall/draw/THallTools.cpp
-
         windows/hall/THallCreate.cpp
         windows/hall/THallEdit.cpp
         windows/hall/THallPreview.cpp
         windows/hall/THalls.cpp
+
+        windows/hall/draw/THall.cpp
+        windows/hall/draw/THallCanvas.cpp
+        windows/hall/draw/THallTools.cpp
 
         windows/perf/TPerf.cpp
         windows/perf/TPerfApprove.cpp
@@ -66,6 +66,15 @@ set(P_S
         windows/poster/TPosterCreate.cpp
         windows/poster/TPosterEdit.cpp
         windows/poster/TPosters.cpp
+
+        windows/price/TPriceCreate.cpp
+        windows/price/TPriceEdit.cpp
+        windows/price/TPricePreview.cpp
+        windows/price/TPrices.cpp
+
+        windows/price/draw/THallPrice.cpp
+        windows/price/draw/THallPriceCanvas.cpp
+        windows/price/draw/THallPriceTools.cpp
 
         windows/settings/TWSettings.cpp
 
@@ -114,14 +123,14 @@ set(P_H
         windows/del/TDeleted.h
         windows/del/TDeletedTab.h
 
-        windows/hall/draw/THall.h
-        windows/hall/draw/THallCanvas.h
-        windows/hall/draw/THallTools.h
-
         windows/hall/THallCreate.h
         windows/hall/THallEdit.h
         windows/hall/THallPreview.h
         windows/hall/THalls.h
+
+        windows/hall/draw/THall.h
+        windows/hall/draw/THallCanvas.h
+        windows/hall/draw/THallTools.h
 
         windows/perf/TPerf.h
         windows/perf/TPerfApprove.h
@@ -133,6 +142,15 @@ set(P_H
         windows/poster/TPosterCreate.h
         windows/poster/TPosterEdit.h
         windows/poster/TPosters.h
+
+        windows/price/TPriceCreate.h
+        windows/price/TPriceEdit.h
+        windows/price/TPricePreview.h
+        windows/price/TPrices.h
+
+        windows/price/draw/THallPrice.h
+        windows/price/draw/THallPriceCanvas.h
+        windows/price/draw/THallPriceTools.h
 
         windows/settings/TWSettings.h
 

@@ -1,7 +1,15 @@
 #include <QtWidgets/QHBoxLayout>
 #include <utils/TConfig.h>
-#include "windows/TChoose.h"
 #include "TMainWindow.h"
+
+#include <windows/TChoose.h>
+#include <windows/del/TDeleted.h>
+#include <windows/settings/TWSettings.h>
+#include <windows/perf/TPerfApprove.h>
+
+#include <windows/actor/TActors.h>
+#include <windows/actor/TActorCreate.h>
+#include <windows/actor/TActorEdit.h>
 
 #include <windows/article/TArticles.h>
 #include <windows/article/TArticleEdit.h>
@@ -22,14 +30,13 @@
 #include <windows/user/TUsers.h>
 #include <windows/user/TUserCreate.h>
 #include <windows/user/TUserEdit.h>
-#include <windows/hall/THallCreate.h>
+
 #include <windows/hall/THalls.h>
-#include <windows/del/TDeleted.h>
-#include <windows/settings/TWSettings.h>
-#include <windows/actor/TActors.h>
-#include <windows/actor/TActorCreate.h>
-#include <windows/actor/TActorEdit.h>
-#include <windows/perf/TPerfApprove.h>
+#include <windows/hall/THallCreate.h>
+#include <windows/hall/THallEdit.h>
+#include <windows/price/TPrices.h>
+#include <windows/price/TPriceCreate.h>
+#include <windows/price/TPriceEdit.h>
 
 
 TMainWindow::TMainWindow() {
@@ -45,7 +52,7 @@ TMainWindow::TMainWindow() {
 	nw->setLayout(l);
 	this->setCentralWidget(nw);
 
-//	resize(800, 500);
+	resize(800, 500);
 
 	this->statusBar()->addPermanentWidget(l_status);
 
@@ -69,8 +76,7 @@ void TMainWindow::changeCurrent(QString s) {
 		w_curr = new QWidget;
 
 	} else if (s == "main") {
-//		w_curr = getNewMainWidget();
-		w_curr = new THallCreate;
+		w_curr = getNewMainWidget();
 
 	} else if (s == "deleted") {
 		w_curr = new TDeleted;
@@ -105,6 +111,18 @@ void TMainWindow::changeCurrent(QString s) {
 
 	} else if (s == "t_halls_create") {
 		w_curr = new THallCreate;
+
+	} else if (s == "t_halls_update") {
+		w_curr = new THallEdit;
+
+	} else if (s == "t_prices") {
+		w_curr = new TPrices;
+
+	} else if (s == "t_prices_create") {
+		w_curr = new TPriceCreate;
+
+	} else if (s == "t_prices_update") {
+		w_curr = new TPriceEdit;
 
 	} else if (s == "u_apis") {
 		w_curr = new TUsers;

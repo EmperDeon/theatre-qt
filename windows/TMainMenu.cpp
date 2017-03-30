@@ -121,6 +121,11 @@ void TMainMenu::createStructure() {
 		IeSI("t_halls", "create", "Создать новый зал");
 	IeC("t_halls", "Залы");
 
+	Ie("t_prices");
+		IeSI("t_prices", "update", "Изменить цены");
+		IeSI("t_prices", "create", "Создать новые цены");
+	IeC("t_prices", "Цены");
+
 	Ie("t_perfs");
 		IeSI("t_perfs", "create", "Добавление спектакля");
 		IeSI("t_perfs", "update", "Редактирование спектактля");

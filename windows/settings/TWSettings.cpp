@@ -39,26 +39,31 @@ void TWSettings::fillMainW() {
 	QMap <QString, QString> desc = {
 			{"Список театров",        "theatres"},
 			{"Список сотрудников",    "u_apis"},
-			{"Список актуров",        "actors"},
+			{"Список актеров",        "actors"},
 			{"Список спектаклей",     "perfs"},
 			{"Список афиш",           "posters"},
+			{"Список залов",          "t_halls"},
+			{"Список цен",            "t_prices"},
 			{"Список новостей",       "articles"},
 			{"Список спектаклей",     "t_perfs"},
 
 			{"Создание театров",      "theatres_create"},
 			{"Создание сотрудников",  "u_apis_create"},
-			{"Создание актуров",      "actors_create"},
+			{"Создание актеров",      "actors_create"},
 			{"Создание спектаклей",   "perfs_create"},
 			{"Создание афиш",         "posters_create"},
 			{"Создание новостей",     "articles_create"},
 			{"Создание спектаклей",   "t_perfs_create"},
 			{"Создание залов",        "t_halls_create"},
+			{"Создание цен",          "t_prices_create"},
 
 			{"Изменение театров",     "theatres_update"},
 			{"Изменение сотрудников", "u_apis_update"},
-			{"Изменение актуров",     "actors_update"},
+			{"Изменение актеров",     "actors_update"},
 			{"Изменение спектаклей",  "perfs_update"},
 			{"Изменение афиш",        "posters_update"},
+			{"Изменение залов",       "t_halls_update"},
+			{"Изменение цен",         "t_prices_update"},
 			{"Изменение новостей",    "articles_update"},
 			{"Изменение спектаклей",  "t_perfs_update"},
 
@@ -85,7 +90,7 @@ void TWSettings::load() {
 void TWSettings::save() {
 	sett["main_widget"] = s_main_w->currentData().toString();
 
-	TDB().request("auth_api/set_settings", {{"settings", QJsonDocument(sett).toJson()}});
+	TDB().request("auth_api/set_settings", {{"settings", QJsonDocument(sett).toJson(QJsonDocument::Compact)}});
 }
 
 void TWSettings::reset() {

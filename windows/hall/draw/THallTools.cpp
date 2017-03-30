@@ -77,8 +77,8 @@ THallTools::THallTools() {
 	sect_w->setVisible(false);
 	l->addWidget(sect_w);
 
-	sect_list.insert(0, THallSect("Партер", "P", QColor(255, 0, 0, 50)));
-	sect_list.insert(1, THallSect("Балкон", "B", QColor(0, 0, 255, 50)));
+//	sect_list.insert(0, THallSect("Партер", "P", QColor(255, 0, 0, 50)));
+//	sect_list.insert(1, THallSect("Балкон", "B", QColor(0, 0, 255, 50)));
 
 	updateSect();
 	// Tool settings
@@ -121,11 +121,58 @@ void THallTools::updateSect() {
 }
 
 QPair<int, THallSect *> THallTools::getCurrentSect() {
-	return QPair<int, THallSect *>(sect_box->currentIndex(), &sect_list[sect_box->currentIndex()]);
+	if (sect_list.size() == 0)
+		return QPair<int, THallSect *>(-1, nullptr);
+	else
+		return QPair<int, THallSect *>(sect_box->currentIndex(), &sect_list[sect_box->currentIndex()]);
 }
 
 QMap<int, THallSect> THallTools::getSectors() {
 	return sect_list;
+}
+
+QJsonArray THallTools::toJson() {
+	QJsonArray r;
+
+	for (int k : sect_list.keys()) {
+		THallSect v = sect_list[k];
+		QJsonObject o;
+
+		o["id"] = k;
+		o["name"] = v.name;
+		o["pref"] = v.pref;
+		o["color"] = v.color.name(QColor::HexArgb);
+
+		QJsonArray t;
+		for (THallCoord c : v.coords)
+			t << c.toString();
+
+		o["coords"] = t;
+
+		r << o;
+	}
+
+	return r;
+}
+
+void THallTools::fromJson(QJsonArray o) {
+	sect_list.clear();
+
+	for (QJsonValue sect : o) {
+		THallSect s;
+		QJsonObject obj = sect.toObject();
+
+		s.name = obj["name"].toString();
+		s.pref = obj["pref"].toString();
+		s.color = QColor(obj["color"].toString());
+
+		for (QJsonValue v : obj["coords"].toArray())
+			s.coords << THallCoord::fromString(v.toString());
+
+		sect_list.insert(obj["id"].toInt(), s);
+	}
+
+	updateSect();
 }
 
 THallToolSect::THallToolSect() {

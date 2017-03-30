@@ -8,5 +8,6 @@
         <file>h_ers.png</file>
         <file>h_set.png</file>
         <file>h_sect.png</file>
+        <file>p_add.png</file>
     </qresource>
 </RCC>

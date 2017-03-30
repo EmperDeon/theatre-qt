@@ -1,9 +1,9 @@
-#include "THall.h"
+#include "THallPrice.h"
 
-THall::THall() {
+THallPrice::THallPrice() {
 	QVBoxLayout *l = new QVBoxLayout;
 
-	w_tools = new THallTools;
+	w_tools = new THallPriceTools;
 	l->addWidget(w_tools);
 
 	// Center
@@ -12,15 +12,15 @@ THall::THall() {
 	QHBoxLayout *c_h = new QHBoxLayout;
 
 	QScrollBar *s_w = new QScrollBar, *s_h = new QScrollBar;
-	w_canvas = new THallCanvas(this, s_w, s_h);
+	w_canvas = new THallPriceCanvas(this, s_w, s_h);
 
 	s_w->setOrientation(Qt::Horizontal);
 
 	s_w->setFixedHeight(20);
 	s_h->setFixedWidth(20);
 
-	connect(s_w, &QScrollBar::valueChanged, w_canvas, &THallCanvas::scrollW);
-	connect(s_h, &QScrollBar::valueChanged, w_canvas, &THallCanvas::scrollH);
+	connect(s_w, &QScrollBar::valueChanged, w_canvas, &THallPriceCanvas::scrollW);
+	connect(s_h, &QScrollBar::valueChanged, w_canvas, &THallPriceCanvas::scrollH);
 
 	c_v->addWidget(w_canvas);
 	c_v->addSpacing(2);
@@ -40,33 +40,11 @@ THall::THall() {
 	l->setContentsMargins(0, 0, 0, 0);
 	l->setSpacing(0);
 
-	QTimer::singleShot(10, [this]() {
-		this->setFocus();
-	});
-
 	setLayout(l);
 }
 
-void THall::setSize(int w, int h) {
-
-}
-
-void THall::crop() {
-
-}
-
-void THall::keyReleaseEvent(QKeyEvent *event) {
+void THallPrice::keyReleaseEvent(QKeyEvent *event) {
 	switch (event->key()) {
-		case Qt::Key_1:
-			w_tools->setCurrentId(0);
-			break;
-		case Qt::Key_2:
-			w_tools->setCurrentId(1);
-			break;
-		case Qt::Key_3:
-			w_tools->setCurrentId(2);
-			break;
-
 		case Qt::Key_Right:
 			w_canvas->moveView(1, 0);
 			break;
@@ -83,27 +61,34 @@ void THall::keyReleaseEvent(QKeyEvent *event) {
 	}
 }
 
-int THall::getCurrentTool() { return w_tools->getCurrentId(); }
+QMap<int, TPriceSect> THallPrice::getSectors() { return w_tools->getSectors(); }
 
-THallSeatSett THall::getSeatSettings() { return w_tools->getSeatSettings(); }
-
-QMap<int, THallSect> THall::getSectors() { return w_tools->getSectors(); }
-
-QPair<int, THallSect *> THall::getCurrentSect() { return w_tools->getCurrentSect(); }
-
-void THall::fromJson(QJsonObject o) {
+void THallPrice::fromJson(QJsonObject o) {
 	w_canvas->fromJson(o);
 	w_tools->fromJson(o["sectors"].toArray());
 }
 
-QJsonObject THall::toJson() {
+QJsonObject THallPrice::toJson() {
 	QJsonObject a = w_canvas->toJson();
 	a["sectors"] = w_tools->toJson();
 
 	return a;
 }
 
-void THall::clear() {
+void THallPrice::clear() {
 	w_tools->fromJson(QJsonArray());
 	w_canvas->fromJson(QJsonObject());
+}
+
+void THallPrice::loadHall(QJsonObject o) {
+	w_canvas->loadHall(o);
+	w_tools->loadHall(o["sectors"].toArray());
+}
+
+QMap<int, TPriceSect> THallPrice::getPrices() {
+	return w_tools->getPrices();
+}
+
+int THallPrice::getCurrentPrice() {
+	return w_tools->getCurrentPrice();
 }

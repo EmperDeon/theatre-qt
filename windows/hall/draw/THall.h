@@ -14,6 +14,15 @@ struct THallSeat {
 	THallSeat() {}
 
 	THallSeat(int s, int tx, int ty, bool tl = true) : st(s), x(tx), y(ty), left(tl) {}
+
+	static THallSeat fromString(QString s) {
+		auto l = s.split(':');
+		return THallSeat(l[0].toInt(), l[1].toInt(), l[2].toInt(), l[3].toInt() == 1);
+	}
+
+	QString toString() {
+		return QString("%1:%2:%3:%4").arg(st).arg(x).arg(y).arg(left ? 1 : 0);
+	}
 };
 
 struct THallSeatSett {
@@ -31,6 +40,15 @@ struct THallCoord {
 	THallCoord(int tx, int ty) : x(tx), y(ty) {}
 
 	bool operator==(const THallCoord o) { return o.x == x && o.y == y; }
+
+	static THallCoord fromString(QString s) {
+		auto l = s.split(':');
+		return THallCoord(l[0].toInt(), l[1].toInt());
+	}
+
+	QString toString() {
+		return QString("%1:%2").arg(x).arg(y);
+	}
 };
 
 struct THallSect {
@@ -42,7 +60,6 @@ struct THallSect {
 
 	THallSect(QString tn, QString tp, QColor tc) : name(tn), pref(tp), color(tc) {}
 };
-
 
 #include <QtWidgets/QtWidgets>
 #include <windows/hall/draw/THallCanvas.h>
@@ -70,9 +87,11 @@ public:
 
 	QPair<int, THallSect *> getCurrentSect();;
 
-	void load();
+	void fromJson(QJsonObject o);
 
-	void save();
+	QJsonObject toJson();
+
+	void clear();
 
 protected:
 	void keyReleaseEvent(QKeyEvent *event) override;

@@ -10,8 +10,4 @@ TODO: Separate menus for admin
 TODO: Нужно ли глоб. админам вообще добавление спектаклей, афиш и т.д. ?
 TODO: Вложенные комменты ?
 
-TODO: 16 March
-TODO:  THall sending to server
-TODO:  Seats tool settings
-
-TODO: Move all unnecessary from THallCanvas to THall
+TODO: Write 'crop' function in THallCanvas

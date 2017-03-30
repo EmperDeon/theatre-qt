@@ -1,8 +1,8 @@
-#include "THallCanvas.h"
+#include "THallPriceCanvas.h"
 
 typedef QPair<int, int> TP;
 
-void THallCanvas::paintEvent(QPaintEvent *event) {
+void THallPriceCanvas::paintEvent(QPaintEvent *event) {
 	QPainter p(this);
 	p.setRenderHint(QPainter::Antialiasing, false);
 
@@ -58,14 +58,24 @@ void THallCanvas::paintEvent(QPaintEvent *event) {
 	for (int i = 0; i < w * h; i++)
 		sect_s[i] = seat_t[i] = seat_r[i] = 0;
 
-	const QMap<int, THallSect> &map = wnd->getSectors();
+	const QMap<int, TPriceSect> &map = wnd->getSectors();
 	for (int s : map.keys()) {
-		for (THallCoord c : map[s].coords) {
-			p.setBrush(map[s].color);
-
-			p.drawRect(c.x * cs, c.y * cs, cs, cs);
-
+		for (TPriceCoord c : map[s].coords) {
+			if (price_s[c.x + c.y * w] == 0) {
+				p.setBrush(map[s].color);
+				p.drawRect(c.x * cs, c.y * cs, cs, cs);
+			}
 			sect_s[c.x + c.y * w] = s + 1;
+		}
+	}
+
+	const QMap<int, TPriceSect> &pr = wnd->getPrices();
+	for (int y = 0; y < h; y++) {
+		for (int x = 0; x < w; x++) {
+			if (int t = price_s[x + y * w]) {
+				p.setBrush(t >= 100 ? GET_C(200) : pr[t].color);
+				p.drawRect(x * cs, y * cs, cs, cs);
+			}
 		}
 	}
 
@@ -98,7 +108,7 @@ void THallCanvas::paintEvent(QPaintEvent *event) {
 	if (cs > 15) {
 
 		// Form text overlay data
-		for (THallSeat s : seat_n) {
+		for (TPriceSeat s : seat_n) {
 			int x = s.x, y = s.y, st = s.st, i = getCell(x, y), curr_s = sect_s[x + y * w];
 
 			while ((i == 0 || i == 1 || i == 3) && x > -1 && x < w && sect_s[x + y * w] == curr_s) {
@@ -133,7 +143,7 @@ void THallCanvas::paintEvent(QPaintEvent *event) {
 	event->accept();
 }
 
-int THallCanvas::getCell(int x, int y) const {
+int THallPriceCanvas::getCell(int x, int y) const {
 	if (x < w && y < h) {
 		int i = seat_s[x + y * w];
 
@@ -142,222 +152,99 @@ int THallCanvas::getCell(int x, int y) const {
 		return 0;
 }
 
-void THallCanvas::setCell(int x, int y, int f) {
+void THallPriceCanvas::setCell(int x, int y, int f) {
 	if (x < w && y < h)
 		seat_s[x + y * w] = f;
 }
 
-THallCanvas::THallCanvas(THall *wn, QScrollBar *s_w, QScrollBar *s_h) : wnd(wn), scroll_w(s_w), scroll_h(s_h) {}
+THallPriceCanvas::THallPriceCanvas(THallPrice *wn, QScrollBar *s_w, QScrollBar *s_h) : wnd(wn), scroll_w(s_w),
+                                                                                       scroll_h(s_h) {}
 
-void THallCanvas::mousePressEvent(QMouseEvent *event) {
+void THallPriceCanvas::mousePressEvent(QMouseEvent *event) {
 	r_start_x = ((event->x() + off_x) / cs);
 	r_start_y = ((event->y() + off_y) / cs);
 
 	mouseMoveEvent(event);
 }
 
-void THallCanvas::mouseMoveEvent(QMouseEvent *event) {
-	int st = wnd->getCurrentTool();
+void THallPriceCanvas::mouseMoveEvent(QMouseEvent *event) {
+	int fill = event->buttons() == Qt::RightButton ? 0 : wnd->getCurrentPrice();
+	int start_x = event->modifiers() == Qt::ShiftModifier ? r_start_x : ((event->x() + off_x) / cs);
+	int start_y = event->modifiers() == Qt::ShiftModifier ? r_start_y : ((event->y() + off_y) / cs);
 
-	switch (st) {
-		case 0:
-		case 1: {
-			int fill = (st == 0) ? 1 : 0;
-			int start_x = event->buttons() == Qt::RightButton ? r_start_x : ((event->x() + off_x) / cs);
-			int start_y = event->buttons() == Qt::RightButton ? r_start_y : ((event->y() + off_y) / cs);
+	int end_x = ((event->x() + off_x) / cs) + 1;
+	int end_y = ((event->y() + off_y) / cs) + 1;
 
-			int end_x = ((event->x() + off_x) / cs) + 1;
-			int end_y = ((event->y() + off_y) / cs) + 1;
-
-			if (end_x <= start_x) {
-				start_x++;
-				end_x--;
-			}
-
-			if (end_y <= start_y) {
-				start_y++;
-				end_y--;
-			}
-
-			swapIf(start_x, end_x);
-			swapIf(start_y, end_y);
-
-			start_x = start_x < 0 ? 0 : start_x;
-			start_y = start_y < 0 ? 0 : start_y;
-
-			if (event->buttons() == Qt::RightButton) {
-				for (int x = 0; x < w * h; x++) {
-					int m = seat_s[x], f = 0;
-
-					switch (m) {
-						case 0:
-							f = 0;
-							break;
-						case 1:
-							f = 1;
-							break;
-						case 2:
-							f = 0;
-							break;
-						case 3:
-							f = 1;
-							break;
-						default:;
-					}
-
-					seat_s[x] = f;
-				}
-
-				for (int x = start_x; x < end_x; x++)
-					for (int y = start_y; y < end_y; y++) {
-						int m = getCell(x, y), f = 0;
-
-						switch (m) {
-							case 0:
-								f = 2;
-								break;
-							case 1:
-								f = 3;
-								break;
-							default:;
-						}
-
-						setCell(x, y, f);
-					}
-
-			} else {
-				setCell(start_x, start_y, fill);
-			}
-
-			lastFill = (st) ? 0 : 1;
-
-		}
-			break;
-		case 2: {
-			int cx = (event->x() + off_x) / cs, cy = ((event->y() + off_y) / cs);
-			QPair<int, THallSeat> seat = getSeatAt(cx, cy);
-			THallSeatSett sett = wnd->getSeatSettings();
-
-			if (event->buttons() == Qt::RightButton) {
-				if (seat.first != -1)
-					seat_n.removeAt(seat.first);
-
-			} else {
-				THallSeat t = seat.second;
-
-				t.st = sett.st;
-				t.left = sett.left;
-				t.x = cx;
-				t.y = cy;
-
-				if (seat.first == -1) {
-					seat_n.append(t);
-
-				} else {
-					seat_n.replace(seat.first, t);
-				}
-			}
-		}
-			break;
-
-		case 3: {
-			int cx = (event->x() + off_x) / cs, cy = ((event->y() + off_y) / cs);
-			auto sect = wnd->getCurrentSect();
-
-			if (sect.first == -1)
-				break;
-
-			auto s = &sect.second->coords;
-
-			THallCoord t = THallCoord(cx, cy);
-
-			if (event->buttons() == Qt::LeftButton) {
-				if (!sect_n.contains(t)) {
-					sect_n.append(t);
-					s->append(t);
-
-				}
-			} else {
-				if (s->contains(t)) {
-					sect_n.removeOne(t);
-					s->removeOne(t);
-				}
-			}
-		}
-			break;
-		default:
-			qDebug() << "Unsupported, " + QString::number(st);
+	if (end_x <= start_x) {
+		start_x++;
+		end_x--;
 	}
 
+	if (end_y <= start_y) {
+		start_y++;
+		end_y--;
+	}
 
+	swapIf(start_x, end_x);
+	swapIf(start_y, end_y);
+
+	start_x = start_x < 0 ? 0 : start_x;
+	start_y = start_y < 0 ? 0 : start_y;
+
+	if (event->modifiers() == Qt::ShiftModifier) {
+		for (int x = 0; x < w * h; x++) {
+			int m = price_s[x], f = m;
+
+			if (m >= 100)
+				f = m - 100;
+
+			price_s[x] = f;
+		}
+
+		for (int x = start_x; x < end_x; x++)
+			for (int y = start_y; y < end_y; y++) {
+				int m = price_s[x + y * w], f = 0;
+
+				f = m + 100;
+
+				price_s[x + y * w] = f;
+			}
+
+	} else {
+		price_s[start_x + start_y * w] = fill;
+	}
+
+	lastFill = event->buttons() == Qt::RightButton ? 0 : wnd->getCurrentPrice();
 
 	update();
 }
 
-void THallCanvas::mouseReleaseEvent(QMouseEvent *event) {
+void THallPriceCanvas::mouseReleaseEvent(QMouseEvent *event) {
 	Q_UNUSED(event)
 
 	r_start_x = -1;
 	r_start_y = -1;
 
 	for (int x = 0; x < w * h; x++) {
-		int m = seat_s[x], f = 0;
+		int m = price_s[x], f = m;
 
-		switch (m) {
-			case 0:
-				f = 0;
-				break;
-			case 1:
-				f = 1;
-				break;
-			case 2:
-				f = lastFill;
-				break;
-			case 3:
-				f = lastFill;
-				break;
-			default:;
+		if (m >= 100) {
+			f = lastFill;
 		}
 
-		seat_s[x] = f;
+		price_s[x] = f;
 	}
 
 	update();
 }
 
-void THallCanvas::setSize(int w, int h) {
-	int *nmap = new int[w * h], *omap = seat_s;
-	int ow = this->w, oh = this->h;
-
-	// Clear new seat_s
-	for (int i = 0; i < w * h; i++)
-		nmap[i] = 0;
-
-	// Fill with old data
-	for (int x = 0; x < qMin(ow, w); x++)
-		for (int y = 0; y < qMin(oh, h); y++) {
-			nmap[x * w + y] = omap[x * ow + y];
-		}
-
-	this->w = w;
-	this->h = h;
-	this->seat_s = nmap;
-	delete omap;
-
-	update();
-}
-
-void THallCanvas::crop() {
-
-}
-
-void THallCanvas::swapIf(int &i1, int &i2) {
+void THallPriceCanvas::swapIf(int &i1, int &i2) {
 	int t = qMin(i1, i2);
 	i2 = qMax(i1, i2);
 	i1 = t;
 }
 
-void THallCanvas::wheelEvent(QWheelEvent *event) {
+void THallPriceCanvas::wheelEvent(QWheelEvent *event) {
 	double inc = event->delta() > 0 ? cs * 1.25 : cs * 0.8;
 	inc -= cs;
 
@@ -382,14 +269,14 @@ void THallCanvas::wheelEvent(QWheelEvent *event) {
 	event->accept();
 }
 
-void THallCanvas::moveView(int x, int y) {
+void THallPriceCanvas::moveView(int x, int y) {
 	off_x += x * (cs * 1.1);
 	off_y += y * (cs * 1.1);
 
 	update();
 }
 
-QJsonObject THallCanvas::toJson() {
+QJsonObject THallPriceCanvas::toJson() {
 	QJsonObject o;
 
 	o["width"] = w;
@@ -433,7 +320,7 @@ QJsonObject THallCanvas::toJson() {
 
 	// Seat names
 	r = QJsonArray();
-	for (THallSeat s : seat_n) {
+	for (TPriceSeat s : seat_n) {
 		r << s.toString();
 	}
 
@@ -442,7 +329,7 @@ QJsonObject THallCanvas::toJson() {
 	return o;
 }
 
-void THallCanvas::fromJson(QJsonObject o) {
+void THallPriceCanvas::fromJson(QJsonObject o) {
 	// Clear old data
 	seat_n.clear();
 	sect_n.clear();
@@ -458,10 +345,52 @@ void THallCanvas::fromJson(QJsonObject o) {
 		sect_s = new int[w * h];
 		seat_t = new int[w * h];
 		seat_r = new int[w * h];
+		price_s = new int[w * h];
+	}
+
+}
+
+void THallPriceCanvas::scrollW(int p) {
+	off_x = p;
+	update();
+}
+
+void THallPriceCanvas::scrollH(int p) {
+	off_y = p;
+	update();
+}
+
+QPair<int, TPriceSeat> THallPriceCanvas::getSeatAt(int cx, int cy) {
+	for (int i = 0; i < seat_n.count(); i++) {
+		TPriceSeat s = seat_n.at(i);
+		if (s.x == cx && s.y == cy)
+			return QPair<int, TPriceSeat>(i, s);
+	}
+
+	return QPair<int, TPriceSeat>(-1, TPriceSeat());
+}
+
+void THallPriceCanvas::loadHall(QJsonObject o) {
+	// Clear old data
+	seat_n.clear();
+	sect_n.clear();
+
+	// Fill with new data
+	w = o["width"].toInt(150);
+	h = o["height"].toInt(80);
+
+	cs = o["cs"].toInt(20);
+
+	if (seat_s == nullptr) {
+		seat_s = new int[w * h];
+		sect_s = new int[w * h];
+		seat_t = new int[w * h];
+		seat_r = new int[w * h];
+		price_s = new int[w * h];
 	}
 
 	for (int i = 0; i < w * h; i++)
-		seat_s[i] = 0;
+		seat_s[i] = price_s[i] = 0;
 
 	for (QJsonValue v : o["seats"].toArray()) {
 		auto t = v.toString().split(":");
@@ -474,28 +403,9 @@ void THallCanvas::fromJson(QJsonObject o) {
 
 	// Seat Names
 	for (QJsonValue v : o["seat_n"].toArray()) {
-		seat_n << THallSeat::fromString(v.toString());
+		seat_n << TPriceSeat::fromString(v.toString());
 	}
 
 	update();
-}
 
-void THallCanvas::scrollW(int p) {
-	off_x = p;
-	update();
-}
-
-void THallCanvas::scrollH(int p) {
-	off_y = p;
-	update();
-}
-
-QPair<int, THallSeat> THallCanvas::getSeatAt(int cx, int cy) {
-	for (int i = 0; i < seat_n.count(); i++) {
-		THallSeat s = seat_n.at(i);
-		if (s.x == cx && s.y == cy)
-			return QPair<int, THallSeat>(i, s);
-	}
-
-	return QPair<int, THallSeat>(-1, THallSeat());
 }

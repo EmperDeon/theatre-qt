@@ -1,39 +1,37 @@
-#ifndef THEATRE_ADMIN_THALLCANVAS_H
-#define THEATRE_ADMIN_THALLCANVAS_H
+#ifndef THEATRE_ADMIN_TPRICECANVAS_H
+#define THEATRE_ADMIN_TPRICECANVAS_H
 #define GET_C(c) QColor(c, c, c)
 
 #include <QtWidgets/QtWidgets>
-#include <windows/hall/draw/THall.h>
+#include <windows/price/draw/THallPrice.h>
 
-class THall;
+class THallPrice;
 
-class THallCanvas : public QWidget {
+class THallPriceCanvas : public QWidget {
 	int w = 150, h = 80;
 	int cs = 20;
 	int off_x = 0, off_y = 0, mw = 0, mh = 0;
 
-	int *seat_s = nullptr, *sect_s = nullptr, *seat_t = nullptr, *seat_r = nullptr;
-	QList<THallSeat> seat_n;
-	QList<THallCoord> sect_n;
+	int *seat_s = nullptr, *sect_s = nullptr, *seat_t = nullptr, *seat_r = nullptr, *price_s = nullptr;
+	QList<TPriceSeat> seat_n;
+	QList<TPriceCoord> sect_n;
 
-	THall *wnd;
+	THallPrice *wnd;
 	QScrollBar *scroll_w, *scroll_h;
 
 	// Mouse-related
 	int r_start_x = -1, r_start_y = -1, lastFill = 2;
 
 public:
-	THallCanvas(THall *wn, QScrollBar *s_w, QScrollBar *s_h);
-
-	void setSize(int w, int h);
-
-	void crop();
+	THallPriceCanvas(THallPrice *wn, QScrollBar *s_w, QScrollBar *s_h);
 
 	void moveView(int x, int y);
 
 	QJsonObject toJson();
 
 	void fromJson(QJsonObject o);
+
+	void loadHall(QJsonObject o);
 
 	void scrollW(int p);
 
@@ -56,7 +54,7 @@ protected:
 
 	void setCell(int x, int y, int f);
 
-	QPair<int, THallSeat> getSeatAt(int cx, int cy);
+	QPair<int, TPriceSeat> getSeatAt(int cx, int cy);
 };
 
-#endif //THEATRE_ADMIN_THALLCANVAS_H
+#endif //THEATRE_ADMIN_TPRICECANVAS_H
