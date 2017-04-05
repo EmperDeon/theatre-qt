@@ -13,10 +13,9 @@ TARGET = untitled
 TEMPLATE = app
 
 
-SOURCES += \
+SOURCES +=  \
  main.cpp \
  \
- dialogs/TDCheck.cpp \
  dialogs/TDLogin.cpp \
  \
  templates/TCreate.cpp \
@@ -48,14 +47,14 @@ SOURCES += \
  windows/del/TDeleted.cpp \
  windows/del/TDeletedTab.cpp \
  \
- windows/hall/draw/THall.cpp \
- windows/hall/draw/THallCanvas.cpp \
- windows/hall/draw/THallTools.cpp \
- \
  windows/hall/THallCreate.cpp \
  windows/hall/THallEdit.cpp \
  windows/hall/THallPreview.cpp \
  windows/hall/THalls.cpp \
+ \
+ windows/hall/draw/THall.cpp \
+ windows/hall/draw/THallCanvas.cpp \
+ windows/hall/draw/THallTools.cpp \
  \
  windows/perf/TPerf.cpp \
  windows/perf/TPerfApprove.cpp \
@@ -68,6 +67,12 @@ SOURCES += \
  windows/poster/TPosterEdit.cpp \
  windows/poster/TPosters.cpp \
  \
+ windows/price/TPriceDialog.cpp \
+ \
+ windows/price/draw/THallPrice.cpp \
+ windows/price/draw/THallPriceCanvas.cpp \
+ windows/price/draw/THallPriceTools.cpp \
+ \
  windows/settings/TWSettings.cpp \
  \
  windows/theatre/TTheatre.cpp \
@@ -78,71 +83,76 @@ SOURCES += \
  windows/user/TUser.cpp \
  windows/user/TUsers.cpp \
  windows/user/TUserCreate.cpp \
- windows/user/TUserEdit.cpp \
+ windows/user/TUserEdit.cpp
 
 HEADERS +=  \
- dialogs/TDCheck.h \
  dialogs/TDLogin.h \
-  \
+ \
  templates/TCreate.h \
  templates/TEdit.h \
  templates/TTModel.h \
  templates/TTModels.h \
-  \
+ \
  utils/TCheckBox.h \
  utils/TComboBox.h \
  utils/TConfig.h \
  utils/TDB.h \
  utils/TFileUpload.h \
  utils/TListBox.h \
-  \
+ \
  windows/TChoose.h \
  windows/TMainMenu.h \
  windows/TMainWindow.h \
-  \
+ \
  windows/actor/TActor.h \
  windows/actor/TActors.h \
  windows/actor/TActorCreate.h \
  windows/actor/TActorEdit.h \
-  \
+ \
  windows/article/TArticle.h \
  windows/article/TArticleCreate.h \
  windows/article/TArticleEdit.h \
  windows/article/TArticles.h \
-  \
+ \
  windows/del/TDeleted.h \
  windows/del/TDeletedTab.h \
-  \
- windows/hall/draw/THall.h \
- windows/hall/draw/THallCanvas.h \
- windows/hall/draw/THallTools.h \
-  \
+ \
  windows/hall/THallCreate.h \
  windows/hall/THallEdit.h \
  windows/hall/THallPreview.h \
  windows/hall/THalls.h \
-  \
+ \
+ windows/hall/draw/THall.h \
+ windows/hall/draw/THallCanvas.h \
+ windows/hall/draw/THallTools.h \
+ \
  windows/perf/TPerf.h \
  windows/perf/TPerfApprove.h \
  windows/perf/TPerfCreate.h \
  windows/perf/TPerfEdit.h \
  windows/perf/TPerfs.h \
-  \
+ \
  windows/poster/TPoster.h \
  windows/poster/TPosterCreate.h \
  windows/poster/TPosterEdit.h \
  windows/poster/TPosters.h \
-  \
+ \
+ windows/price/TPriceDialog.h \
+ \
+ windows/price/draw/THallPrice.h \
+ windows/price/draw/THallPriceCanvas.h \
+ windows/price/draw/THallPriceTools.h \
+ \
  windows/settings/TWSettings.h \
-  \
+ \
  windows/theatre/TTheatre.h \
  windows/theatre/TTheatres.h \
  windows/theatre/TTheatreCreate.h \
  windows/theatre/TTheatreEdit.h \
-  \
+ \
  windows/user/TUser.h \
  windows/user/TUsers.h \
  windows/user/TUserCreate.h \
- windows/user/TUserEdit.h \
+ windows/user/TUserEdit.h
 
 RESOURCES += res/res.qrc
