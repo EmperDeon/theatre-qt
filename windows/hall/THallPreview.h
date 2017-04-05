@@ -1,19 +1,19 @@
 #ifndef THEATRE_ADMIN_THALLPREVIEW_H
 #define THEATRE_ADMIN_THALLPREVIEW_H
 
-#include <templates/TTModel.h>
+#include <QtWidgets/QtWidgets>
 
-class THallPreview : public TTModel {
-
+class THallPreview : public QFrame {
+	int id;
 
 public:
 	THallPreview(QJsonObject o);
 
-	QString getPath() override;
+	void edt();
 
-	void setFEnabled(bool b) override;
+	void del();
 
-	QMap<QString, QString> getParams() override;
+	QString getPath();
 };
 
 

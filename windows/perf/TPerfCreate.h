@@ -5,6 +5,7 @@
 #include <templates/TCreate.h>
 #include <utils/TComboBox.h>
 #include <utils/TFileUpload.h>
+#include <utils/TCheckBox.h>
 
 class TPerfCreate : public TCreate {
 	// Global perfs
@@ -18,6 +19,8 @@ class TPerfCreate : public TCreate {
 	TComboBox *e_hall;
 	QTextEdit *e_desc, *e_desc_s;
 	TFileUpload *e_img;
+
+	TCheckBox *e_actors;
 
 public:
 	TPerfCreate();

@@ -1,12 +1,12 @@
 #ifndef THEATRE_ADMIN_TPERFEDIT_H
 #define THEATRE_ADMIN_TPERFEDIT_H
 
-
 #include <QtWidgets/QtWidgets>
 #include <templates/TCreate.h>
 #include <utils/TComboBox.h>
 #include <templates/TEdit.h>
 #include <utils/TFileUpload.h>
+#include <utils/TCheckBox.h>
 
 class TPerfEdit : public TEdit {
 	// Global perfs
@@ -20,6 +20,8 @@ class TPerfEdit : public TEdit {
 	TComboBox *e_hall;
 	QTextEdit *e_desc, *e_desc_s;
 	TFileUpload *e_img;
+
+	TCheckBox *e_actors;
 
 public:
 	TPerfEdit();

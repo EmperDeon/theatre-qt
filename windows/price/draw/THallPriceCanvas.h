@@ -53,8 +53,6 @@ protected:
 	int getCell(int x, int y) const;
 
 	void setCell(int x, int y, int f);
-
-	QPair<int, TPriceSeat> getSeatAt(int cx, int cy);
 };
 
 #endif //THEATRE_ADMIN_TPRICECANVAS_H

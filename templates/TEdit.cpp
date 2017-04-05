@@ -7,6 +7,30 @@ TEdit::TEdit() {
 
 	c_box = new TComboBox();
 
+	l->addWidget(c_box, 0, Qt::AlignTop);
+
+	// Scroll
+	QScrollArea *scroll = new QScrollArea;
+	QWidget *w = new QWidget;
+
+	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 5, 0);
+	layout->setAlignment(Qt::AlignTop);
+
+	w->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+	w->setLayout(layout);
+
+	scroll->setWidget(w);
+	scroll->setWidgetResizable(true);
+	scroll->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+	scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+	scroll->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
+	scroll->setFrameStyle(QFrame::NoFrame);
+
+	l->addWidget(scroll);
+	// Scroll
+
 	b_create = new QPushButton("Сохранить");
 	b_reset = new QPushButton("Сбросить");
 
@@ -19,11 +43,8 @@ TEdit::TEdit() {
 	vl->addWidget(b_reset);
 	vl->setAlignment(Qt::AlignBottom);
 
-	l->addWidget(c_box, 0, Qt::AlignTop);
-	l->addLayout(layout);
-	l->addLayout(vl);
 	l->addSpacing(10);
-
+	l->addLayout(vl);
 	setLayout(l);
 }
 

@@ -110,7 +110,7 @@ void TMainMenu::createStructure() {
 		IeSI("theatres", "create", "Создать новый театр");
 	IeC("theatres", "Театры");
 
-	if (!perms.contains("theatres_update")) {
+	if (perms.contains("theatres") && !perms.contains("theatres_update")) {
 		QJsonArray s;
 		menuStructure << QJsonObject{{"action", "theatres_update"},
 		                             {"name",   "Редактировать текущий театр"}};
@@ -120,11 +120,6 @@ void TMainMenu::createStructure() {
 		IeSI("t_halls", "update", "Изменить зал");
 		IeSI("t_halls", "create", "Создать новый зал");
 	IeC("t_halls", "Залы");
-
-	Ie("t_prices");
-		IeSI("t_prices", "update", "Изменить цены");
-		IeSI("t_prices", "create", "Создать новые цены");
-	IeC("t_prices", "Цены");
 
 	Ie("t_perfs");
 		IeSI("t_perfs", "create", "Добавление спектакля");

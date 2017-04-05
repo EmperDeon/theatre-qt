@@ -7,7 +7,6 @@ TTheatreEdit::TTheatreEdit() {
 	address = new QLineEdit;
 	desc = new QTextEdit;
 	img = new TFileUpload;
-	halls = new TListBox("t_halls");
 
 	layout->setMargin(0);
 
@@ -16,7 +15,6 @@ TTheatreEdit::TTheatreEdit() {
 	layout->addRow("Адрес:", address);
 	layout->addRow("Описание:", desc);
 	layout->addRow("Изображение:", img);
-	layout->addRow("Залы:", halls);
 
 	c_box->load(getPath());
 	if (c_box->count() == 1)
@@ -33,8 +31,6 @@ void TTheatreEdit::reset() {
 	address->setText(obj["address"].toString());
 	desc->setText(obj["desc"].toString());
 	img->load(obj["img"].toString());
-
-	halls->load("t_halls");
 }
 
 QString TTheatreEdit::getPath() {
@@ -51,14 +47,11 @@ QMap<QString, QString> TTheatreEdit::getParams() {
 //	}
 
 	return {
-			{"id",          QString::number(id)},
-			{"name",        name->text()},
-			{"tel_num",     phone->text()},
-			{"address",     address->text()},
-			{"desc",        desc->toPlainText()},
-			{"img",         img->getUrl()},
-
-			{"t_halls_del", halls->getItems()},
-			{"t_halls_new", halls->getAdded()}
+			{"id",      QString::number(id)},
+			{"name",    name->text()},
+			{"tel_num", phone->text()},
+			{"address", address->text()},
+			{"desc",    desc->toPlainText()},
+			{"img",     img->getUrl()}
 	};
 }

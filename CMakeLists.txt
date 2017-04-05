@@ -13,7 +13,6 @@ find_package(Qt5Concurrent)
 set(P_S
         main.cpp
 
-        dialogs/TDCheck.cpp
         dialogs/TDLogin.cpp
 
         templates/TCreate.cpp
@@ -67,10 +66,7 @@ set(P_S
         windows/poster/TPosterEdit.cpp
         windows/poster/TPosters.cpp
 
-        windows/price/TPriceCreate.cpp
-        windows/price/TPriceEdit.cpp
-        windows/price/TPricePreview.cpp
-        windows/price/TPrices.cpp
+        windows/price/TPriceDialog.cpp
 
         windows/price/draw/THallPrice.cpp
         windows/price/draw/THallPriceCanvas.cpp
@@ -91,7 +87,6 @@ set(P_S
         )
 
 set(P_H
-        dialogs/TDCheck.h
         dialogs/TDLogin.h
 
         templates/TCreate.h
@@ -143,10 +138,7 @@ set(P_H
         windows/poster/TPosterEdit.h
         windows/poster/TPosters.h
 
-        windows/price/TPriceCreate.h
-        windows/price/TPriceEdit.h
-        windows/price/TPricePreview.h
-        windows/price/TPrices.h
+        windows/price/TPriceDialog.h
 
         windows/price/draw/THallPrice.h
         windows/price/draw/THallPriceCanvas.h

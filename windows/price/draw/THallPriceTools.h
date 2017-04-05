@@ -37,7 +37,7 @@ class TPriceToolSect : public QDialog {
 	QColor l_color;
 
 public:
-	TPriceToolSect();
+	TPriceToolSect(TPriceSect old);
 
 	static TPriceSect getSect(TPriceSect old = TPriceSect());
 

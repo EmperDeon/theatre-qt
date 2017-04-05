@@ -6,23 +6,13 @@
 #include <utils/TComboBox.h>
 #include "windows/price/draw/THallPrice.h"
 
-class TPriceCreate : public QWidget {
+class TPriceDialog : public QDialog {
 	THallPrice *price;
 
-	TComboBox *c_poster, *c_hall;
-
 public:
-	TPriceCreate();
+	TPriceDialog(int hall_id, QJsonObject o = QJsonObject());
 
-	QString getPath();
-
-	QMap<QString, QString> getParams();
-
-	void reset();
-
-	void save();
-
-	void selectHall(int n);
+	static QString getPrice(int hall_id, QJsonObject o = QJsonObject());
 };
 
 

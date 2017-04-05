@@ -8,10 +8,14 @@
 class TPosterEdit : public TEdit {
 	TComboBox *name;
 	QDateTimeEdit *date;
+	QLabel *l_prices;
+	QString price = "";
 
 
 public:
 	TPosterEdit();
+
+	void setHalls();
 
 	virtual void reset();
 

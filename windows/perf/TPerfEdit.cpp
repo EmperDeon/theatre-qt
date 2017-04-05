@@ -42,6 +42,7 @@ TPerfEdit::TPerfEdit() {
 	e_desc = new QTextEdit;
 	e_desc_s = new QTextEdit;
 	e_img = new TFileUpload;
+	e_actors = new TCheckBox("actors");
 
 	e_desc_s->setMaximumHeight(100);
 	// Theatre performance
@@ -59,6 +60,9 @@ TPerfEdit::TPerfEdit() {
 
 	layout->addWidget(new QLabel("Изображение:"));
 	layout->addWidget(e_img);
+
+	layout->addWidget(new QLabel("Актеры:"));
+	layout->addWidget(e_actors);
 
 	c_box->load("t_performances");
 }
@@ -84,7 +88,7 @@ void TPerfEdit::reset() {
 	p_auth->clear();
 	p_type->setCurrentIndex(0);
 
-
+	e_actors->setIds(obj["actor_ids"].toArray());
 	e_hall->setCurrentIndex(obj["t_hall_id"].toInt());
 	e_desc->setText(obj["desc"].toString());
 	e_desc_s->setText(obj["desc_s"].toString());
@@ -114,6 +118,7 @@ QMap<QString, QString> TPerfEdit::getParams() {
 	map["desc"] = e_desc->toPlainText();
 	map["desc_s"] = e_desc_s->toPlainText();
 	map["t_hall_id"] = e_hall->getIndex();
+	map["actors"] = e_actors->getIds();
 
 	return map;
 }

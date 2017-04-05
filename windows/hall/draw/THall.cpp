@@ -48,7 +48,7 @@ THall::THall() {
 }
 
 void THall::setSize(int w, int h) {
-
+	w_canvas->setSize(w, h);
 }
 
 void THall::crop() {

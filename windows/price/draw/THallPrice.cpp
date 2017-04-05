@@ -69,8 +69,9 @@ void THallPrice::fromJson(QJsonObject o) {
 }
 
 QJsonObject THallPrice::toJson() {
-	QJsonObject a = w_canvas->toJson();
-	a["sectors"] = w_tools->toJson();
+	QJsonObject a;
+	a["seats"] = w_canvas->toJson();
+	a["prices"] = w_tools->toJson();
 
 	return a;
 }

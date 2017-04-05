@@ -336,13 +336,22 @@ void THallCanvas::setSize(int w, int h) {
 	// Fill with old data
 	for (int x = 0; x < qMin(ow, w); x++)
 		for (int y = 0; y < qMin(oh, h); y++) {
-			nmap[x * w + y] = omap[x * ow + y];
+			nmap[x + w * y] = omap[x + ow * y];
 		}
 
 	this->w = w;
 	this->h = h;
 	this->seat_s = nmap;
 	delete omap;
+
+
+	delete sect_s;
+	delete seat_t;
+	delete seat_r;
+
+	sect_s = new int[w * h];
+	seat_t = new int[w * h];
+	seat_r = new int[w * h];
 
 	update();
 }
@@ -453,12 +462,17 @@ void THallCanvas::fromJson(QJsonObject o) {
 
 	cs = o["cs"].toInt(20);
 
-	if (seat_s == nullptr) {
-		seat_s = new int[w * h];
-		sect_s = new int[w * h];
-		seat_t = new int[w * h];
-		seat_r = new int[w * h];
+	if (seat_s != nullptr) {
+		delete seat_s;
+		delete sect_s;
+		delete seat_t;
+		delete seat_r;
 	}
+
+	seat_s = new int[w * h];
+	sect_s = new int[w * h];
+	seat_t = new int[w * h];
+	seat_r = new int[w * h];
 
 	for (int i = 0; i < w * h; i++)
 		seat_s[i] = 0;

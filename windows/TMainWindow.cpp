@@ -34,10 +34,6 @@
 #include <windows/hall/THalls.h>
 #include <windows/hall/THallCreate.h>
 #include <windows/hall/THallEdit.h>
-#include <windows/price/TPrices.h>
-#include <windows/price/TPriceCreate.h>
-#include <windows/price/TPriceEdit.h>
-
 
 TMainWindow::TMainWindow() {
 	QWidget *nw = new QWidget;
@@ -114,15 +110,6 @@ void TMainWindow::changeCurrent(QString s) {
 
 	} else if (s == "t_halls_update") {
 		w_curr = new THallEdit;
-
-	} else if (s == "t_prices") {
-		w_curr = new TPrices;
-
-	} else if (s == "t_prices_create") {
-		w_curr = new TPriceCreate;
-
-	} else if (s == "t_prices_update") {
-		w_curr = new TPriceEdit;
 
 	} else if (s == "u_apis") {
 		w_curr = new TUsers;

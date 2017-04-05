@@ -1,14 +1,16 @@
 #ifndef THEATRE_ADMIN_TCHECKBOX_H
 #define THEATRE_ADMIN_TCHECKBOX_H
 
-#include <QtWidgets/QListWidget>
+#include <QtWidgets/QtWidgets>
 #include <QtCore/QtCore>
 
 class TCheckBox;
 
-class TCheckBox : public QListWidget {
+class TCheckBox : public QWidget {
 	QMap<QString, QString> map;
 	QStringList selected;
+
+	QList<QCheckBox *> lst;
 
 public:
 	TCheckBox(QString t);
@@ -17,12 +19,13 @@ public:
 
 	void setIds(QJsonArray l);
 
-	void setIds(QStringList l);
-
 	QString getIds();
 
-protected:
-	virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
+	void clear();
+
+	QString tryDescribe(QString n);
+
+	QString tryDeDescribe(QString n);
 };
 
 

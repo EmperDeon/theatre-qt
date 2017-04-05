@@ -211,7 +211,8 @@ void THallPriceCanvas::mouseMoveEvent(QMouseEvent *event) {
 			}
 
 	} else {
-		price_s[start_x + start_y * w] = fill;
+		if (seat_s[start_x + start_y * w] == 1)
+			price_s[start_x + start_y * w] = fill;
 	}
 
 	lastFill = event->buttons() == Qt::RightButton ? 0 : wnd->getCurrentPrice();
@@ -229,7 +230,7 @@ void THallPriceCanvas::mouseReleaseEvent(QMouseEvent *event) {
 		int m = price_s[x], f = m;
 
 		if (m >= 100) {
-			f = lastFill;
+			f = seat_s[x] == 1 ? lastFill : m - 100;
 		}
 
 		price_s[x] = f;
@@ -279,52 +280,23 @@ void THallPriceCanvas::moveView(int x, int y) {
 QJsonObject THallPriceCanvas::toJson() {
 	QJsonObject o;
 
-	o["width"] = w;
-	o["height"] = h;
+	update();
 
-	o["cs"] = cs;
-
-//	TODO: Add validations (all seats in sectors, all seats have names)
-//	int *seat_t = new int[w * h];
+	QMap<int, TPriceSect> sects = wnd->getSectors();
+	QMap<int, TPriceSect> prics = wnd->getPrices();
 
 	// Seats
-	QJsonArray r;
-	int st = -1, ln = 0;
+//	for (int y = 0; y < h; y++)
+	for (int x = 0; x < w * h; x++)
+		if (seat_s[x] == 1) {
+			QString k("%1-%2-%3");
 
-	for (int y = 0; y < h; y++) {
-		for (int x = 0; x < w; x++) {
-			int c = getCell(x, y);
+			k = k.arg(sects[sect_s[x] - 1].pref);
+			k = k.arg(QString::number(seat_r[x]), 2, '0');
+			k = k.arg(QString::number(seat_t[x]), 2, '0');
 
-			if (c == 1) {
-				if (st == -1) {
-					st = x;
-				}
-
-				ln++;
+			o[k] = prics[price_s[x]].name.toInt();
 			}
-
-			if ((c == 0 && st != -1) || ((x == (w - 1)) && ln != 0)) {
-				QString t("%1:%2:%3");
-				t = t.arg(st).arg(y).arg(ln);
-
-				st = -1;
-				ln = 0;
-
-				r << t;
-			}
-		}
-	}
-
-	o["seats"] = r;
-
-
-	// Seat names
-	r = QJsonArray();
-	for (TPriceSeat s : seat_n) {
-		r << s.toString();
-	}
-
-	o["seat_n"] = r;
 
 	return o;
 }
@@ -358,16 +330,6 @@ void THallPriceCanvas::scrollW(int p) {
 void THallPriceCanvas::scrollH(int p) {
 	off_y = p;
 	update();
-}
-
-QPair<int, TPriceSeat> THallPriceCanvas::getSeatAt(int cx, int cy) {
-	for (int i = 0; i < seat_n.count(); i++) {
-		TPriceSeat s = seat_n.at(i);
-		if (s.x == cx && s.y == cy)
-			return QPair<int, TPriceSeat>(i, s);
-	}
-
-	return QPair<int, TPriceSeat>(-1, TPriceSeat());
 }
 
 void THallPriceCanvas::loadHall(QJsonObject o) {
@@ -407,5 +369,4 @@ void THallPriceCanvas::loadHall(QJsonObject o) {
 	}
 
 	update();
-
 }

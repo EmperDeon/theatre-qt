@@ -103,20 +103,13 @@ int THallPriceTools::getCurrentPrice() {
 QJsonArray THallPriceTools::toJson() {
 	QJsonArray r;
 
-	for (int k : sect_list.keys()) {
-		TPriceSect v = sect_list[k];
+	for (int k : price_list.keys()) {
+		TPriceSect v = price_list[k];
 		QJsonObject o;
 
 		o["id"] = k;
-		o["name"] = v.name;
-		o["pref"] = v.pref;
+		o["price"] = v.name;
 		o["color"] = v.color.name(QColor::HexArgb);
-
-		QJsonArray t;
-		for (TPriceCoord c : v.coords)
-			t << c.toString();
-
-		o["coords"] = t;
 
 		r << o;
 	}
@@ -148,12 +141,15 @@ void THallPriceTools::loadHall(QJsonArray o) {
 }
 
 
-TPriceToolSect::TPriceToolSect() {
+TPriceToolSect::TPriceToolSect(TPriceSect old) {
 	QFormLayout *l = new QFormLayout;
 	QHBoxLayout *hl = new QHBoxLayout;
 	QButtonGroup *bg = new QButtonGroup;
 
 	l_name = new QLineEdit;
+
+	if (old.name != "")
+		l_name->setText(old.name);
 
 	QList <QColor> b_list;
 
@@ -165,6 +161,7 @@ TPriceToolSect::TPriceToolSect() {
 
 	int i = 0;
 	for (QColor c : b_list) {
+
 		QPushButton *bt = new QPushButton;
 		c.setAlpha(100);
 
@@ -179,10 +176,14 @@ TPriceToolSect::TPriceToolSect() {
 			        l_color = id->property("color").value<QColor>();
 		        });
 
+		if (c == old.color)
+			bt->setChecked(true);
+
 		hl->addWidget(bt);
 	}
 
-	bg->button(0)->setChecked(true);
+	if (old.name == "")
+		bg->button(0)->setChecked(true);
 
 	l->addRow("Цена: ", l_name);
 	l->addRow("Цвет: ", hl);
@@ -200,7 +201,7 @@ TPriceToolSect::TPriceToolSect() {
 }
 
 TPriceSect TPriceToolSect::getSect(TPriceSect old) {
-	auto t = new TPriceToolSect;
+	auto t = new TPriceToolSect(old);
 	int r = t->exec();
 
 	if (r) {

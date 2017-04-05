@@ -10,9 +10,13 @@
 class TPosterCreate : public TCreate {
 	TComboBox *name;
 	QDateTimeEdit *date;
+	QLabel *l_prices;
+	QString price = "";
 
 public:
 	TPosterCreate();
+
+	void setHalls();
 
 	virtual void reset();
 

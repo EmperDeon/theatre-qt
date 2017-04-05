@@ -41,6 +41,7 @@ TPerfCreate::TPerfCreate() {
 	e_desc = new QTextEdit;
 	e_desc_s = new QTextEdit;
 	e_img = new TFileUpload();
+	e_actors = new TCheckBox("actors");
 
 	e_desc_s->setMaximumHeight(100);
 	// Theatre performance
@@ -58,6 +59,10 @@ TPerfCreate::TPerfCreate() {
 
 	layout->addWidget(new QLabel("Изображение:"));
 	layout->addWidget(e_img);
+
+	layout->addWidget(new QLabel("Актеры:"));
+	layout->addWidget(e_actors);
+
 }
 
 void TPerfCreate::add() {
@@ -83,6 +88,7 @@ void TPerfCreate::reset() {
 	e_desc->clear();
 	e_desc_s->clear();
 	e_img->clear();
+	e_actors->clear();
 }
 
 QString TPerfCreate::getPath() {
@@ -107,6 +113,7 @@ QMap<QString, QString> TPerfCreate::getParams() {
 	map["desc"] = e_desc->toPlainText();
 	map["desc_s"] = e_desc_s->toPlainText();
 	map["img"] = e_img->getUrl();
+	map["actors"] = e_actors->getIds();
 
 	return map;
 }

@@ -10,8 +10,6 @@ class TTheatreEdit : public TEdit {
 	QTextEdit *desc;
 	TFileUpload *img;
 
-	TListBox *halls;
-
 public:
 	TTheatreEdit();
 

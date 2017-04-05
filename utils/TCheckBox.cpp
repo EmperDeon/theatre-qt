@@ -1,5 +1,4 @@
 #include <QtCore/QJsonArray>
-#include <dialogs/TDCheck.h>
 #include "TCheckBox.h"
 #include "TDB.h"
 
@@ -9,35 +8,43 @@ TCheckBox::TCheckBox(QString t) {
 	for (QString v : a.keys()) {
 		map.insert(a[v].toString(), QString::number(v.toInt()));
 	}
-}
 
-void TCheckBox::mouseDoubleClickEvent(QMouseEvent *event) {
-	Q_UNUSED(event);
-	QStringList t = TDCheck::getSelection(map, selected);
+	QVBoxLayout *l = new QVBoxLayout;
+	QHBoxLayout *hl1 = new QHBoxLayout;
+	QStringList n = map.keys();
 
-	if (t.count() == 1 && t[0] == "") return;
+	int size = 6; // Size of column
 
-	setIds(t);
-}
+	for (int i = 0; i < (n.count() / size) + 1; i++) {
+		QVBoxLayout *tl = new QVBoxLayout;
+		tl->setAlignment(Qt::AlignTop);
 
-void TCheckBox::setIds(QStringList l) {
-	selected = l;
+		for (int j = 0; j < size; j++) {
+			if (n.count() > (i * size + j)) {
+				QCheckBox *tc = new QCheckBox(tryDescribe(n[i * size + j]));
+				tc->setChecked(selected.contains(map[n[i * size + j]]));
 
-	this->clear();
-	for (QString v : map.keys()) {
-		if (l.contains(map[v]))
-			this->addItem(v);
+				tl->addWidget(tc);
+				lst << tc;
+			}
+		}
+
+		hl1->addLayout(tl);
 	}
 
+	l->addLayout(hl1);
+
+	setLayout(l);
 }
 
 QString TCheckBox::getIds() {
 	QJsonArray r;
 
-	for (QString s : selected)
-		r << s.toInt();
+	for (QCheckBox *v : lst)
+		if (v->isChecked())
+			r << map[v->text()].toInt();
 
-	return QJsonDocument(r).toJson();
+	return QJsonDocument(r).toJson(QJsonDocument::Compact);
 }
 
 void TCheckBox::setIds(QJsonArray l) {
@@ -46,9 +53,76 @@ void TCheckBox::setIds(QJsonArray l) {
 	for (QJsonValue v : l)
 		selected << QString::number(v.toInt());
 
-	this->clear();
-	for (QString v : map.keys()) {
-		if (l.contains(map[v]))
-			this->addItem(v);
+	for (QCheckBox *tc : lst) {
+		tc->setChecked(selected.contains(map[tryDeDescribe(tc->text())]));
 	}
+}
+
+void TCheckBox::clear() {
+	selected.clear();
+
+	for (QCheckBox *tc : lst)
+		tc->setChecked(false);
+}
+
+QString TCheckBox::tryDescribe(QString n) {
+	QMap<QString, QString> desc = {
+			{"Список театров",                  "theatres"},
+			{"Список сотрудников",              "u_apis"},
+			{"Список актеров",                  "actors"},
+			{"Список спектаклей",               "perfs"},
+			{"Список афиш",                     "posters"},
+			{"Список залов",                    "t_halls"},
+			{"Список цен",                      "t_prices"},
+			{"Список новостей",                 "articles"},
+			{"Список спектаклей",               "t_perfs"},
+			{"Список глобальных спектаклей",    "perfs"},
+			{"Изменение глобальных спектаклей", "perfs_edit"},
+			{"Изменение театров",               "theatres_edit"},
+			{"Изменение сотрудников",           "u_apis_edit"},
+			{"Изменение актеров",               "actors_edit"},
+			{"Изменение спектаклей",            "perfs_edit"},
+			{"Изменение афиш",                  "posters_edit"},
+			{"Изменение залов",                 "t_halls_edit"},
+			{"Изменение цен",                   "t_prices_edit"},
+			{"Изменение новостей",              "articles_edit"},
+			{"Изменение спектаклей",            "t_perfs_edit"},
+			{"Выбор текущего театра",           "theatre_choose"}
+	};
+
+	for (QString k : desc.keys()) {
+		if (desc[k] == n) {
+			return k;
+		}
+	}
+
+	return n;
+}
+
+QString TCheckBox::tryDeDescribe(QString n) {
+	QMap<QString, QString> desc = {
+			{"Список театров",                  "theatres"},
+			{"Список сотрудников",              "u_apis"},
+			{"Список актеров",                  "actors"},
+			{"Список спектаклей",               "perfs"},
+			{"Список афиш",                     "posters"},
+			{"Список залов",                    "t_halls"},
+			{"Список цен",                      "t_prices"},
+			{"Список новостей",                 "articles"},
+			{"Список спектаклей",               "t_perfs"},
+			{"Список глобальных спектаклей",    "perfs"},
+			{"Изменение глобальных спектаклей", "perfs_edit"},
+			{"Изменение театров",               "theatres_edit"},
+			{"Изменение сотрудников",           "u_apis_edit"},
+			{"Изменение актеров",               "actors_edit"},
+			{"Изменение спектаклей",            "perfs_edit"},
+			{"Изменение афиш",                  "posters_edit"},
+			{"Изменение залов",                 "t_halls_edit"},
+			{"Изменение цен",                   "t_prices_edit"},
+			{"Изменение новостей",              "articles_edit"},
+			{"Изменение спектаклей",            "t_perfs_edit"},
+			{"Выбор текущего театра",           "theatre_choose"}
+	};
+
+	return desc.contains(n) ? desc[n] : n;
 }

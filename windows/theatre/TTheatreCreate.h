@@ -10,8 +10,6 @@ class TTheatreCreate : public TCreate {
 	QTextEdit *desc;
 	TFileUpload *img;
 
-	TListBox *halls;
-
 public:
 	TTheatreCreate();
 
